@@ -6,6 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Cliente")
@@ -16,11 +18,19 @@ public class UpbeatClientModel {
     private Long cod_cliente;
 	
 	private String client_name;
+	
 	private String nombre;
+	
 	private String apellidos;
+	
 	private String password;
+	
 	private String correo;
 	
+	public UpbeatClientModel() {
+		super();
+	}
+
 	public UpbeatClientModel(Long cod_cliente, String client_name, String nombre, String apellidos, String password,
 			String correo) {
 		super();

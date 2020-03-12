@@ -6,17 +6,23 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "Usuario")
 public class UpbeatUserModel extends UpbeatClientModel{
 	
+	@NotNull
+    @NotEmpty
 	private String nom_user;
 	
-	public UpbeatUserModel(Long cod_cliente, String client_name, String nombre, String apellidos, String password,
-			String correo, String nombre_usuario) {
-		super(cod_cliente, client_name, nombre, apellidos, password, correo);
-		this.nom_user = nombre_usuario;
+	@NotNull
+    @NotEmpty
+	private String matchingPassword;
+
+	public UpbeatUserModel() {
+		super();
 	}
 
 	public String getNom_user() {
@@ -27,34 +33,13 @@ public class UpbeatUserModel extends UpbeatClientModel{
 		this.nom_user = nom_user;
 	}
 
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((nom_user == null) ? 0 : nom_user.hashCode());
-		return result;
+	public String getMatchingPassword() {
+		return matchingPassword;
 	}
 
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		UpbeatUserModel other = (UpbeatUserModel) obj;
-		if (nom_user == null) {
-			if (other.nom_user != null)
-				return false;
-		} else if (!nom_user.equals(other.nom_user))
-			return false;
-		return true;
+	public void setMatchingPassword(String matchingPassword) {
+		this.matchingPassword = matchingPassword;
 	}
-
-	@Override
-	public String toString() {
-		return "UpbeatUserModel [nom_user=" + nom_user + "]";
-	}
+	
 	
 }
