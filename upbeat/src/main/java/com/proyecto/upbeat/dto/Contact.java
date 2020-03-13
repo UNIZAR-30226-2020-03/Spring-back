@@ -1,11 +1,26 @@
-package com.proyecto.upbeat.model;
+package com.proyecto.upbeat.dto;
 
-public class Contact {
-	 Long id;
-	 String firstName;
-	 String lastName;
-	 String phoneNumber;
-	 String email;
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+
+
+
+@Entity
+public class Contact implements Serializable{
+	
+	private static final long serialVersionUID = 4894729030347835498L;
+	
+	@Id
+	@GeneratedValue
+	Long id;
+	String firstName;
+	String lastName;
+	String phoneNumber;
+	String email;
 	public Contact(Long id, String firstName, String lastName, String phoneNumber, String email) {
 		super();
 		this.id = id;
