@@ -1,5 +1,7 @@
 package com.proyecto.upbeat.api;
 
+import org.dozer.Mapper;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +19,23 @@ public class ClienteApi {
 	@Autowired
 	ClienteService clienteService;
 	
-	@RequestMapping(value="/saveCliente", method=RequestMethod.POST)
-	public Cliente updateOrSave(@RequestBody Cliente cliente) {
-		return clienteService.save(cliente);
+	@Autowired
+	Mapper mapper;
+	
+	@RequestMapping(value="/cliente", method=RequestMethod.POST)
+	public ClienteResponse updateOrSave(@RequestBody ClienteRequest clienteRequest) {
+		
+		// Mapeo request dto
+		Cliente cliente = mapper.map(clienteRequest, Cliente.class);
+		
+		// Invoca lógica de negocio
+		Cliente updatedCliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(updatedCliente, ClienteResponse.class);
+		
+		return clienteResponse;
+		
+		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
 }

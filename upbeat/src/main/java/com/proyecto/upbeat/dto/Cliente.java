@@ -16,13 +16,13 @@ public class Cliente implements Serializable{
 	
 	@Id
 	@GeneratedValue
-	Long cod_cliente;
-	String nombre;
-	String apellidos;
-	String contrasenya;
-	String correo;
-	String username;
-	String pais;
+	private Long cod_cliente;
+	private String nombre;
+	private String apellidos;
+	private String contrasenya;
+	private String correo;
+	private String username;
+	private String pais;
 	
 	public Cliente(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
 			String username, String pais) {
