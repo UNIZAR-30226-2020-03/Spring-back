@@ -14,7 +14,7 @@ public class Usuario extends Cliente{
 	
 	@Id
 	@GeneratedValue
-	Long cod_usuario;
+	private Long cod_usuario;
 	
 	public Usuario(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
 			String username, String pais, Long cod_usuario) {
