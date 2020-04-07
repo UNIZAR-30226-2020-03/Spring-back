@@ -10,7 +10,7 @@ public class Usuario extends Cliente{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3424972757253234619L;
+	private static final long serialVersionUID = 3424972757253234619L;
 	
 	@Id
 	@GeneratedValue
@@ -29,9 +29,7 @@ public class Usuario extends Cliente{
 
 	@Override
 	public String toString() {
-		return "Usuario [cod_usuario=" + cod_usuario + ", cod_cliente=" + cod_cliente + ", nombre=" + nombre
-				+ ", apellidos=" + apellidos + ", contrasenya=" + contrasenya + ", correo=" + correo + ", username="
-				+ username + ", pais=" + pais + ", getCod_usuario()=" + getCod_usuario() + ", getUsername()="
+		return "Usuario [cod_usuario=" + cod_usuario + ", getCod_usuario()=" + getCod_usuario() + ", getUsername()="
 				+ getUsername() + ", getPais()=" + getPais() + ", getCod_cliente()=" + getCod_cliente()
 				+ ", getNombre()=" + getNombre() + ", getApellidos()=" + getApellidos() + ", getContrasenya()="
 				+ getContrasenya() + ", getCorreo()=" + getCorreo() + ", hashCode()=" + hashCode() + ", toString()="
@@ -45,6 +43,5 @@ public class Usuario extends Cliente{
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
 
 }
