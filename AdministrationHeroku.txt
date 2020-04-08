@@ -1,0 +1,14 @@
+Host
+ec2-54-197-48-79.compute-1.amazonaws.com
+Database
+devvggns8fcnm2
+User
+ajtrnxuzivseex
+Port
+5432
+Password
+fa0228be42ae8110761b49b1fab259fa7a3c80047836b0151d55eceaa9d8a34d
+URI
+postgres://ajtrnxuzivseex:fa0228be42ae8110761b49b1fab259fa7a3c80047836b0151d55eceaa9d8a34d@ec2-54-197-48-79.compute-1.amazonaws.com:5432/devvggns8fcnm2
+Heroku CLI
+heroku pg:psql postgresql-dimensional-82463 --app upbeatproyect
