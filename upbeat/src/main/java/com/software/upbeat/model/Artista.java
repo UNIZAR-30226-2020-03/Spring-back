@@ -1,5 +1,6 @@
 package com.software.upbeat.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,7 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "artista")
 public class Artista extends Cliente{
 	
 	/**
@@ -30,7 +30,6 @@ public class Artista extends Cliente{
 		this.descripcion = descripcion;
 	}
 
-	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getCod_artista() {
 		return cod_artista;
@@ -39,7 +38,8 @@ public class Artista extends Cliente{
 	public void setCod_artista(Long cod_artista) {
 		this.cod_artista = cod_artista;
 	}
-
+	
+	@Column(name = "artistname", nullable = false)
 	public String getNombre_artista() {
 		return nombre_artista;
 	}
@@ -48,6 +48,7 @@ public class Artista extends Cliente{
 		this.nombre_artista = nombre_artista;
 	}
 
+	@Column(name = "descripcion", nullable = false)
 	public String getDescripcion() {
 		return descripcion;
 	}

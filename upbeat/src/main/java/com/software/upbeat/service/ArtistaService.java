@@ -11,7 +11,8 @@ public class ArtistaService {
 	@Autowired
 	ArtistaRepository dao;
 	
-	public Artista save(Artista cliente){
-		return dao.saveAndFlush(cliente);
+	public Artista save(Artista artista){
+		return dao.saveAndFlush(artista);
 	}
+	
 }
