@@ -27,8 +27,7 @@ public class Cliente implements Serializable{
 	private String username;
 	private String pais;
 	
-	public Cliente() {
-		
+	public Cliente() {	
 	}
 	
 	public Cliente(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
