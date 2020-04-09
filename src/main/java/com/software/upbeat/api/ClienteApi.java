@@ -1,5 +1,7 @@
 package com.software.upbeat.api;
 
+import java.util.List;
+
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +25,15 @@ public class ClienteApi {
 	
 	@Autowired
 	Mapper mapper;
+	
+	//////////////////////////////////////////////
+	// OBTENER TODOS LOS CLIENTES				//
+	//////////////////////////////////////////////
+	
+	@RequestMapping(value="/allClientes", method=RequestMethod.GET)
+	public List<Cliente> getAllClientes() {
+		return clienteService.getAllClientes();
+	}	
 	
 	@RequestMapping(value="/cliente", method=RequestMethod.POST)
 	public ClienteResponse updateOrSave(@RequestBody ClienteRequest clienteRequest) {

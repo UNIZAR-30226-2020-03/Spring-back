@@ -1,5 +1,7 @@
 package com.software.upbeat.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,6 +16,10 @@ public class ClienteService {
 	
 	public Cliente save(Cliente cliente){
 		return dao.saveAndFlush(cliente);
+	}
+	
+	public List<Cliente> getAllClientes() {
+		return this.dao.findAll();
 	}
 	
 }

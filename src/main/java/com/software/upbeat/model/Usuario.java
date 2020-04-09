@@ -1,5 +1,6 @@
 package com.software.upbeat.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,19 +12,20 @@ public class Usuario extends Cliente{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cod_usuario;
 
 	public Usuario() {	
 	}
 
 	public Usuario(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
-			String username, String pais, Long cod_usuario) {
+			String username, String pais, Long codigo_usuario) {
 		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais);
 		// TODO Auto-generated constructor stub
-		this.cod_usuario = cod_usuario;
+		this.cod_usuario = codigo_usuario;
 	}
 
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cod_usuario")
 	public Long getCod_usuario() {
 		return cod_usuario;
 	}

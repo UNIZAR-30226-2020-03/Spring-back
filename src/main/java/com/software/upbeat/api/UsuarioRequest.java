@@ -1,10 +1,7 @@
 package com.software.upbeat.api;
 
-import javax.validation.constraints.*;
-
 public class UsuarioRequest extends ClienteRequest{
 
-	@NotNull(message="El codigo de usuario es requerido")
 	private Long cod_usuario;
 
 	public Long getCod_usuario() {

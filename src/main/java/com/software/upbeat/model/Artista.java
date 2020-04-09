@@ -14,6 +14,7 @@ public class Artista extends Cliente{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cod_artista;
 	private String nombre_artista;
 	private String descripcion;
@@ -30,7 +31,7 @@ public class Artista extends Cliente{
 		this.descripcion = descripcion;
 	}
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cod_artista")
 	public Long getCod_artista() {
 		return cod_artista;
 	}

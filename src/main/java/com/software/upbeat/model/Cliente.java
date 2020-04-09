@@ -18,7 +18,8 @@ public class Cliente implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cod_cliente;
 	private String nombre;
 	private String apellidos;
@@ -42,8 +43,7 @@ public class Cliente implements Serializable{
 		this.pais = pais;
 	}
 
-	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "cod_cliente", nullable = false)
 	public Long getCod_cliente() {
 		return cod_cliente;
 	}
