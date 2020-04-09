@@ -4,6 +4,8 @@ import java.util.List;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,13 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.service.ClienteService;
 
+import ResourceNotFoundException.ResourceNotFoundException;
+
 @RestController
 public class ClienteApi {
-	
-	@RequestMapping(value="/cliente", method=RequestMethod.GET)
-	public Cliente getById() {
-		return new Cliente(1L, "Pepe", "Ruiz", "pepecontra", "pepito@gmail.com", "pepitomusic", "España");
-	}
 	
 	@Autowired
 	ClienteService clienteService;
@@ -26,6 +25,28 @@ public class ClienteApi {
 	@Autowired
 	Mapper mapper;
 	
+	
+	//////////////////////////////////////////////
+	// OBTENER CLIENTE POR EMAIL				//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/cliente/{correo}", method=RequestMethod.GET)
+	public ClienteResponse getByEmail(@PathVariable(value = "correo") String correoCliente) throws ResourceNotFoundException {
+	
+		// Mapeo request dto
+		// Cliente cliente = mapper.map(clienteRequest, Cliente.class);
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(clienteByEmail.getBody(), ClienteResponse.class);
+		
+		return clienteResponse;
+		
+		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
+	}
+	
+
 	//////////////////////////////////////////////
 	// OBTENER TODOS LOS CLIENTES				//
 	//////////////////////////////////////////////
@@ -35,7 +56,7 @@ public class ClienteApi {
 		return clienteService.getAllClientes();
 	}	
 	
-	@RequestMapping(value="/cliente", method=RequestMethod.POST)
+	@RequestMapping(value="/saveCliente", method=RequestMethod.POST)
 	public ClienteResponse updateOrSave(@RequestBody ClienteRequest clienteRequest) {
 		
 		// Mapeo request dto
