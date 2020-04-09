@@ -28,4 +28,9 @@ public class ClienteService {
 		Cliente cliente = dao.findByEmail(correo);
 		return ResponseEntity.ok().body(cliente);
 	}
+	
+	public ResponseEntity<Cliente> getClienteByEmailAndPassword(String password, String correo){
+		Cliente cliente = dao.findByEmailAndPassword(password, correo);
+		return ResponseEntity.ok().body(cliente);
+	}
 }

@@ -30,7 +30,7 @@ public class ClienteApi {
 	// OBTENER CLIENTE POR EMAIL				//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/cliente/{correo}", method=RequestMethod.GET)
-	public ClienteResponse getByEmail(@PathVariable(value = "correo") String correoCliente) throws ResourceNotFoundException {
+	public ClienteResponse getByEmail(@PathVariable(value = "correo") String correoCliente) {
 	
 		// Mapeo request dto
 		// Cliente cliente = mapper.map(clienteRequest, Cliente.class);
@@ -46,7 +46,19 @@ public class ClienteApi {
 		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
 	
-
+	//////////////////////////////////////////////
+	// OBTENER CLIENTE POR PASSWORD Y EMAIL 	//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/cliente/{contrasenya}/{correo}", method=RequestMethod.GET)
+	public ClienteResponse getByEmailAndPassword(@PathVariable(value = "contrasenya") String password, @PathVariable(value = "correo") String correoCliente) {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmailAndPassword = clienteService.getClienteByEmailAndPassword(password, correoCliente);
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(clienteByEmailAndPassword.getBody(), ClienteResponse.class);
+		
+		return clienteResponse;
+	}
 	//////////////////////////////////////////////
 	// OBTENER TODOS LOS CLIENTES				//
 	//////////////////////////////////////////////
