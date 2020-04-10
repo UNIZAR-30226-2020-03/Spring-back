@@ -17,7 +17,7 @@ public class ClienteService {
 	ClienteRepository dao;
 	
 	public Cliente save(Cliente cliente){
-		return dao.saveAndFlush(cliente);
+		return dao.save(cliente);
 	}
 	
 	public List<Cliente> getAllClientes() {
@@ -32,5 +32,10 @@ public class ClienteService {
 	public ResponseEntity<Cliente> getClienteByEmailAndPassword(String password, String correo){
 		Cliente cliente = dao.findByEmailAndPassword(password, correo);
 		return ResponseEntity.ok().body(cliente);
+	}
+
+	public void delete(Cliente cliente) {
+		// TODO Auto-generated method stub
+		dao.delete(cliente);
 	}
 }

@@ -1,6 +1,10 @@
 package com.software.upbeat.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.validation.Valid;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +20,7 @@ import com.software.upbeat.model.Cliente;
 import com.software.upbeat.service.ClienteService;
 
 @RestController
+@RequestMapping("/cliente/")
 public class ClienteApi {
 	
 	@Autowired
@@ -28,7 +33,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// OBTENER CLIENTE POR EMAIL				//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/cliente/{correo}", method=RequestMethod.GET)
+	@RequestMapping(value="/get/{correo}", method=RequestMethod.GET)
 	public ClienteResponse getByEmail(@PathVariable(value = "correo") String correoCliente) {
 	
 		// Mapeo request dto
@@ -48,7 +53,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// OBTENER CLIENTE POR PASSWORD Y EMAIL 	//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/cliente/{contrasenya}/{correo}", method=RequestMethod.GET)
+	@RequestMapping(value="/get/{contrasenya}/{correo}", method=RequestMethod.GET)
 	public ClienteResponse getByEmailAndPassword(@PathVariable(value = "contrasenya") String password, @PathVariable(value = "correo") String correoCliente) {
 		// Invoca lógica de negocio
 		ResponseEntity<Cliente> clienteByEmailAndPassword = clienteService.getClienteByEmailAndPassword(password, correoCliente);
@@ -65,22 +70,83 @@ public class ClienteApi {
 	@RequestMapping(value="/allClientes", method=RequestMethod.GET)
 	public List<Cliente> getAllClientes() {
 		return clienteService.getAllClientes();
-	}	
+	}
 	
-	@RequestMapping(value="/saveCliente", method=RequestMethod.POST)
-	public ClienteResponse updateOrSave(@RequestBody ClienteRequest clienteRequest) {
+	//////////////////////////////////////////////
+	// AÑADIR CLIENTE							//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/save", method=RequestMethod.POST)
+	public ClienteResponse saveCliente(@RequestBody ClienteRequest clienteRequest) {
 		
 		// Mapeo request dto
 		Cliente cliente = mapper.map(clienteRequest, Cliente.class);
 		
 		// Invoca lógica de negocio
-		Cliente updatedCliente = clienteService.save(cliente);
+		Cliente newCliente = clienteService.save(cliente);
 		
 		// Mapeo entity
-		ClienteResponse clienteResponse = mapper.map(updatedCliente, ClienteResponse.class);
+		ClienteResponse clienteResponse = mapper.map(newCliente, ClienteResponse.class);
 		
 		return clienteResponse;
 		
 		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
+	
+	//////////////////////////////////////////////
+	// ACTUALIZAR CLIENTE POR EL CORREO 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/update/{correo}", method=RequestMethod.PUT)
+	public ClienteResponse update(@PathVariable(value = "correo") String correoCliente,
+			@Valid @RequestBody ClienteRequest datosCliente) {
+		
+		// Mapeo request dto
+		Cliente cliente = mapper.map(datosCliente, Cliente.class);
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente updateCliente = clienteByEmail.getBody();
+		
+		updateCliente.setNombre(cliente.getNombre());
+		updateCliente.setApellidos(cliente.getApellidos());
+		updateCliente.setContrasenya(cliente.getContrasenya());
+		updateCliente.setCorreo(cliente.getCorreo());
+		updateCliente.setUsername(cliente.getUsername());
+		updateCliente.setPais(cliente.getPais());
+		
+		updateCliente = clienteService.save(updateCliente);
+		
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(updateCliente, ClienteResponse.class);
+		
+		return clienteResponse;
+		
+		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
+	}
+	
+	//////////////////////////////////////////////
+	// ELIMINAR CLIENTE					 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/delete/{correo}", method=RequestMethod.DELETE)
+	public Map<String, Boolean> delete(@PathVariable(value = "correo") String correoCliente) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente deleteCliente = clienteByEmail.getBody();
+		
+		clienteService.delete(deleteCliente);
+		
+		Map<String, Boolean> response = new HashMap<>();
+		response.put("ELIMINADO", Boolean.TRUE);
+		
+		
+		// Mapeo entity
+		// ClienteResponse clienteResponse = mapper.map(deleteCliente, ClienteResponse.class);
+		
+		return response;
+		
+	}
+	
 }
