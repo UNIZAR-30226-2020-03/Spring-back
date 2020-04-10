@@ -11,10 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.upbeat.exception.ResourceNotFoundException;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.service.ClienteService;
-
-import ResourceNotFoundException.ResourceNotFoundException;
 
 @RestController
 public class ClienteApi {
