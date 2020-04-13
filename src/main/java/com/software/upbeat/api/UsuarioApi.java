@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +20,7 @@ import com.software.upbeat.model.Usuario;
 import com.software.upbeat.model.Usuario;
 import com.software.upbeat.service.UsuarioService;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/usuario/")
 public class UsuarioApi {
