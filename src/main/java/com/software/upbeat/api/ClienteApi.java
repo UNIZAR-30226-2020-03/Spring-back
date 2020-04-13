@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,6 +76,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// AÑADIR CLIENTE							//
 	//////////////////////////////////////////////
+	@CrossOrigin(maxAge = 3600)
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	public ClienteResponse saveCliente(@RequestBody ClienteRequest clienteRequest) {
 		
