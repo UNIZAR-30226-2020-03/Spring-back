@@ -20,6 +20,7 @@ import com.software.upbeat.exception.ResourceNotFoundException;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.service.ClienteService;
 
+@CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/cliente/")
 public class ClienteApi {
@@ -76,7 +77,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// AÑADIR CLIENTE							//
 	//////////////////////////////////////////////
-	@CrossOrigin(maxAge = 3600)
+
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	public ClienteResponse saveCliente(@RequestBody ClienteRequest clienteRequest) {
 		
