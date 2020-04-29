@@ -1,10 +1,12 @@
 package com.software.upbeat.model;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.Table;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Usuario extends Cliente{
@@ -20,6 +22,15 @@ public class Usuario extends Cliente{
 	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
 	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
 	 */
+	Set<Cliente> amigos;
+
+	public Set<Cliente> getAmigos() {
+		return amigos;
+	}
+
+	public void setAmigos(Set<Cliente> amigos) {
+		this.amigos = amigos;
+	}
 
 	public Usuario() {	
 	}
