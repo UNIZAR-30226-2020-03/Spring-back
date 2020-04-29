@@ -15,6 +15,11 @@ public class Usuario extends Cliente{
 	private static final long serialVersionUID = 1L;
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long cod_usuario;
+	
+	/*
+	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
+	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
+	 */
 
 	public Usuario() {	
 	}
