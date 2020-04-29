@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Usuario;
-import com.software.upbeat.model.Usuario;
 import com.software.upbeat.service.UsuarioService;
 
 @CrossOrigin(maxAge = 3600)

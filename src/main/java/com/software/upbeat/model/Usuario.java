@@ -2,6 +2,7 @@ package com.software.upbeat.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,6 +25,7 @@ public class Usuario extends Cliente{
 	 */
 	Set<Cliente> amigos;
 
+	@OneToMany(mappedBy = "cod_cliente", cascade = CascadeType.ALL)
 	public Set<Cliente> getAmigos() {
 		return amigos;
 	}
