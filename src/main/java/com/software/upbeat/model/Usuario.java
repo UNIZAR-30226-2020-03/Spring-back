@@ -13,7 +13,7 @@ public class Usuario extends Cliente{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO) // GenerationType.IDENTITY??????
 	private Long cod_usuario;
 	
 	/*
@@ -22,6 +22,31 @@ public class Usuario extends Cliente{
 	 */
 
 	public Usuario() {	
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((cod_usuario == null) ? 0 : cod_usuario.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Usuario other = (Usuario) obj;
+		if (cod_usuario == null) {
+			if (other.cod_usuario != null)
+				return false;
+		} else if (!cod_usuario.equals(other.cod_usuario))
+			return false;
+		return true;
 	}
 
 	public Usuario(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
