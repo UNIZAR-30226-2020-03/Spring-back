@@ -3,6 +3,7 @@ package com.software.upbeat.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.validation.Valid;
 
@@ -16,13 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Usuario;
 import com.software.upbeat.service.UsuarioService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
 @RequestMapping("/usuario/")
-public class UsuarioApi {
+public class UsuarioApi extends ClienteApi{
 	
 	@Autowired
 	UsuarioService usuarioService;
@@ -111,6 +113,7 @@ public class UsuarioApi {
 		updateUsuario.setCorreo(usuario.getCorreo());
 		updateUsuario.setUsername(usuario.getUsername());
 		updateUsuario.setPais(usuario.getPais());
+		updateUsuario.setAmigos(usuario.getAmigos());
 		
 		updateUsuario = usuarioService.save(updateUsuario);
 		
@@ -147,4 +150,28 @@ public class UsuarioApi {
 		
 	}
 	
+	//////////////////////////////////////////////
+	// ACTUALIZAR USUARIO POR EL CORREO 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/follow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
+	public UsuarioResponse follow(@PathVariable(value = "miCorreo") String correoUsuario,
+	@PathVariable(value = "suCorreo") String correoAmigo) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+		ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+		
+		Usuario usuario = usuarioByEmail.getBody();
+		Cliente amigo = amigoByEmail.getBody();
+		
+		usuario.addAmigo(amigo);
+		usuario = usuarioService.save(usuario);
+		
+		// Mapeo entity
+		UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
+		
+		return usuarioResponse;
+	
+	}
+		
 }

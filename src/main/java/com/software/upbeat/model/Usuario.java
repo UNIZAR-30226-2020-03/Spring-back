@@ -1,5 +1,6 @@
 package com.software.upbeat.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -32,6 +33,10 @@ public class Usuario extends Cliente{
 
 	public void setAmigos(Set<Cliente> amigos) {
 		this.amigos = amigos;
+	}
+	
+	public void addAmigo(Cliente amigo) {
+		amigos.add(amigo);
 	}
 
 	public Usuario() {	
@@ -67,6 +72,7 @@ public class Usuario extends Cliente{
 		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais);
 		// TODO Auto-generated constructor stub
 		this.cod_usuario = codigo_usuario;
+		this.amigos = new HashSet<Cliente>();
 	}
 
 	@Column(name = "cod_usuario")
