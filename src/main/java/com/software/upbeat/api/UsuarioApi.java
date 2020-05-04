@@ -151,7 +151,7 @@ public class UsuarioApi extends ClienteApi{
 	}
 	
 	//////////////////////////////////////////////
-	// ACTUALIZAR USUARIO POR EL CORREO 		//
+	// SEGUIR A UN CLIENTE				 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/follow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
 	public UsuarioResponse follow(@PathVariable(value = "miCorreo") String correoUsuario,
@@ -172,6 +172,48 @@ public class UsuarioApi extends ClienteApi{
 		
 		return usuarioResponse;
 	
+	}
+	
+	//////////////////////////////////////////////
+	// VER SI UN CLIENTE ES AMIGO		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/following/{miCorreo}/{suCorreo}", method=RequestMethod.GET)
+	public boolean following(@PathVariable(value = "miCorreo") String correoUsuario,
+	@PathVariable(value = "suCorreo") String correoAmigo) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+		ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+		
+		Usuario usuario = usuarioByEmail.getBody();
+		Cliente amigo = amigoByEmail.getBody();
+		
+		return usuario.containsAmigo(amigo);
+		
+	}
+	
+	//////////////////////////////////////////////
+	// ACTUALIZAR USUARIO POR EL CORREO 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/unfollow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
+	public UsuarioResponse unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
+	@PathVariable(value = "suCorreo") String correoAmigo) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+		ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+		
+		Usuario usuario = usuarioByEmail.getBody();
+		Cliente amigo = amigoByEmail.getBody();
+		
+		usuario.removeAmigo(amigo);
+		usuario = usuarioService.save(usuario);
+		
+		// Mapeo entity
+		UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
+		
+		return usuarioResponse;
+		
 	}
 		
 }

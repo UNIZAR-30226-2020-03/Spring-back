@@ -38,6 +38,14 @@ public class Usuario extends Cliente{
 	public void addAmigo(Cliente amigo) {
 		amigos.add(amigo);
 	}
+	
+	public void removeAmigo(Cliente amigo) {
+		amigos.remove(amigo);
+	}
+	
+	public boolean containsAmigo(Cliente amigo) {
+		return amigos.contains(amigo);
+	}
 
 	public Usuario() {	
 	}
