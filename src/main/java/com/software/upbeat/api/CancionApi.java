@@ -112,7 +112,6 @@ public class CancionApi {
 
 	@RequestMapping(value="/save", method=RequestMethod.POST)
 	public CancionResponse saveCancion(@RequestBody CancionRequest cancionRequest) throws IOException {
-		cancionRequest.setSong("");
 		
 		// Mapeo request dto
 		Cancion cancion = mapper.map(cancionRequest, Cancion.class);

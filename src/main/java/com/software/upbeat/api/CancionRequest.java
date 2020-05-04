@@ -42,10 +42,13 @@ private Long id;
 	public byte[] getSong() {
 		return song;
 	}
-	public void setSong(String media) throws IOException {
+	/*public void setSong(String media) throws IOException {
 		ClassPathResource song = new ClassPathResource(path);
 		byte[] arraySong = new byte[(int) song.contentLength()];
 		song.getInputStream().read(arraySong);
 		this.song = arraySong;
+	}*/
+	public void setSong(byte[] song){
+		this.song = song;
 	}
 }
