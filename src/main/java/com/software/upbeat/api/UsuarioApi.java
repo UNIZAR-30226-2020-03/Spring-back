@@ -23,8 +23,8 @@ import com.software.upbeat.service.UsuarioService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/usuario/")
-public class UsuarioApi extends ClienteApi{
+@RequestMapping("/usuario")
+public class UsuarioApi{
 	
 	@Autowired
 	UsuarioService usuarioService;
@@ -95,7 +95,7 @@ public class UsuarioApi extends ClienteApi{
 	//////////////////////////////////////////////
 	// ACTUALIZAR USUARIO POR EL CORREO 		//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/update/{correo}", method=RequestMethod.PUT)
+	@RequestMapping(value="/updateUser/{correo}", method=RequestMethod.PUT)
 	public UsuarioResponse update(@PathVariable(value = "correo") String correoUsuario,
 			@Valid @RequestBody UsuarioRequest datosUsuario) {
 		
@@ -154,23 +154,30 @@ public class UsuarioApi extends ClienteApi{
 	// SEGUIR A UN CLIENTE				 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/follow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
-	public UsuarioResponse follow(@PathVariable(value = "miCorreo") String correoUsuario,
+	public Map<String, Boolean> follow(@PathVariable(value = "miCorreo") String correoUsuario,
 	@PathVariable(value = "suCorreo") String correoAmigo) {
 		
-		// Invoca lógica de negocio
-		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-		ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+		Map<String, Boolean> response = new HashMap<>();
 		
-		Usuario usuario = usuarioByEmail.getBody();
-		Cliente amigo = amigoByEmail.getBody();
-		
-		usuario.addAmigo(amigo);
-		usuario = usuarioService.save(usuario);
-		
-		// Mapeo entity
-		UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
-		
-		return usuarioResponse;
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+			ResponseEntity<Usuario> amigoByEmail = usuarioService.getUsuarioByEmail(correoAmigo);
+			
+			Usuario usuario = usuarioByEmail.getBody();
+			Usuario amigo = amigoByEmail.getBody();
+			
+			usuario.addAmigo(amigo);
+			usuario = usuarioService.save(usuario);
+			
+			
+			response.put("FOLLOWED", Boolean.TRUE);
+
+		}
+		catch(Exception e) {
+			response.put("ERROR", Boolean.FALSE);
+		}
+		return response;
 	
 	}
 	
@@ -178,17 +185,31 @@ public class UsuarioApi extends ClienteApi{
 	// VER SI UN CLIENTE ES AMIGO		 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/following/{miCorreo}/{suCorreo}", method=RequestMethod.GET)
-	public boolean following(@PathVariable(value = "miCorreo") String correoUsuario,
+	public Map<String, Boolean> following(@PathVariable(value = "miCorreo") String correoUsuario,
 	@PathVariable(value = "suCorreo") String correoAmigo) {
 		
-		// Invoca lógica de negocio
-		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-		ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+		Map<String, Boolean> response = new HashMap<>();
 		
-		Usuario usuario = usuarioByEmail.getBody();
-		Cliente amigo = amigoByEmail.getBody();
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+			ResponseEntity<Usuario> amigoByEmail = usuarioService.getUsuarioByEmail(correoAmigo);
+			
+			Usuario usuario = usuarioByEmail.getBody();
+			Usuario amigo = amigoByEmail.getBody();
+			
+			if(usuario.containsAmigo(amigo)) {
+				response.put("FOLLOWING", Boolean.TRUE);
+			}
+			else {
+				response.put("NOT FOLLOWING", Boolean.TRUE);
+			}
+		}
+		catch(Exception e) {
+			response.put("ERROR", Boolean.FALSE);
+		}
 		
-		return usuario.containsAmigo(amigo);
+		return response;
 		
 	}
 	
@@ -196,23 +217,30 @@ public class UsuarioApi extends ClienteApi{
 	// ACTUALIZAR USUARIO POR EL CORREO 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/unfollow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
-	public UsuarioResponse unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
+	public Map<String, Boolean> unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
 	@PathVariable(value = "suCorreo") String correoAmigo) {
 		
-		// Invoca lógica de negocio
-		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-		ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+		Map<String, Boolean> response = new HashMap<>();
 		
-		Usuario usuario = usuarioByEmail.getBody();
-		Cliente amigo = amigoByEmail.getBody();
+		try{
+			// Invoca lógica de negocio
+			ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+			ResponseEntity<Usuario> amigoByEmail = usuarioService.getUsuarioByEmail(correoAmigo);
+			
+			Usuario usuario = usuarioByEmail.getBody();
+			Usuario amigo = amigoByEmail.getBody();
+			
+			usuario.removeAmigo(amigo);
+			usuario = usuarioService.save(usuario);
+			
+			response.put("UNFOLLOWED", Boolean.TRUE);
+			
+		}
+		catch(Exception e) {
+			response.put("ERROR", Boolean.FALSE);
+		}
 		
-		usuario.removeAmigo(amigo);
-		usuario = usuarioService.save(usuario);
-		
-		// Mapeo entity
-		UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
-		
-		return usuarioResponse;
+		return response;
 		
 	}
 		
