@@ -31,6 +31,11 @@ public class UsuarioService extends ClienteService{
 		Usuario usuario = dao.findByEmailAndPassword(password, correo);
 		return ResponseEntity.ok().body(usuario);
 	}
+	
+	public ResponseEntity<Usuario> getUsuarioByUsername(String username){
+		Usuario usuario = dao.findByUsername(username);
+		return ResponseEntity.ok().body(usuario);
+	}
 
 	public void delete(Usuario usuario) {
 		// TODO Auto-generated method stub
