@@ -26,6 +26,10 @@ import com.software.upbeat.service.UsuarioService;
 @RequestMapping("/usuario")
 public class UsuarioApi{
 	
+	private static final int CORRECT = 0;
+	private static final int ERROR = 1;
+	private static final int WRONG_RESULT = 2;
+	
 	@Autowired
 	UsuarioService usuarioService;
 	
@@ -171,10 +175,10 @@ public class UsuarioApi{
 	// SEGUIR A UN CLIENTE				 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/follow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
-	public Map<String, Boolean> follow(@PathVariable(value = "miCorreo") String correoUsuario,
+	public int follow(@PathVariable(value = "miCorreo") String correoUsuario,
 	@PathVariable(value = "suCorreo") String correoAmigo) {
 		
-		Map<String, Boolean> response = new HashMap<>();
+		int resul;
 		
 		try {
 			// Invoca lógica de negocio
@@ -188,13 +192,13 @@ public class UsuarioApi{
 			usuario = usuarioService.save(usuario);
 			
 			
-			response.put("FOLLOWED", Boolean.TRUE);
+			resul = CORRECT;
 
 		}
 		catch(Exception e) {
-			response.put("ERROR", Boolean.FALSE);
+			resul = ERROR;
 		}
-		return response;
+		return resul;
 	
 	}
 	
@@ -202,10 +206,10 @@ public class UsuarioApi{
 	// VER SI UN CLIENTE ES AMIGO		 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/following/{miCorreo}/{suCorreo}", method=RequestMethod.GET)
-	public Map<String, Boolean> following(@PathVariable(value = "miCorreo") String correoUsuario,
+	public int following(@PathVariable(value = "miCorreo") String correoUsuario,
 	@PathVariable(value = "suCorreo") String correoAmigo) {
 		
-		Map<String, Boolean> response = new HashMap<>();
+		int resul;
 		
 		try {
 			// Invoca lógica de negocio
@@ -216,17 +220,17 @@ public class UsuarioApi{
 			Usuario amigo = amigoByEmail.getBody();
 			
 			if(usuario.containsAmigo(amigo)) {
-				response.put("FOLLOWING", Boolean.TRUE);
+				resul = CORRECT;
 			}
 			else {
-				response.put("NOT FOLLOWING", Boolean.TRUE);
+				resul = WRONG_RESULT;
 			}
 		}
 		catch(Exception e) {
-			response.put("ERROR", Boolean.FALSE);
+			resul = ERROR;
 		}
 		
-		return response;
+		return resul;
 		
 	}
 	
@@ -234,10 +238,10 @@ public class UsuarioApi{
 	// ACTUALIZAR USUARIO POR EL CORREO 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/unfollow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
-	public Map<String, Boolean> unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
+	public int unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
 	@PathVariable(value = "suCorreo") String correoAmigo) {
 		
-		Map<String, Boolean> response = new HashMap<>();
+		int resul;
 		
 		try{
 			// Invoca lógica de negocio
@@ -250,14 +254,14 @@ public class UsuarioApi{
 			usuario.removeAmigo(amigo);
 			usuario = usuarioService.save(usuario);
 			
-			response.put("UNFOLLOWED", Boolean.TRUE);
+			resul = CORRECT;
 			
 		}
 		catch(Exception e) {
-			response.put("ERROR", Boolean.FALSE);
+			resul = ERROR;
 		}
 		
-		return response;
+		return resul;
 		
 	}
 		
