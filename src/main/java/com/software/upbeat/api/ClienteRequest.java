@@ -11,7 +11,7 @@ public class ClienteRequest {
 	private String apellidos;
 	
 	@NotNull(message="La contraseña es requerida")
-	@Size(min=6, max=30, message="La canción debe tener entre {min} y {max} caracteres")
+	@Size(min=6, max=30, message="La contraseña debe tener entre {min} y {max} caracteres")
 	private String contrasenya;
 	
 	private String correo;
