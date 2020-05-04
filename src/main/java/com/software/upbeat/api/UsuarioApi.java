@@ -235,7 +235,7 @@ public class UsuarioApi{
 	}
 	
 	//////////////////////////////////////////////
-	// ACTUALIZAR USUARIO POR EL CORREO 		//
+	// DEJAR DE SEGUIR					 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/unfollow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
 	public int unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
@@ -263,6 +263,24 @@ public class UsuarioApi{
 		
 		return resul;
 		
+	}
+	
+	//////////////////////////////////////////////
+	// LISTA SIGUIENDO					 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/unfollow/{miCorreo}", method=RequestMethod.GET)
+	public Set<Usuario> followingList(@PathVariable(value = "miCorreo") String correoUsuario) {
+	
+		// Invoca lógica de negocio
+		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
+		
+		Usuario usuario = usuarioByEmail.getBody();
+		
+		// Mapeo entity
+		UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
+		
+		return usuarioResponse.getAmigos();
+	
 	}
 		
 }

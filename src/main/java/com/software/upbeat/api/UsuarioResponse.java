@@ -11,9 +11,6 @@ public class UsuarioResponse extends ClienteResponse{
 
 	private Set<Usuario> amigos = new HashSet<Usuario>();
 	
-	public Set<Usuario> getAmigos() {
-		return amigos;
-	}
 
 	public void setAmigos(Set<Usuario> amigos) {
 		this.amigos = amigos;
@@ -25,6 +22,10 @@ public class UsuarioResponse extends ClienteResponse{
 
 	public void setCod_usuario(Long cod_usuario) {
 		this.cod_usuario = cod_usuario;
+	}
+
+	public Set<Usuario> getAmigos() {
+		return amigos;
 	}
 	
 }
