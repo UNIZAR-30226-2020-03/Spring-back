@@ -64,6 +64,23 @@ public class UsuarioApi{
 	}
 	
 	//////////////////////////////////////////////
+	// OBTENER USUARIO POR USERNAME				//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/username/{username}", method=RequestMethod.GET)
+	public UsuarioResponse getByUsername(@PathVariable(value = "username") String username) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Usuario> usuarioByUsername = usuarioService.getUsuarioByUsername(username);
+		
+		// Mapeo entity
+		UsuarioResponse usuarioResponse = mapper.map(usuarioByUsername.getBody(), UsuarioResponse.class);
+		
+		return usuarioResponse;
+		
+		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
+	}
+	
+	//////////////////////////////////////////////
 	// OBTENER TODOS LOS USUARIOS				//
 	//////////////////////////////////////////////
 	

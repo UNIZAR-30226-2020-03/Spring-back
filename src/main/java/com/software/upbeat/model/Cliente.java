@@ -139,7 +139,7 @@ public class Cliente implements Serializable{
 		this.contrasenya = contrasenya;
 	}
 
-	@Column(name = "correo", nullable = false)
+	@Column(name = "correo", nullable = false, unique=true)
 	public String getCorreo() {
 		return correo;
 	}
@@ -148,7 +148,7 @@ public class Cliente implements Serializable{
 		this.correo = correo;
 	}
 
-	@Column(name = "username", nullable = false)
+	@Column(name = "username", nullable = false, unique=true)
 	public String getUsername() {
 		return username;
 	}

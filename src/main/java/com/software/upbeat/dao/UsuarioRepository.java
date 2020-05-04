@@ -13,4 +13,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	
 	@Query(value = "SELECT * FROM cliente u WHERE u.contrasenya = ?1 AND u.correo = ?2", nativeQuery = true)
 	Usuario findByEmailAndPassword(String contrasenya, String correo);
+	
+	@Query(value = "SELECT * FROM cliente u WHERE u.username = ?1", nativeQuery = true)
+	Usuario findByUsername(String username);
 }
