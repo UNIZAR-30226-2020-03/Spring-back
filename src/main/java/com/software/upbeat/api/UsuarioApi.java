@@ -268,7 +268,7 @@ public class UsuarioApi{
 	//////////////////////////////////////////////
 	// LISTA SIGUIENDO					 		//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/unfollow/{miCorreo}", method=RequestMethod.GET)
+	@RequestMapping(value="/followingList/{miCorreo}", method=RequestMethod.GET)
 	public Set<Usuario> followingList(@PathVariable(value = "miCorreo") String correoUsuario) {
 	
 		// Invoca lógica de negocio
