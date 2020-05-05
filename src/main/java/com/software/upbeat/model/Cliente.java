@@ -8,9 +8,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="cliente")
+@Table(name="cliente", uniqueConstraints= {@UniqueConstraint(columnNames= "correo"), @UniqueConstraint(columnNames= "username")})
 public class Cliente implements Serializable{
 	/**
 	 * 
@@ -139,7 +140,8 @@ public class Cliente implements Serializable{
 		this.contrasenya = contrasenya;
 	}
 
-	@Column(name = "correo", nullable = false, unique=true)
+	// unique = true
+	@Column(name = "correo", nullable = false, unique = true)
 	public String getCorreo() {
 		return correo;
 	}
@@ -148,7 +150,8 @@ public class Cliente implements Serializable{
 		this.correo = correo;
 	}
 
-	@Column(name = "username", nullable = false, unique=true)
+	// unique = true
+	@Column(name = "username", nullable = false, unique = true)
 	public String getUsername() {
 		return username;
 	}
