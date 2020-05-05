@@ -14,6 +14,7 @@ public class ClienteRequest {
 	@Size(min=6, max=30, message="La contraseña debe tener entre {min} y {max} caracteres")
 	private String contrasenya;
 	
+	@NotNull(message="El correo es requerido")
 	private String correo;
 	
 	@NotNull(message="El nombre de usuario es requerido")

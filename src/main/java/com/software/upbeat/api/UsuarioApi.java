@@ -103,12 +103,23 @@ public class UsuarioApi{
 		Usuario usuario = mapper.map(usuarioRequest, Usuario.class);
 		
 		// Invoca lógica de negocio
-		Usuario newUsuario = usuarioService.save(usuario);
+		try {
+			Usuario newUsuario = usuarioService.save(usuario);
+			
+			// Mapeo entity
+			UsuarioResponse usuarioResponse = mapper.map(newUsuario, UsuarioResponse.class);
+			
+			return usuarioResponse;
+		}
+		catch(Exception e) {
+			System.out.println("ERROR AL CREAR USUARIO");
+			usuario.setCod_cliente((long) -1);
+			// Mapeo entity
+			UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
+			
+			return usuarioResponse;
+		}
 		
-		// Mapeo entity
-		UsuarioResponse usuarioResponse = mapper.map(newUsuario, UsuarioResponse.class);
-		
-		return usuarioResponse;
 		
 		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
@@ -188,11 +199,15 @@ public class UsuarioApi{
 			Usuario usuario = usuarioByEmail.getBody();
 			Usuario amigo = amigoByEmail.getBody();
 			
-			usuario.addAmigo(amigo);
-			usuario = usuarioService.save(usuario);
-			
-			
-			resul = CORRECT;
+			if(usuario.containsAmigo(amigo)) {
+				System.out.println("YA SE SEGUÍA");
+				resul = WRONG_RESULT;
+			}
+			else {
+				usuario.addAmigo(amigo);
+				usuario = usuarioService.save(usuario);
+				resul = CORRECT;
+			}
 
 		}
 		catch(Exception e) {
