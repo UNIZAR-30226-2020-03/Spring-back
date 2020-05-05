@@ -43,7 +43,8 @@ public class CancionApi {
 	//////////////////////////////////////////////
 	@RequestMapping(value="/getStream/{nombre}", method=RequestMethod.GET)
 	public void getStreamByName(HttpServletResponse response,@PathVariable(value = "nombre") String nombreCancion) throws IOException{
-		InputStream myStream =new ByteArrayInputStream(cancionService.getSongStreamByName(nombreCancion));
+		byte[] song=cancionService.getSongStreamByName(nombreCancion);
+		InputStream myStream =new ByteArrayInputStream(song);
 		// Set the content type and attachment header.
 		response.addHeader("Content-disposition", "attachment;filename="+nombreCancion);
 		response.setContentType("mp3");
