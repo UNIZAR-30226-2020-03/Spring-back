@@ -45,14 +45,19 @@ public class CancionApi {
 	@RequestMapping(value="/getStream/{nombre}", method=RequestMethod.GET)
 	public void getStreamByName(HttpServletResponse response,@PathVariable(value = "nombre") String nombreCancion) throws IOException{
 		byte[] song=cancionService.getSongStreamByName(nombreCancion);
-		InputStream myStream =new ByteArrayInputStream(song);
+		/*InputStream myStream =new ByteArrayInputStream(song);
 		// Set the content type and attachment header.
 		response.addHeader("Content-disposition", "attachment;filename="+nombreCancion);
 		response.setContentType("mp3");
 
 		// Copy the stream to the response's output stream.
 		IOUtils.copy(myStream, response.getOutputStream());
-		response.flushBuffer();
+		response.flushBuffer();*/
+     try{                
+         response.getOutputStream().write(song);              
+     } catch (IOException e) {
+         e.printStackTrace();
+     }       
 	}
 	
 	//////////////////////////////////////////////
