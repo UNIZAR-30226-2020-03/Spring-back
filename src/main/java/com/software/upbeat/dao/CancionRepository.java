@@ -8,7 +8,7 @@ import com.software.upbeat.model.Cancion;
 
 
 public interface CancionRepository extends JpaRepository<Cancion, Long>{
-	@Query(value = "SELECT song FROM cancion c WHERE c.nombre = ?1", nativeQuery = true)
+	@Query(value = "SELECT * FROM cancion c WHERE c.nombre = ?1", nativeQuery = true)
 	Cancion findSongByName(String nombre);
 	
 	@Query(value = "SELECT song FROM cancion c WHERE c.nombre = ?1 AND c.artista = ?2", nativeQuery = true)
