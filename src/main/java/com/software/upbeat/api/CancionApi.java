@@ -172,6 +172,30 @@ public class CancionApi {
 		return response;
 		
 	}
+//////////////////////////////////////////////
+// ELIMINAR CANCION		ID			 		//
+//////////////////////////////////////////////
+@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
+public Map<String, Boolean> delete(@PathVariable(value = "id") Long id) {
+
+// Invoca lógica de negocio
+ResponseEntity<Cancion> songByName = cancionService.getSongByID(id);
+
+Cancion deleteCancion = songByName.getBody();
+
+cancionService.delete(deleteCancion);
+
+Map<String, Boolean> response = new HashMap<>();
+response.put("ELIMINADO", Boolean.TRUE);
+
+
+// Mapeo entity
+// ClienteResponse clienteResponse = mapper.map(deleteCliente, ClienteResponse.class);
+
+return response;
+
+}
+	
 // compress the image bytes before inserting it to the database
 public static byte[] compressBytes(byte[] data) {
 	Deflater deflater = new Deflater();

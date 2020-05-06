@@ -30,6 +30,10 @@ public class CancionService {
 		return ResponseEntity.ok().body(cancion);
 	}
 	
+	public ResponseEntity<Cancion> getSongByID(Long id){
+		Cancion cancion = dao.findSongByID(id);
+		return ResponseEntity.ok().body(cancion);
+	}
 	public byte[] getSongStreamByName(String nombre){
 		Cancion cancion = dao.findSongByName(nombre);
 		return cancion.getSong();
