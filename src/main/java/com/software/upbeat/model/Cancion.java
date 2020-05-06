@@ -25,6 +25,8 @@ public class Cancion {
     @Column(name = "artista")
 	private String autor;
 	
+    @Column(name = "path")
+	private String path;
 	@Lob
 	@Type(type="org.hibernate.type.BinaryType")
     @Column(name="fichero")
@@ -32,6 +34,14 @@ public class Cancion {
 	
 	public Cancion(){}
 	
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	public Cancion(long id, String nombre, Artista autor, byte[] song){
 		this.id = id;
 		this.nombre = nombre;

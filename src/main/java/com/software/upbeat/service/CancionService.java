@@ -35,6 +35,11 @@ public class CancionService {
 		return cancion.getSong();
 	}
 	
+	public String getSongURLByName(String nombre){
+		Cancion cancion = dao.findSongByName(nombre);
+		return cancion.getPath();
+	}
+	
 	public ResponseEntity<Cancion> getSongByNameAndArtist(String nombre, String autor){
 		Cancion cancion = dao.findSongByNameAndArtist(nombre, autor);
 		return ResponseEntity.ok().body(cancion);

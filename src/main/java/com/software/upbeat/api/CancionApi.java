@@ -1,21 +1,20 @@
 package com.software.upbeat.api;
 
-import java.io.ByteArrayInputStream;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.Buffer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.servlet.http.HttpServletResponse;
+import java.util.zip.DataFormatException;
+import java.util.zip.Deflater;
+import java.util.zip.Inflater;
 import javax.validation.Valid;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,39 +41,22 @@ public class CancionApi {
 	//////////////////////////////////////////////
 	// STREAMING CANCION POR NOMBRE				//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/getStream/{nombre}", method=RequestMethod.GET)
-	public void getStreamByName(HttpServletResponse response,@PathVariable(value = "nombre") String nombreCancion) throws IOException{
+	@GetMapping(value="/getStream/{nombre}")
+	public byte[]  getStreamByName(@PathVariable(value = "nombre") String nombreCancion) throws IOException{
 		byte[] song=cancionService.getSongStreamByName(nombreCancion);
-		/*InputStream myStream =new ByteArrayInputStream(song);
-		// Set the content type and attachment header.
-		response.addHeader("Content-disposition", "attachment;filename="+nombreCancion);
-		response.setContentType("mp3");
-
-		// Copy the stream to the response's output stream.
-		IOUtils.copy(myStream, response.getOutputStream());
-		response.flushBuffer();*/
-     try{                
-         response.getOutputStream().write(song);              
-     } catch (IOException e) {
-         e.printStackTrace();
-     }       
+		return decompressBytes(song);
 	}
 	
 	//////////////////////////////////////////////
-	// STREAMING CANCION POR NOMBRE Y AUTOR  	//
+	// STREAMING CANCION POR NOMBRE URL      	//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/getStream/{nombre}/{autor}", method=RequestMethod.GET)
-	public void getStreamByNameAndArtist(HttpServletResponse response,@PathVariable(value = "nombre") String nombreCancion, @PathVariable(value = "autor") String autorCancion) throws IOException {
-
-		InputStream myStream =new ByteArrayInputStream(cancionService.getSongStreamByNameAndArtist(nombreCancion,autorCancion));
-		// Set the content type and attachment header.
-		response.addHeader("Content-disposition", "attachment;filename="+nombreCancion);
-		response.setContentType("mp3");
-
-		// Copy the stream to the response's output stream.
-		IOUtils.copy(myStream, response.getOutputStream());
-		response.flushBuffer();
+	@GetMapping(value="/getStreamUrl/{nombre}")
+	public String  getUrlByName(@PathVariable(value = "nombre") String nombreCancion) throws IOException{
+		return cancionService.getSongURLByName(nombreCancion);
+		
 	}
+	
+	
 	//////////////////////////////////////////////
 	// OBTENER CANCION POR NOMBRE           	//
 	//////////////////////////////////////////////
@@ -114,7 +96,7 @@ public class CancionApi {
 	}
 	
 	//////////////////////////////////////////////
-	// AÑADIR CANCION						//
+	// AÑADIR CANCION BYTES					    //
 	//////////////////////////////////////////////
 
 	@RequestMapping(value="/save", method=RequestMethod.POST)
@@ -124,6 +106,7 @@ public class CancionApi {
 		Cancion cancion = mapper.map(cancionRequest, Cancion.class);
 		
 		// Invoca lógica de negocio
+		cancion.setSong(compressBytes(cancion.getSong()));
 		Cancion newCancion = cancionService.save(cancion);
 		
 		// Mapeo entity
@@ -133,6 +116,7 @@ public class CancionApi {
 		
 		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
+	
 	
 	//////////////////////////////////////////////
 	// ACTUALIZAR CANCION POR EL NOMBRE 		//
@@ -151,7 +135,8 @@ public class CancionApi {
 		
 		updateCancion.setNombre(cancion.getNombre());
 		updateCancion.setAutor(cancion.getAutor());
-		updateCancion.setSong(cancion.getSong());
+		updateCancion.setPath(cancion.getPath());
+		updateCancion.setSong(compressBytes(cancion.getSong()));
 		
 		updateCancion = cancionService.save(updateCancion);
 		
@@ -187,4 +172,42 @@ public class CancionApi {
 		return response;
 		
 	}
+// compress the image bytes before inserting it to the database
+public static byte[] compressBytes(byte[] data) {
+	Deflater deflater = new Deflater();
+	deflater.setInput(data);
+	deflater.finish();
+
+	ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+	byte[] buffer = new byte[1024];
+	while (!deflater.finished()) {
+		int count = deflater.deflate(buffer);
+		outputStream.write(buffer, 0, count);
+	}
+	try {
+		outputStream.close();
+	} catch (IOException e) {
+	}
+	System.out.println("Compressed Image Byte Size - " + outputStream.toByteArray().length);
+
+	return outputStream.toByteArray();
+}
+
+// uncompress the image bytes before returning it to the angular application
+public static byte[] decompressBytes(byte[] data) {
+	Inflater inflater = new Inflater();
+	inflater.setInput(data);
+	ByteArrayOutputStream outputStream = new ByteArrayOutputStream(data.length);
+	byte[] buffer = new byte[1024];
+	try {
+		while (!inflater.finished()) {
+			int count = inflater.inflate(buffer);
+			outputStream.write(buffer, 0, count);
+		}
+		outputStream.close();
+	} catch (IOException ioe) {
+	} catch (DataFormatException e) {
+	}
+	return outputStream.toByteArray();
+}
 }
