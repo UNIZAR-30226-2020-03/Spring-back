@@ -20,8 +20,8 @@ public class Usuario extends Cliente{
 	}
 
 	public Usuario(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
-			String username, String pais, Long codigo_usuario) {
-		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais);
+			String username, String pais, byte[] picByte, Long codigo_usuario) {
+		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais, picByte);
 		// TODO Auto-generated constructor stub
 		this.cod_usuario = codigo_usuario;
 	}

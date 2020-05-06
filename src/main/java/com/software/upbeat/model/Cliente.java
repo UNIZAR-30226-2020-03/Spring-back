@@ -26,12 +26,13 @@ public class Cliente implements Serializable{
 	private String correo;
 	private String username;
 	private String pais;
+	private byte[] picByte;
 	
 	public Cliente() {	
 	}
 	
 	public Cliente(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
-			String username, String pais) {
+			String username, String pais, byte[] picByte) {
 		super();
 		this.cod_cliente = cod_cliente;
 		this.nombre = nombre;
@@ -40,6 +41,7 @@ public class Cliente implements Serializable{
 		this.correo = correo;
 		this.username = username;
 		this.pais = pais;
+		this.picByte = picByte;
 	}
 
 	@Column(name = "cod_cliente", nullable = false)
@@ -103,6 +105,15 @@ public class Cliente implements Serializable{
 
 	public void setPais(String pais) {
 		this.pais = pais;
+	}
+
+	@Column(name = "picByte", length = 1000)
+	public byte[] getPicByte() {
+		return picByte;
+	}
+
+	public void setPicByte(byte[] picByte) {
+		this.picByte = picByte;
 	}
 
 	@Override

@@ -13,11 +13,6 @@ import com.software.upbeat.service.ArtistaService;
 @RestController
 public class ArtistaApi {
 	
-	@RequestMapping(value="/artista", method=RequestMethod.GET)
-	public Artista getById() {
-		return new Artista(1L, "Pepe", "Ruiz", "pepecontra", "pepito@gmail.com", "pepitomusic", "España", 1L, "PepeMusic", "DJ");
-	}
-	
 	@Autowired
 	ArtistaService artistaService;
 	

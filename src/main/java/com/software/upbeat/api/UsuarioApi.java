@@ -13,11 +13,6 @@ import com.software.upbeat.service.UsuarioService;
 
 @RestController
 public class UsuarioApi {
-
-	@RequestMapping(value="/usuario", method=RequestMethod.GET)
-	public Usuario getById() {
-		return new Usuario(1L, "Pepe", "Ruiz", "pepecontra", "pepito@gmail.com", "pepitomusic", "España", 1L);
-	}
 	
 	@Autowired
 	UsuarioService usuarioService;
