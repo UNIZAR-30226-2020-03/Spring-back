@@ -175,7 +175,7 @@ public class CancionApi {
 //////////////////////////////////////////////
 // ELIMINAR CANCION		ID			 		//
 //////////////////////////////////////////////
-@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
+@RequestMapping(value="/deleteid/{id}", method=RequestMethod.DELETE)
 public Map<String, Boolean> delete(@PathVariable(value = "id") Long id) {
 
 // Invoca lógica de negocio
