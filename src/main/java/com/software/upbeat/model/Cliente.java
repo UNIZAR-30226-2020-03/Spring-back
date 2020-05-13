@@ -1,12 +1,15 @@
 package com.software.upbeat.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
@@ -27,6 +30,35 @@ public class Cliente implements Serializable{
 	private String correo;
 	private String username;
 	private String pais;
+	
+	/*
+	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
+	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
+	 */
+	@OneToMany(cascade = CascadeType.ALL)
+	private Set<Cliente> amigos; // = new HashSet<Usuario>();
+	// private List<Cliente> amigos = new ArrayList<Cliente>();
+
+	// @OneToMany(mappedBy = "cod_cliente", cascade = CascadeType.ALL)
+	public Set<Cliente> getAmigos() {
+		return amigos;
+	}
+
+	public void setAmigos(Set<Cliente> amigos) {
+		this.amigos = amigos;
+	}
+	
+	public void addAmigo(Cliente amigo) {
+		amigos.add(amigo);
+	}
+	
+	public void removeAmigo(Cliente amigo) {
+		amigos.remove(amigo);
+	}
+	
+	public boolean containsAmigo(Cliente amigo) {
+		return amigos.contains(amigo);
+	}
 	
 	public Cliente() {	
 	}

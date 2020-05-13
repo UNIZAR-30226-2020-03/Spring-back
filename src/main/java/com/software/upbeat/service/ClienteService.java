@@ -38,4 +38,9 @@ public class ClienteService {
 		// TODO Auto-generated method stub
 		dao.delete(cliente);
 	}
+	
+	public ResponseEntity<Cliente> getClienteByUsername(String username) {
+		Cliente cliente = dao.findByUsername(username);
+		return ResponseEntity.ok().body(cliente);
+	}
 }

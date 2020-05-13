@@ -24,7 +24,7 @@ public class Usuario extends Cliente{
 	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
 	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
+	/*@OneToMany(cascade = CascadeType.ALL)
 	private Set<Usuario> amigos; // = new HashSet<Usuario>();
 	// private List<Cliente> amigos = new ArrayList<Cliente>();
 
@@ -48,6 +48,7 @@ public class Usuario extends Cliente{
 	public boolean containsAmigo(Usuario amigo) {
 		return amigos.contains(amigo);
 	}
+	*/
 
 	public Usuario() {	
 	}
@@ -82,7 +83,7 @@ public class Usuario extends Cliente{
 		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais);
 		// TODO Auto-generated constructor stub
 		this.cod_usuario = codigo_usuario;
-		this.amigos = new HashSet<Usuario>();
+		//this.amigos = new HashSet<Usuario>();
 	}
 
 	@Column(name = "cod_usuario")

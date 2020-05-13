@@ -1,5 +1,10 @@
 package com.software.upbeat.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.software.upbeat.model.Cliente;
+
 public class ClienteResponse {
 	
 	private Long cod_cliente;
@@ -9,6 +14,16 @@ public class ClienteResponse {
 	private String correo;
 	private String username;
 	private String pais;
+	
+	private Set<Cliente> amigos = new HashSet<Cliente>();
+	
+	public void setAmigos(Set<Cliente> amigos) {
+		this.amigos = amigos;
+	}
+	
+	public Set<Cliente> getAmigos() {
+		return amigos;
+	}
 	
 	public Long getCod_cliente() {
 		return cod_cliente;

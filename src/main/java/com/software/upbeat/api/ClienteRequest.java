@@ -1,6 +1,11 @@
 package com.software.upbeat.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.validation.constraints.*;
+
+import com.software.upbeat.model.Cliente;
 
 public class ClienteRequest {
 	
@@ -22,6 +27,16 @@ public class ClienteRequest {
 	private String username;
 	
 	private String pais;
+	
+	private Set<Cliente> amigos = new HashSet<Cliente>();
+	
+	public Set<Cliente> getAmigos() {
+		return amigos;
+	}
+
+	public void setAmigos(Set<Cliente> amigos) {
+		this.amigos = amigos;
+	}
 	
 	public Long getCod_cliente() {
 		return cod_cliente;

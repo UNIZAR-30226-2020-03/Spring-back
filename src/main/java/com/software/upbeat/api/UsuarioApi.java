@@ -26,10 +26,6 @@ import com.software.upbeat.service.UsuarioService;
 @RequestMapping("/usuario")
 public class UsuarioApi{
 	
-	private static final int CORRECT = 0;
-	private static final int ERROR = 1;
-	private static final int WRONG_RESULT = 2;
-	
 	@Autowired
 	UsuarioService usuarioService;
 	
@@ -180,122 +176,6 @@ public class UsuarioApi{
 		
 		return response;
 		
-	}
-	
-	//////////////////////////////////////////////
-	// SEGUIR A UN CLIENTE				 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/follow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
-	public int follow(@PathVariable(value = "miCorreo") String correoUsuario,
-	@PathVariable(value = "suCorreo") String correoAmigo) {
-		
-		int resul;
-		
-		try {
-			// Invoca lógica de negocio
-			ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-			ResponseEntity<Usuario> amigoByEmail = usuarioService.getUsuarioByEmail(correoAmigo);
-			
-			Usuario usuario = usuarioByEmail.getBody();
-			Usuario amigo = amigoByEmail.getBody();
-			
-			if(usuario.containsAmigo(amigo)) {
-				System.out.println("YA SE SEGUÍA");
-				resul = WRONG_RESULT;
-			}
-			else {
-				usuario.addAmigo(amigo);
-				usuario = usuarioService.save(usuario);
-				resul = CORRECT;
-			}
-
-		}
-		catch(Exception e) {
-			resul = ERROR;
-		}
-		return resul;
-	
-	}
-	
-	//////////////////////////////////////////////
-	// VER SI UN CLIENTE ES AMIGO		 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/following/{miCorreo}/{suCorreo}", method=RequestMethod.GET)
-	public int following(@PathVariable(value = "miCorreo") String correoUsuario,
-	@PathVariable(value = "suCorreo") String correoAmigo) {
-		
-		int resul;
-		
-		try {
-			// Invoca lógica de negocio
-			ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-			ResponseEntity<Usuario> amigoByEmail = usuarioService.getUsuarioByEmail(correoAmigo);
-			
-			Usuario usuario = usuarioByEmail.getBody();
-			Usuario amigo = amigoByEmail.getBody();
-			
-			if(usuario.containsAmigo(amigo)) {
-				resul = CORRECT;
-			}
-			else {
-				resul = WRONG_RESULT;
-			}
-		}
-		catch(Exception e) {
-			resul = ERROR;
-		}
-		
-		return resul;
-		
-	}
-	
-	//////////////////////////////////////////////
-	// DEJAR DE SEGUIR					 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/unfollow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
-	public int unfollow(@PathVariable(value = "miCorreo") String correoUsuario,
-	@PathVariable(value = "suCorreo") String correoAmigo) {
-		
-		int resul;
-		
-		try{
-			// Invoca lógica de negocio
-			ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-			ResponseEntity<Usuario> amigoByEmail = usuarioService.getUsuarioByEmail(correoAmigo);
-			
-			Usuario usuario = usuarioByEmail.getBody();
-			Usuario amigo = amigoByEmail.getBody();
-			
-			usuario.removeAmigo(amigo);
-			usuario = usuarioService.save(usuario);
-			
-			resul = CORRECT;
-			
-		}
-		catch(Exception e) {
-			resul = ERROR;
-		}
-		
-		return resul;
-		
-	}
-	
-	//////////////////////////////////////////////
-	// LISTA SIGUIENDO					 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/followingList/{miCorreo}", method=RequestMethod.GET)
-	public Set<Usuario> followingList(@PathVariable(value = "miCorreo") String correoUsuario) {
-	
-		// Invoca lógica de negocio
-		ResponseEntity<Usuario> usuarioByEmail = usuarioService.getUsuarioByEmail(correoUsuario);
-		
-		Usuario usuario = usuarioByEmail.getBody();
-		
-		// Mapeo entity
-		UsuarioResponse usuarioResponse = mapper.map(usuario, UsuarioResponse.class);
-		
-		return usuarioResponse.getAmigos();
-	
 	}
 		
 }
