@@ -6,12 +6,22 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import org.apache.openjpa.persistence.FetchAttribute;
+import org.apache.openjpa.persistence.FetchGroup;
+import org.apache.openjpa.persistence.FetchGroups;
+import org.apache.openjpa.persistence.LoadFetchGroup;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+// DOC FetchGroups -> http://openjpa.apache.org/builds/2.4.3/apache-openjpa/docs/ref_guide_fetch.html
 
 @Entity
 @Table(name="cliente", uniqueConstraints= {@UniqueConstraint(columnNames= "correo"), @UniqueConstraint(columnNames= "username")})
@@ -35,11 +45,19 @@ public class Cliente implements Serializable{
 	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
 	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
 	 */
-	@OneToMany(cascade = CascadeType.ALL)
-	private Set<Cliente> amigos; // = new HashSet<Usuario>();
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Cliente> amigos; //= new HashSet<Cliente>();
 	// private List<Cliente> amigos = new ArrayList<Cliente>();
-
-	// @OneToMany(mappedBy = "cod_cliente", cascade = CascadeType.ALL)
+	
+	/*
+	 * IMPORTANTE!!!!!
+	 * EVITAR RECURSIVIDAD INFINITA
+	 * 
+	 * https://www.youtube.com/watch?v=6cW4z3DwG4E
+	 */
+	
+	@JsonBackReference
 	public Set<Cliente> getAmigos() {
 		return amigos;
 	}
@@ -48,6 +66,7 @@ public class Cliente implements Serializable{
 		this.amigos = amigos;
 	}
 	
+
 	public void addAmigo(Cliente amigo) {
 		amigos.add(amigo);
 	}

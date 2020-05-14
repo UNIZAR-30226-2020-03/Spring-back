@@ -61,6 +61,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.openjpa/openjpa-persistence-jdbc -->
+		<dependency>
+    		<groupId>org.apache.openjpa</groupId>
+    		<artifactId>openjpa-persistence-jdbc</artifactId>
+    		<version>3.1.1</version>
+		</dependency>
 	</dependencies>
 	
 
