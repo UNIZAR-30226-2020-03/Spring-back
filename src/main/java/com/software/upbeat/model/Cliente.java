@@ -11,15 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.apache.openjpa.persistence.FetchAttribute;
-import org.apache.openjpa.persistence.FetchGroup;
-import org.apache.openjpa.persistence.FetchGroups;
-import org.apache.openjpa.persistence.LoadFetchGroup;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 // DOC FetchGroups -> http://openjpa.apache.org/builds/2.4.3/apache-openjpa/docs/ref_guide_fetch.html
 
@@ -78,6 +75,34 @@ public class Cliente implements Serializable{
 	public boolean containsAmigo(Cliente amigo) {
 		return amigos.contains(amigo);
 	}
+	
+	// PLAYLISTS
+	
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creador")
+	private Set<Playlist> playlists; //= new HashSet<Playlist>();
+	
+	@JsonManagedReference
+	public Set<Playlist> getPlaylists() {
+		return playlists;
+	}
+
+	public void setPlaylists(Set<Playlist> playlists) {
+		this.playlists = playlists;
+	}
+	
+
+	public void createPlaylist() {
+		;
+	}
+	
+	public void removePlaylist() {
+		;
+	}
+	
+	public boolean containsPlaylist(Playlist playlist) {
+		return playlists.contains(playlist);
+	}
+	// FIN PLAYLISTS
 	
 	public Cliente() {	
 	}

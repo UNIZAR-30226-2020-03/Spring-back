@@ -1,6 +1,7 @@
 package com.software.upbeat.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -10,8 +11,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.springframework.data.jpa.repository.Query;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -71,7 +76,41 @@ public class Playlist implements Serializable{
 	}
 	//////// FIN CANCIONES /////////////////////
 	
-	public Playlist() {}
+	////////CREADOR /////////////////////
+	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="creador", nullable=true)
+	private Cliente creador;
+	
+	@JsonBackReference
+	public Cliente getCreador() {
+		return creador;
+	}
+	
+	public void setCreador(Cliente creador) {
+		this.creador = creador;
+	}
+	
+	/*public void addCancion(Cancion cancion) {
+		canciones.add(cancion);
+		numCanciones++;
+	}
+	
+	public void removeCancion(Cancion cancion) {
+		canciones.remove(cancion);
+		if(numCanciones<=0) {
+			numCanciones=0;
+		}
+		else {
+			numCanciones--;
+		}
+	}*/
+	
+	public boolean isCreador(Cliente creador) {
+		return this.creador==creador;
+	}
+	//////// FIN CREADOR /////////////////////
+	
+	public Playlist() {this.numCanciones = 0;}
 
 	public Long getId() {
 		return id;
@@ -151,12 +190,12 @@ public class Playlist implements Serializable{
 		return true;
 	}
 
-	public Playlist(Long id, String nombre, String descripcion, int numCanciones) {
+	public Playlist(Long id, String nombre, String descripcion) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
-		this.numCanciones = numCanciones;
+		this.numCanciones = 0;
 	}
 	
 	
