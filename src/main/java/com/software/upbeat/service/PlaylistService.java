@@ -4,11 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.software.upbeat.dao.PlaylistRepository;
-import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
 
 @Component
@@ -35,6 +33,10 @@ public class PlaylistService {
 
 	public Optional<Playlist> getPlaylistById(Long playlistId) {
 		return dao.findById(playlistId);
+	}
+	
+	public List<Playlist> getPlaylistByName(String nombre){
+		return dao.findByName(nombre);
 	}
 
 }
