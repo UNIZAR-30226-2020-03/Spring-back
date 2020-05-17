@@ -7,16 +7,22 @@ import javax.validation.constraints.NotNull;
 import org.springframework.core.io.ClassPathResource;
 
 public class CancionResponse {
-private Long id;
-	
+
+	private Long id;
+
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
 	private String autor;
-	
+	/*
+	 * PATH REQUERIDO -> SI NO ES ASÍ Y SE CREA PRIMERO SIN PATH: ELIMINAR CONSTRAINT
+	 */
+	@NotNull(message="La ruta a la canción es requerida")
+	private String path;
+
 	@NotNull(message="La url es requerida")
 	private String path;
-	
-	
+
+
 	public Long getId() {
 		return id;
 	}
@@ -41,8 +47,8 @@ private Long id;
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
-	
+
+
 	/*
 	public byte[] getSong() {
 		return song;

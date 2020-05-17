@@ -3,9 +3,11 @@ package com.software.upbeat.api;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.Playlist;
 
 public class ClienteRequest {
 	
@@ -30,14 +32,9 @@ public class ClienteRequest {
 	
 	private Set<Cliente> amigos = new HashSet<Cliente>();
 	
-	public Set<Cliente> getAmigos() {
-		return amigos;
-	}
-
-	public void setAmigos(Set<Cliente> amigos) {
-		this.amigos = amigos;
-	}
+	private Set<Playlist> playlists = new HashSet<Playlist>();
 	
+
 	public Long getCod_cliente() {
 		return cod_cliente;
 	}
@@ -79,6 +76,18 @@ public class ClienteRequest {
 	}
 	public void setPais(String pais) {
 		this.pais = pais;
+	}
+	public Set<Cliente> getAmigos() {
+		return amigos;
+	}
+	public void setAmigos(Set<Cliente> amigos) {
+		this.amigos = amigos;
+	}
+	public Set<Playlist> getPlaylists() {
+		return playlists;
+	}
+	public void setPlaylists(Set<Playlist> playlists) {
+		this.playlists = playlists;
 	}
 
 }

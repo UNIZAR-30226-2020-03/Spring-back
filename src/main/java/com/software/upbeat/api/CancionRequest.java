@@ -8,21 +8,21 @@ import javax.validation.constraints.NotNull;
 
 public class CancionRequest {
 private Long id;
-	
+
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
 	private String autor;
 	private String path;
 	//private byte[] song;
-	
-	
+
+
 	public String getPath() {
 		return path;
 	}
 	public void setPath(String path) {
 		this.path = path;
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -41,21 +41,21 @@ private Long id;
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-	
+
 	/*
 	public byte[] getSong() {
 		return song;
 	}
-	
+
 	public void setSong(String media) throws IOException {
 		ClassPathResource song = new ClassPathResource(path);
 		byte[] arraySong = new byte[(int) song.contentLength()];
 		song.getInputStream().read(arraySong);
 		this.song = arraySong;
 	}
-	
+
 	public void setSong(byte[] song){
-		
+
 		this.song = song;
 	}
 	*/

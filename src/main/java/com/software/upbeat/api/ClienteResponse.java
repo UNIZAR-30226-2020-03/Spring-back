@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.Playlist;
 
 public class ClienteResponse {
 	
@@ -16,14 +17,8 @@ public class ClienteResponse {
 	private String pais;
 	
 	private Set<Cliente> amigos = new HashSet<Cliente>();
+	private Set<Playlist> playlists = new HashSet<Playlist>();
 	
-	public void setAmigos(Set<Cliente> amigos) {
-		this.amigos = amigos;
-	}
-	
-	public Set<Cliente> getAmigos() {
-		return amigos;
-	}
 	
 	public Long getCod_cliente() {
 		return cod_cliente;
@@ -66,6 +61,18 @@ public class ClienteResponse {
 	}
 	public void setPais(String pais) {
 		this.pais = pais;
+	}
+	public void setAmigos(Set<Cliente> amigos) {
+		this.amigos = amigos;
+	}
+	public Set<Cliente> getAmigos() {
+		return amigos;
+	}
+	public Set<Playlist> getPlaylists() {
+		return playlists;
+	}
+	public void setPlaylists(Set<Playlist> playlists) {
+		this.playlists = playlists;
 	}
 
 }
