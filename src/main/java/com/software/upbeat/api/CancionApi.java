@@ -38,15 +38,7 @@ public class CancionApi {
 	Mapper mapper;
 	
 	
-	//////////////////////////////////////////////
-	// STREAMING CANCION POR NOMBRE				//
-	//////////////////////////////////////////////
-	@GetMapping(value="/getStream/{nombre}")
-	public byte[]  getStreamByName(@PathVariable(value = "nombre") String nombreCancion) throws IOException{
-		byte[] song=cancionService.getSongStreamByName(nombreCancion);
-		return decompressBytes(song);
-	}
-	
+	 
 	//////////////////////////////////////////////
 	// STREAMING CANCION POR NOMBRE URL      	//
 	//////////////////////////////////////////////
@@ -68,7 +60,6 @@ public class CancionApi {
 	CancionResponse cancionResponse = mapper.map(songByName.getBody(), CancionResponse.class);
 	
 	return cancionResponse;
-	//Jejjejejeherokuuu
 	}
 
 	//////////////////////////////////////////////
@@ -95,6 +86,16 @@ public class CancionApi {
 		return cancionService.getAllSongs();
 	}
 	
+	//////////////////////////////////////////////////////////////////////
+	// OBTENER TODAS LAS CANCIONES ORDENADAS POR POPULARIDAD			//
+	//////////////////////////////////////////////////////////////////////
+	
+	@RequestMapping(value="/allSongsOrderByPopularity", method=RequestMethod.GET)
+	public List<Cancion> findSongsByPopularity() {
+	return cancionService.findSongsByPopularity();
+	}
+	
+	/*
 	//////////////////////////////////////////////
 	// AÑADIR CANCION BYTES					    //
 	//////////////////////////////////////////////
@@ -117,6 +118,15 @@ public class CancionApi {
 		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
 	
+	//////////////////////////////////////////////
+	// STREAMING CANCION POR NOMBRE				//
+	//////////////////////////////////////////////
+	@GetMapping(value="/getStream/{nombre}")
+	public byte[]  getStreamByName(@PathVariable(value = "nombre") String nombreCancion) throws IOException{
+		byte[] song=cancionService.getSongStreamByName(nombreCancion);
+		return decompressBytes(song);
+	}
+	*/
 	
 	//////////////////////////////////////////////
 	// ACTUALIZAR CANCION POR EL NOMBRE 		//
@@ -136,17 +146,14 @@ public class CancionApi {
 		updateCancion.setNombre(cancion.getNombre());
 		updateCancion.setAutor(cancion.getAutor());
 		updateCancion.setPath(cancion.getPath());
-		updateCancion.setSong(compressBytes(cancion.getSong()));
+		//updateCancion.setSong(compressBytes(cancion.getSong()));
 		
 		updateCancion = cancionService.save(updateCancion);
 		
-		
+		//ACTUALIZAR DE FIREBASE
 		// Mapeo entity
 		CancionResponse cancionResponse = mapper.map(updateCancion, CancionResponse.class);
-		
 		return cancionResponse;
-		
-		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
 	
 	//////////////////////////////////////////////
@@ -164,7 +171,7 @@ public class CancionApi {
 		
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("ELIMINADO", Boolean.TRUE);
-		
+		//ELIMINAR DE FIREBASE
 		
 		// Mapeo entity
 		// ClienteResponse clienteResponse = mapper.map(deleteCliente, ClienteResponse.class);

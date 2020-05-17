@@ -1,5 +1,7 @@
 package com.software.upbeat.dao;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -16,4 +18,8 @@ public interface CancionRepository extends JpaRepository<Cancion, Long>{
 	
 	@Query(value = "SELECT song FROM cancion c WHERE c.nombre = ?1 AND c.artista = ?2", nativeQuery = true)
 	Cancion findSongByNameAndArtist(String nombre, String autor);
+	
+	@Query(value = "SELECT * FROM cancion c ORDER BY reproducciones DESC", nativeQuery = true)
+	List<Cancion> findSongsByPopularity();
+	
 }

@@ -13,18 +13,20 @@ private Long id;
 	private String nombre;
 	private String autor;
 	private String path;
-	private byte[] song;
+	//private byte[] song;
 	
-	public Long getId_cancion() {
-		return id;
-	}
+	
 	public String getPath() {
 		return path;
 	}
 	public void setPath(String path) {
 		this.path = path;
 	}
-	public void setId_cancion(Long id) {
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getNombre() {
@@ -39,17 +41,22 @@ private Long id;
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
+	
+	/*
 	public byte[] getSong() {
 		return song;
 	}
-	/*public void setSong(String media) throws IOException {
+	
+	public void setSong(String media) throws IOException {
 		ClassPathResource song = new ClassPathResource(path);
 		byte[] arraySong = new byte[(int) song.contentLength()];
 		song.getInputStream().read(arraySong);
 		this.song = arraySong;
-	}*/
+	}
+	
 	public void setSong(byte[] song){
 		
 		this.song = song;
 	}
+	*/
 }

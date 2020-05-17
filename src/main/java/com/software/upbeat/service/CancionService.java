@@ -34,13 +34,12 @@ public class CancionService {
 		Cancion cancion = dao.findSongByID(id);
 		return ResponseEntity.ok().body(cancion);
 	}
-	public byte[] getSongStreamByName(String nombre){
-		Cancion cancion = dao.findSongByName(nombre);
-		return cancion.getSong();
-	}
 	
-	public String getSongURLByName(String nombre){
+	
+	public String getSongURLByName(String nombre){ //con actualización reproducciones
 		Cancion cancion = dao.findSongByName(nombre);
+		cancion.setReproducciones((cancion.getReproducciones()+1));
+		dao.save(cancion);
 		return cancion.getPath();
 	}
 	
@@ -49,11 +48,20 @@ public class CancionService {
 		return ResponseEntity.ok().body(cancion);
 	}
 	
+	/*
 	public byte[] getSongStreamByNameAndArtist(String nombre, String autor){
 		Cancion cancion = dao.findSongByNameAndArtist(nombre, autor);
 		return cancion.getSong();
 	}
-
+	
+	public byte[] getSongStreamByName(String nombre){
+		Cancion cancion = dao.findSongByName(nombre);
+		return cancion.getSong();
+	}
+	*/
+	public List<Cancion> findSongsByPopularity(){
+		return dao.findSongsByPopularity();
+	}
 	public void delete(Cancion cancion) {
 		// TODO Auto-generated method stub
 		dao.delete(cancion);
