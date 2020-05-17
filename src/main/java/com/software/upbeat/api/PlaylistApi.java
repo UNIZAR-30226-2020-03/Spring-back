@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Cancion;
-import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.PlaylistService;
@@ -43,8 +42,6 @@ public class PlaylistApi {
 	CancionService cancionService;
 	
 	/*
-	 * TODO: getPlaylistByName(String nombre) <- List
-	 * 
 	 * ¿¿¿ getPlaylistByNameAndAuthor ???
 	 */
 	

@@ -17,8 +17,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import org.springframework.data.jpa.repository.Query;
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
@@ -50,7 +48,7 @@ public class Playlist implements Serializable{
 	/*
 	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 	 */
-	@JsonBackReference(value = "canciones-playlist")
+	@JsonBackReference(value = "canciones")
 	public Set<Cancion> getCanciones() {
 		return canciones;
 	}
