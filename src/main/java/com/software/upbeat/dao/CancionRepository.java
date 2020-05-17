@@ -22,4 +22,7 @@ public interface CancionRepository extends JpaRepository<Cancion, Long>{
 	@Query(value = "SELECT * FROM cancion c ORDER BY reproducciones DESC", nativeQuery = true)
 	List<Cancion> findSongsByPopularity();
 	
+	@Query(value = "SELECT * FROM cancion c WHERE c.autor=?1", nativeQuery = true)
+	List<Cancion> findSongsByAutor(String autor);
+	
 }

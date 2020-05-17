@@ -1,27 +1,30 @@
 package com.software.upbeat.api;
 
-import java.io.IOException;
+import java.sql.Date;
 
 import javax.validation.constraints.NotNull;
 
-import org.springframework.core.io.ClassPathResource;
 
 public class CancionResponse {
-
 	private Long id;
-
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
+	@NotNull(message="El artista es requerido")
 	private String autor;
-	/*
-	 * PATH REQUERIDO -> SI NO ES ASÍ Y SE CREA PRIMERO SIN PATH: ELIMINAR CONSTRAINT
-	 */
-	@NotNull(message="La ruta a la canción es requerida")
-	private String path;
-
 	@NotNull(message="La url es requerida")
 	private String path;
+	private Float duracion;
+	private Date fecha;
+	private Long reproducciones;
+	//private byte[] song;
 
+
+	public String getPath() {
+		return path;
+	}
+	public void setPath(String path) {
+		this.path = path;
+	}
 
 	public Long getId() {
 		return id;
@@ -41,23 +44,40 @@ public class CancionResponse {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-	public String getPath() {
-		return path;
+	public Float getDuracion() {
+		return duracion;
 	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setDuracion(Float duracion) {
+		this.duracion = duracion;
 	}
-
+	public Date getFecha() {
+		return fecha;
+	}
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+	public Long getReproducciones() {
+		return reproducciones;
+	}
+	public void setReproducciones(Long reproducciones) {
+		this.reproducciones = reproducciones;
+	}
 
 	/*
 	public byte[] getSong() {
 		return song;
 	}
-	public void setSong(String path) throws IOException {
+
+	public void setSong(String media) throws IOException {
 		ClassPathResource song = new ClassPathResource(path);
 		byte[] arraySong = new byte[(int) song.contentLength()];
 		song.getInputStream().read(arraySong);
 		this.song = arraySong;
+	}
+
+	public void setSong(byte[] song){
+
+		this.song = song;
 	}
 	*/
 }

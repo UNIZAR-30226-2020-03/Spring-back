@@ -2,17 +2,23 @@ package com.software.upbeat.api;
 
 
 
+import java.sql.Date;
+
 import javax.validation.constraints.NotNull;
 
 
 
 public class CancionRequest {
-private Long id;
-
+	private Long id;
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
+	@NotNull(message="El artista es requerido")
 	private String autor;
+	@NotNull(message="La url es requerida")
 	private String path;
+	private Float duracion;
+	private Date fecha;
+	private Long reproducciones;
 	//private byte[] song;
 
 
@@ -40,6 +46,24 @@ private Long id;
 	}
 	public void setAutor(String autor) {
 		this.autor = autor;
+	}
+	public Float getDuracion() {
+		return duracion;
+	}
+	public void setDuracion(Float duracion) {
+		this.duracion = duracion;
+	}
+	public Date getFecha() {
+		return fecha;
+	}
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+	public Long getReproducciones() {
+		return reproducciones;
+	}
+	public void setReproducciones(Long reproducciones) {
+		this.reproducciones = reproducciones;
 	}
 
 	/*

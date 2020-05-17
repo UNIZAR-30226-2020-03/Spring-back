@@ -48,6 +48,19 @@ public class CancionService {
 		return ResponseEntity.ok().body(cancion);
 	}
 	
+	public List<Cancion> findSongsByPopularity(){
+		return dao.findSongsByPopularity();
+	}
+	
+	public List<Cancion> findSongsByAutor(String autor){
+		return dao.findSongsByAutor(autor);
+	}
+	
+	public void delete(Cancion cancion) {
+		// TODO Auto-generated method stub
+		dao.delete(cancion);
+	}
+	
 	/*
 	public byte[] getSongStreamByNameAndArtist(String nombre, String autor){
 		Cancion cancion = dao.findSongByNameAndArtist(nombre, autor);
@@ -59,11 +72,4 @@ public class CancionService {
 		return cancion.getSong();
 	}
 	*/
-	public List<Cancion> findSongsByPopularity(){
-		return dao.findSongsByPopularity();
-	}
-	public void delete(Cancion cancion) {
-		// TODO Auto-generated method stub
-		dao.delete(cancion);
-	}
 }
