@@ -3,12 +3,12 @@ package com.software.upbeat.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
 import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -35,11 +35,24 @@ public class PlaylistApi {
 	Mapper mapper;
 	
 	/*
-	 * TODO: getPlaylistById(Long id)
 	 * TODO: getPlaylistByName(String nombre) <- List
 	 * 
 	 * ¿¿¿ getPlaylistByNameAndAuthor ???
 	 */
+	
+	//////////////////////////////////////////////
+	// OBTENER PLAYLIST POR EMAIL				//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/get/{id}", method=RequestMethod.GET)
+    public PlaylistResponse getPlaylistById(@PathVariable(value = "id") Long playlistId) {
+		// Invoca lógica de negocio
+		Optional<Playlist> playlistById = playlistService.getPlaylistById(playlistId);
+		
+		// Mapeo entity
+		PlaylistResponse playlistResponse = mapper.map(playlistById.get(), PlaylistResponse.class);
+		
+		return playlistResponse;
+    }
 	
 	//////////////////////////////////////////////
 	// OBTENER TODOS LOS PLAYLISTS				//
@@ -81,12 +94,9 @@ public class PlaylistApi {
 		Playlist playlist = mapper.map(datosPlaylist, Playlist.class);
 		
 		// Invoca lógica de negocio
-		/*
-		 * TODO: getPlaylistById
-		 */
-		ResponseEntity<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
 		
-		Playlist updatePlaylist = playlistById.getBody();
+		Playlist updatePlaylist = playlistById.get();
 		
 		updatePlaylist.setNombre(playlist.getNombre());
 		updatePlaylist.setDescripcion(playlist.getDescripcion());
@@ -108,12 +118,9 @@ public class PlaylistApi {
 	public Map<String, Boolean> delete(@PathVariable(value = "id") Long idPlaylist) {
 		
 		// Invoca lógica de negocio
-		/*
-		 * TODO: getPlaylistById
-		 */
-		ResponseEntity<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
 		
-		Playlist deletePlaylist = playlistById.getBody();
+		Playlist deletePlaylist = playlistById.get();
 		
 		playlistService.delete(deletePlaylist);
 		

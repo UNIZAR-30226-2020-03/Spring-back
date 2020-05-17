@@ -15,13 +15,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.springframework.data.jpa.repository.Query;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name = "playlist")
+@Table(name = "playlist", uniqueConstraints= {@UniqueConstraint(columnNames= {"nombre", "creador"})})
 public class Playlist implements Serializable{
 	/**
 	 * 
@@ -46,7 +47,10 @@ public class Playlist implements Serializable{
 	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<Cancion> canciones; //= new HashSet<Cancion>();
 	
-	@JsonBackReference
+	/*
+	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	 */
+	@JsonBackReference(value = "canciones-playlist")
 	public Set<Cancion> getCanciones() {
 		return canciones;
 	}
@@ -77,11 +81,14 @@ public class Playlist implements Serializable{
 	//////// FIN CANCIONES /////////////////////
 	
 	////////CREADOR /////////////////////
-	@ManyToOne(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-	@JoinColumn(name="creador", nullable=true)
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="creador")
 	private Cliente creador;
 	
-	@JsonBackReference
+	/*
+	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	 */
+	@JsonBackReference(value = "cliente-playlists")
 	public Cliente getCreador() {
 		return creador;
 	}
@@ -89,21 +96,6 @@ public class Playlist implements Serializable{
 	public void setCreador(Cliente creador) {
 		this.creador = creador;
 	}
-	
-	/*public void addCancion(Cancion cancion) {
-		canciones.add(cancion);
-		numCanciones++;
-	}
-	
-	public void removeCancion(Cancion cancion) {
-		canciones.remove(cancion);
-		if(numCanciones<=0) {
-			numCanciones=0;
-		}
-		else {
-			numCanciones--;
-		}
-	}*/
 	
 	public boolean isCreador(Cliente creador) {
 		return this.creador==creador;

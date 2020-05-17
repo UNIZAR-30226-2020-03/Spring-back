@@ -54,7 +54,7 @@ public class Cliente implements Serializable{
 	 * https://www.youtube.com/watch?v=6cW4z3DwG4E
 	 */
 	
-	@JsonBackReference
+	@JsonBackReference(value = "amigos")
 	public Set<Cliente> getAmigos() {
 		return amigos;
 	}
@@ -81,7 +81,7 @@ public class Cliente implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creador")
 	private Set<Playlist> playlists; //= new HashSet<Playlist>();
 	
-	@JsonManagedReference
+	@JsonManagedReference(value = "cliente-playlists")
 	public Set<Playlist> getPlaylists() {
 		return playlists;
 	}
@@ -91,12 +91,16 @@ public class Cliente implements Serializable{
 	}
 	
 
-	public void createPlaylist() {
-		;
+	public void addPlaylist(Playlist playlist) {
+		playlists.add(playlist);
+		playlist.setCreador(this);
+		System.out.println("------------------");
+		System.out.println(playlists);
 	}
 	
-	public void removePlaylist() {
-		;
+	public void removePlaylist(Playlist playlist) {
+		playlists.remove(playlist);
+		playlist.setCreador(null);
 	}
 	
 	public boolean containsPlaylist(Playlist playlist) {
@@ -111,12 +115,14 @@ public class Cliente implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((amigos == null) ? 0 : amigos.hashCode());
 		result = prime * result + ((apellidos == null) ? 0 : apellidos.hashCode());
 		result = prime * result + ((cod_cliente == null) ? 0 : cod_cliente.hashCode());
 		result = prime * result + ((contrasenya == null) ? 0 : contrasenya.hashCode());
 		result = prime * result + ((correo == null) ? 0 : correo.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
 		result = prime * result + ((pais == null) ? 0 : pais.hashCode());
+		result = prime * result + ((playlists == null) ? 0 : playlists.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -130,6 +136,11 @@ public class Cliente implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
+		if (amigos == null) {
+			if (other.amigos != null)
+				return false;
+		} else if (!amigos.equals(other.amigos))
+			return false;
 		if (apellidos == null) {
 			if (other.apellidos != null)
 				return false;
@@ -159,6 +170,11 @@ public class Cliente implements Serializable{
 			if (other.pais != null)
 				return false;
 		} else if (!pais.equals(other.pais))
+			return false;
+		if (playlists == null) {
+			if (other.playlists != null)
+				return false;
+		} else if (!playlists.equals(other.playlists))
 			return false;
 		if (username == null) {
 			if (other.username != null)
@@ -249,7 +265,7 @@ public class Cliente implements Serializable{
 	public String toString() {
 		return "Cliente [cod_cliente=" + cod_cliente + ", nombre=" + nombre + ", apellidos=" + apellidos
 				+ ", contrasenya=" + contrasenya + ", correo=" + correo + ", username=" + username + ", pais=" + pais
-				+ "]";
+				+ ", amigos=" + amigos + ", playlists=" + playlists + "]";
 	}
 
 }

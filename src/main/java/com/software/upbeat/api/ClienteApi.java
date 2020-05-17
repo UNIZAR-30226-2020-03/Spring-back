@@ -3,6 +3,7 @@ package com.software.upbeat.api;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.Playlist;
 import com.software.upbeat.service.ClienteService;
+import com.software.upbeat.service.PlaylistService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -35,6 +38,9 @@ public class ClienteApi {
 	
 	@Autowired
 	Mapper mapper;
+	
+	@Autowired
+	PlaylistService playlistService;
 	
 	
 	//////////////////////////////////////////////
@@ -69,7 +75,6 @@ public class ClienteApi {
 		ClienteResponse clienteResponse = mapper.map(clienteByEmailAndPassword.getBody(), ClienteResponse.class);
 		
 		return clienteResponse;
-		//Jejjejejeherokuuu
 	}
 	//////////////////////////////////////////////
 	// OBTENER TODOS LOS CLIENTES				//
@@ -158,6 +163,9 @@ public class ClienteApi {
 		
 	}
 	
+	//////////////////////////////////////////////////////////////////////////////////
+	// AMIGOS																		//
+	//////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////
 	// SEGUIR A UN CLIENTE				 		//
 	//////////////////////////////////////////////
@@ -273,5 +281,128 @@ public class ClienteApi {
 		return clienteResponse.getAmigos();
 	
 	}
+	
+	//////////////////////////////////////////////////////////////////////////////////
+	// PLAYLISTS																	//
+	//////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////
+	// SEGUIR A UN CLIENTE				 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/createPlaylist/{miCorreo}/{playlistId}", method=RequestMethod.PUT)
+	public int createPlaylist(@PathVariable(value = "miCorreo") String correoCliente,
+			@PathVariable(value = "playlistId") Long playlistId) {
+		
+		int resul;
+		
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+			Optional<Playlist> newPlaylist = playlistService.getPlaylistById(playlistId);
+			
+			Cliente cliente = clienteByEmail.getBody();
+			Playlist playlist = newPlaylist.get();
+			
+			if(cliente.containsPlaylist(playlist)) {
+				System.out.println("YA TENÍA ESA PLAYLIST");
+				resul = WRONG_RESULT;
+			}
+			else {
+				System.out.println("AÑADO PLAYLIST");
+				cliente.addPlaylist(playlist);
+				System.out.println("AÑADIDA");
+				cliente = clienteService.save(cliente);
+				resul = CORRECT;
+			}
+		
+		}
+		catch(Exception e) {
+			resul = ERROR;
+		}
+		return resul;
+	
+	}
+	
+	//////////////////////////////////////////////
+	// ELIMINAR PLAYLIST				 		//
+	//////////////////////////////////////////////
+	/*@RequestMapping(value="/unfollow/{miCorreo}/{suCorreo}", method=RequestMethod.PUT)
+	public int deletePlaylist(@PathVariable(value = "miCorreo") String correoCliente,
+	@PathVariable(value = "suCorreo") String correoAmigo) {
+		
+		int resul;
+		
+		try{
+			// Invoca lógica de negocio
+			ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+			ResponseEntity<Cliente> amigoByEmail = clienteService.getClienteByEmail(correoAmigo);
+			
+			Cliente cliente = clienteByEmail.getBody();
+			Cliente amigo = amigoByEmail.getBody();
+			
+			cliente.removeAmigo(amigo);
+			cliente = clienteService.save(cliente);
+			
+			resul = CORRECT;
+			
+		}
+		catch(Exception e) {
+			resul = ERROR;
+		}
+		
+		return resul;
+		
+	}*/
+	
+	//////////////////////////////////////////////
+	// LISTA PLAYLISTS					 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/myPlaylists/{miCorreo}", method=RequestMethod.GET)
+	public Set<Playlist> myPlaylists(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+	// Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	
+	Cliente cliente = clienteByEmail.getBody();
+	
+	// Mapeo entity
+	ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+	
+	return cliente.getPlaylists();
+	
+	}
+	
+	//////////////////////////////////////////////
+	// VER SI UNA PLAYLIST ES DE UN CLIENTE		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/isMyPlaylist/{miCorreo}/{playlistId}", method=RequestMethod.GET)
+	public int isMyPlaylist(@PathVariable(value = "miCorreo") String correoCliente,
+	@PathVariable(value = "playlistId") Long playlistId) {
+		
+		int resul;
+		
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+			Optional<Playlist> newPlaylist = playlistService.getPlaylistById(playlistId);
+			
+			Cliente cliente = clienteByEmail.getBody();
+			Playlist playlist = newPlaylist.get();
+			
+			if(cliente.containsPlaylist(playlist)) {
+				resul = CORRECT;
+			}
+			else {
+				resul = WRONG_RESULT;
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			resul = ERROR;
+		}
+		
+		return resul;
+		
+	}
+	
 	
 }

@@ -1,8 +1,10 @@
 package com.software.upbeat.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import com.software.upbeat.dao.PlaylistRepository;
@@ -20,7 +22,6 @@ public class PlaylistService {
 	}
 	
 	public void delete(Playlist playlist) {
-		// TODO Auto-generated method stub
 		dao.delete(playlist);
 	}
 	
@@ -30,6 +31,10 @@ public class PlaylistService {
 	
 	public List<Playlist> getCreatorPlaylists() {
 		return this.dao.findCreatorPlaylists();
+	}
+
+	public Optional<Playlist> getPlaylistById(Long playlistId) {
+		return dao.findById(playlistId);
 	}
 
 }
