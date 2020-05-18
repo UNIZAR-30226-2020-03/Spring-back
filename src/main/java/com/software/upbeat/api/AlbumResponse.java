@@ -1,19 +1,29 @@
 package com.software.upbeat.api;
 
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.validation.constraints.*;
-
+import com.software.upbeat.model.Artista;
 import com.software.upbeat.model.Cancion;
-import com.software.upbeat.model.Cliente;
 
-public class PlaylistRequest {
-
+public class AlbumResponse {
+	
 	private Long id;
 	
-	@NotNull(message="El nombre es requerido")
 	private String nombre;
+	
+	private String descripcion;
+	
+	private Float duracion;
+    
+	private Date fecha;
+	
+	private int numCanciones;
+	
+	private Set<Cancion> canciones = new HashSet<Cancion>();
+	
+	private Artista autor;
 	
 	public Long getId() {
 		return id;
@@ -39,6 +49,22 @@ public class PlaylistRequest {
 		this.descripcion = descripcion;
 	}
 
+	public Float getDuracion() {
+		return duracion;
+	}
+
+	public void setDuracion(Float duracion) {
+		this.duracion = duracion;
+	}
+
+	public Date getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(Date fecha) {
+		this.fecha = fecha;
+	}
+
 	public int getNumCanciones() {
 		return numCanciones;
 	}
@@ -55,20 +81,13 @@ public class PlaylistRequest {
 		this.canciones = canciones;
 	}
 
-	public Cliente getCreador() {
-		return creador;
+	public Artista getAutor() {
+		return autor;
 	}
 
-	public void setCreador(Cliente creador) {
-		this.creador = creador;
+	public void setAutor(Artista autor) {
+		this.autor = autor;
 	}
+		
 
-	@Size(min=0, max=1000, message="La descripcion debe tener entre {min} y {max} caracteres")
-	private String descripcion;
-	
-	private int numCanciones;
-	
-	private Set<Cancion> canciones = new HashSet<Cancion>();
-	
-	private Cliente creador;
 }
