@@ -18,12 +18,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.software.upbeat.model.Cancion;
+import com.software.upbeat.model.Cliente;
 import com.software.upbeat.service.CancionService;
+import com.software.upbeat.service.ClienteService;
 /* al final no uso bytes
 import java.util.zip.DataFormatException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 import java.io.ByteArrayOutputStream;*/
+import com.software.upbeat.service.PlaylistService;
+import com.software.upbeat.service.UsuarioService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -33,15 +37,21 @@ public class CancionApi {
 	@Autowired
 	CancionService cancionService;
 	
+	
 	@Autowired
 	Mapper mapper;
 	
-	//////////////////////////////////////////////
-	// STREAMING CANCION POR NOMBRE URL      	//
-	//////////////////////////////////////////////
-	@GetMapping(value="/getStreamUrl/{nombre}")
-	public String  getUrlByName(@PathVariable(value = "nombre") String nombreCancion) throws IOException{
-		return cancionService.getSongURLByName(nombreCancion);
+	@Autowired
+	ClienteService clienteService; 
+	
+	//////////////////////////////////////////////////////
+	// STREAMING CANCION POR NOMBRE Y ARTISTA URL      	//
+	/////////////////////////////////////////////////////
+	@GetMapping(value="/getStreamUrl/{usuario}/{nombre}/{autor}")
+	public String  getUrlByName(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "usuario") String usuario,@PathVariable(value = "autor") String autor) throws IOException{
+		Cliente clienteReproduce= clienteService.getClienteByEmail(usuario).getBody();
+		clienteReproduce.reproduceCancion(cancionService.getSongByNameAndArtist(nombre, autor).getBody());
+		return cancionService.getSongURLByNameAndArtist(nombre,autor);
 	}
 	
 	//////////////////////////////////////////////
@@ -86,6 +96,15 @@ public class CancionApi {
 	@RequestMapping(value="/getAllSongsByAutor/{autor}", method=RequestMethod.GET)
 	public List<Cancion> findSongsByAutor(@PathVariable(value = "autor") String autor) {
 	return cancionService.findSongsByAutor(autor);
+	}
+	
+	//////////////////////////////////////////////////////////////////////
+	// OBTENER 10 ULTIMAS CANCIONES REPRODUCIDAS USUARIO            			//
+	//////////////////////////////////////////////////////////////////////
+	@RequestMapping(value="/getAllSongsByAutor/{correo}", method=RequestMethod.GET)
+	public List<Cancion> find10LastSongsByClient(@PathVariable(value = "correo") String correo) {
+		Cliente clienteReproduce= clienteService.getClienteByEmail(correo).getBody();
+	return clienteReproduce.ultimasCancionesReproducidas();
 	}
 
 	//////////////////////////////////////////////////////////

@@ -1,6 +1,7 @@
 package com.software.upbeat.model;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
@@ -37,7 +39,10 @@ public class Cliente implements Serializable{
 	private String correo;
 	private String username;
 	private String pais;
-	
+	@Transient
+	private List<Cancion> ultimasCanciones;
+	@Transient
+	private int ultimasCancionesN;
 	/*
 	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
 	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
@@ -194,6 +199,8 @@ public class Cliente implements Serializable{
 		this.correo = correo;
 		this.username = username;
 		this.pais = pais;
+		this.ultimasCanciones.clear();
+		this.ultimasCancionesN=0;
 	}
 
 	@Column(name = "cod_cliente", nullable = false)
@@ -267,5 +274,13 @@ public class Cliente implements Serializable{
 				+ ", contrasenya=" + contrasenya + ", correo=" + correo + ", username=" + username + ", pais=" + pais
 				+ ", amigos=" + amigos + ", playlists=" + playlists + "]";
 	}
-
+	
+	public void reproduceCancion(Cancion cancion) {
+		ultimasCanciones.add(ultimasCancionesN,cancion);
+		ultimasCancionesN=(ultimasCancionesN+1)%10;
+	}
+	
+	public List<Cancion> ultimasCancionesReproducidas(){
+		return ultimasCanciones;
+	}
 }
