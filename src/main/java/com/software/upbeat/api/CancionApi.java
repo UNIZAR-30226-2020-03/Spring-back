@@ -42,7 +42,28 @@ public class CancionApi {
 	Mapper mapper;
 	
 	@Autowired
-	ClienteService clienteService; 
+	ClienteService clienteService;
+	
+	//////////////////////////////////////////////
+	// AÑADIR CANCION        				    //
+	//////////////////////////////////////////////
+
+	@RequestMapping(value="/save", method=RequestMethod.POST)
+	public CancionResponse saveCancion(@RequestBody CancionRequest cancionRequest) throws IOException {
+		
+		// Mapeo request dto
+		Cancion cancion = mapper.map(cancionRequest, Cancion.class);
+		
+		// Invoca lógica de negocio
+		Cancion newCancion = cancionService.save(cancion);
+		
+		// Mapeo entity
+		CancionResponse cancionResponse = mapper.map(newCancion, CancionResponse.class);
+		
+		return cancionResponse;
+		
+		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
+	}
 	
 	//////////////////////////////////////////////////////
 	// STREAMING CANCION POR NOMBRE Y ARTISTA URL      	//
@@ -213,27 +234,7 @@ public class CancionApi {
 		return outputStream.toByteArray();
 	}
 	/*
-	//////////////////////////////////////////////
-	// AÑADIR CANCION BYTES					    //
-	//////////////////////////////////////////////
 
-	@RequestMapping(value="/save", method=RequestMethod.POST)
-	public CancionResponse saveCancion(@RequestBody CancionRequest cancionRequest) throws IOException {
-		
-		// Mapeo request dto
-		Cancion cancion = mapper.map(cancionRequest, Cancion.class);
-		
-		// Invoca lógica de negocio
-		cancion.setSong(compressBytes(cancion.getSong()));
-		Cancion newCancion = cancionService.save(cancion);
-		
-		// Mapeo entity
-		CancionResponse cancionResponse = mapper.map(newCancion, CancionResponse.class);
-		
-		return cancionResponse;
-		
-		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
-	}
 	
 	//////////////////////////////////////////////
 	// STREAMING CANCION POR NOMBRE				//
