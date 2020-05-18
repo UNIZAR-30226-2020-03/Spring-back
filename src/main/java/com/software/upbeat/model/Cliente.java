@@ -147,7 +147,7 @@ public class Cliente implements Serializable{
 	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<Cancion> favSongs;
 	
-	@JsonBackReference(value = "favPlaylists")
+	@JsonBackReference(value = "favSongs")
 	public Set<Cancion> getFavSongs() {
 		return favSongs;
 	}
