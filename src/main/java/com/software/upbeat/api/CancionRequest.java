@@ -6,6 +6,8 @@ import java.sql.Date;
 
 import javax.validation.constraints.NotNull;
 
+import com.software.upbeat.model.Artista;
+
 
 
 public class CancionRequest {
@@ -13,7 +15,7 @@ public class CancionRequest {
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
 	@NotNull(message="El artista es requerido")
-	private String autor;
+	private Artista creador;
 	@NotNull(message="La url es requerida")
 	private String path;
 	private Float duracion;
@@ -24,6 +26,12 @@ public class CancionRequest {
 
 	public String getPath() {
 		return path;
+	}
+	public Artista getCreador() {
+		return creador;
+	}
+	public void setCreador(Artista creador) {
+		this.creador = creador;
 	}
 	public void setPath(String path) {
 		this.path = path;
@@ -41,12 +49,6 @@ public class CancionRequest {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getAutor() {
-		return autor;
-	}
-	public void setAutor(String autor) {
-		this.autor = autor;
-	}
 	public Float getDuracion() {
 		return duracion;
 	}
@@ -63,7 +65,7 @@ public class CancionRequest {
 		return reproducciones;
 	}
 	public void setReproducciones(Long reproducciones) {
-		this.reproducciones = reproducciones;
+		this.reproducciones =reproducciones;
 	}
 
 	/*

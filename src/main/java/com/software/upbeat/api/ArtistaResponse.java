@@ -1,12 +1,30 @@
 package com.software.upbeat.api;
 
+import java.util.Set;
+
+import com.software.upbeat.model.Cancion;
+import com.software.upbeat.model.Podcast;
+
 public class ArtistaResponse extends ClienteResponse{
 	
 	private Long cod_artista;
 	private String nombre_artista;
 	private String descripcion;
+	private Set<Cancion> artistSongs;
+	private Set<Podcast> artistPodcast;
 	
-	
+	public Set<Cancion> getArtistSongs() {
+		return artistSongs;
+	}
+	public void setArtistSongs(Set<Cancion> artistSongs) {
+		this.artistSongs = artistSongs;
+	}
+	public Set<Podcast> getArtistPodcast() {
+		return artistPodcast;
+	}
+	public void setArtistPodcast(Set<Podcast> artistPodcast) {
+		this.artistPodcast = artistPodcast;
+	}
 	public Long getCod_artista() {
 		return cod_artista;
 	}

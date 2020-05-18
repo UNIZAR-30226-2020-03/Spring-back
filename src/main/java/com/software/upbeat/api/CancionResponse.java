@@ -2,17 +2,20 @@ package com.software.upbeat.api;
 
 import java.sql.Date;
 
+import com.software.upbeat.model.Artista;
+import com.software.upbeat.model.Cliente;
+
 
 
 
 public class CancionResponse {
 	private Long id;
 	private String nombre;
-	private String autor;
 	private String path;
 	private Float duracion;
 	private Date fecha;
 	private Long reproducciones;
+	private Artista creador;
 	//private byte[] song;
 
 
@@ -35,12 +38,6 @@ public class CancionResponse {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	public String getAutor() {
-		return autor;
-	}
-	public void setAutor(String autor) {
-		this.autor = autor;
-	}
 	public Float getDuracion() {
 		return duracion;
 	}
@@ -59,7 +56,14 @@ public class CancionResponse {
 	public void setReproducciones(Long reproducciones) {
 		this.reproducciones = reproducciones;
 	}
+	
+	public Artista getCreador() {
+		return creador;
+	}
 
+	public void setCreador(Artista creador) {
+		this.creador = creador;
+	}
 	/*
 	public byte[] getSong() {
 		return song;

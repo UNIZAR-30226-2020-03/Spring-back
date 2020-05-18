@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.service.ArtistaService;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.ClienteService;
 /* al final no uso bytes
@@ -44,6 +45,9 @@ public class CancionApi {
 	@Autowired
 	ClienteService clienteService;
 	
+	@Autowired
+	ArtistaService artistaService;
+	
 	//////////////////////////////////////////////
 	// AÑADIR CANCION        				    //
 	//////////////////////////////////////////////
@@ -53,7 +57,7 @@ public class CancionApi {
 		
 		// Mapeo request dto
 		Cancion cancion = mapper.map(cancionRequest, Cancion.class);
-		
+		cancion.setReproducciones((long) 0);
 		// Invoca lógica de negocio
 		Cancion newCancion = cancionService.save(cancion);
 		
@@ -68,11 +72,11 @@ public class CancionApi {
 	//////////////////////////////////////////////////////
 	// STREAMING CANCION POR NOMBRE Y ARTISTA URL      	//
 	/////////////////////////////////////////////////////
-	@GetMapping(value="/getStreamUrl/{usuario}/{nombre}/{autor}")
-	public String  getUrlByName(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "usuario") String usuario,@PathVariable(value = "autor") String autor) throws IOException{
+	@GetMapping(value="/getStreamUrl/{usuario}/{nombre}")
+	public String  getUrlByName(@PathVariable(value = "usuario") String usuario,@PathVariable(value = "nombre") String nombre) throws IOException{
 		Cliente clienteReproduce= clienteService.getClienteByEmail(usuario).getBody();
-		clienteReproduce.reproduceCancion(cancionService.getSongByNameAndArtist(nombre, autor).getBody());
-		return cancionService.getSongURLByNameAndArtist(nombre,autor);
+		clienteReproduce.reproduceCancion(cancionService.getSongByName(nombre).getBody());
+		return cancionService.getSongURLByName(nombre);
 	}
 	
 	//////////////////////////////////////////////
@@ -85,15 +89,6 @@ public class CancionApi {
 	return cancionResponse;
 	}
 
-	//////////////////////////////////////////////
-	// OBTENER CANCION POR NOMBRE Y AUTOR    	//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/get/{nombre}/{autor}", method=RequestMethod.GET)
-	public CancionResponse getByEmailAndPassword(@PathVariable(value = "nombre") String name, @PathVariable(value = "autor") String autor) {
-		ResponseEntity<Cancion> songByNameAndArtist = cancionService.getSongByNameAndArtist(name, autor);
-		CancionResponse cancionResponse = mapper.map(songByNameAndArtist.getBody(), CancionResponse.class);
-		return cancionResponse;
-	}
 	
 	//////////////////////////////////////////////
 	// OBTENER TODAS LAS CANCIONES			//
@@ -112,40 +107,32 @@ public class CancionApi {
 	}
 	
 	//////////////////////////////////////////////////////////////////////
-	// OBTENER TODAS LAS CANCIONES DE UN ARTISTA             			//
-	//////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/getAllSongsByAutor/{autor}", method=RequestMethod.GET)
-	public List<Cancion> findSongsByAutor(@PathVariable(value = "autor") String autor) {
-	return cancionService.findSongsByAutor(autor);
-	}
-	
-	//////////////////////////////////////////////////////////////////////
 	// OBTENER 10 ULTIMAS CANCIONES REPRODUCIDAS USUARIO            			//
 	//////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/getAllSongsByAutor/{correo}", method=RequestMethod.GET)
+	@RequestMapping(value="/getLast10/{correo}", method=RequestMethod.GET)
 	public List<Cancion> find10LastSongsByClient(@PathVariable(value = "correo") String correo) {
 		Cliente clienteReproduce= clienteService.getClienteByEmail(correo).getBody();
 	return clienteReproduce.ultimasCancionesReproducidas();
 	}
 
 	//////////////////////////////////////////////////////////
-	// ACTUALIZAR CANCION POR EL NOMBRE Y EL ARTISTA		//
+	// ACTUALIZAR CANCION POR EL NOMBRE 		//
 	/////////////////////////////////////////////////////////
 	@RequestMapping(value="/update/{nombre}/{autor}", method=RequestMethod.PUT)
-	public CancionResponse update(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "autor") String autor,
+	public CancionResponse update(@PathVariable(value = "nombre") String nombre,
 			@Valid @RequestBody CancionRequest datosCancion) {
 		
 		// Mapeo request dto
 		Cancion cancion = mapper.map(datosCancion, Cancion.class);
 		
 		// Invoca lógica de negocio
-		ResponseEntity<Cancion> cancionByNombreArtista = cancionService.getSongByNameAndArtist(nombre,autor);
+		ResponseEntity<Cancion> cancionByNombreArtista = cancionService.getSongByName(nombre);
 		
 		Cancion updateCancion = cancionByNombreArtista.getBody();
 		updateCancion.setNombre(cancion.getNombre());
-		updateCancion.setAutor(cancion.getAutor());
 		updateCancion.setPath(cancion.getPath());
 		updateCancion.setDuracion(cancion.getDuracion());
+		updateCancion.setCreador(cancion.getCreador());
 		updateCancion.setFecha(cancion.getFecha());
 		//updateCancion.setSong(compressBytes(cancion.getSong()));
 		
@@ -157,13 +144,13 @@ public class CancionApi {
 	}
 	
 	//////////////////////////////////////////////////
-	// ELIMINAR CANCION	POR EL NOMBRE Y EL ARTISTA	//
+	// ELIMINAR CANCION	POR EL NOMBRE 	//
 	/////////////////////////////////////////////////
-	@RequestMapping(value="/delete/{nombre}/{autor}", method=RequestMethod.DELETE)
-	public Map<String, Boolean> delete(@PathVariable(value = "nombre") String nombreCancion,@PathVariable(value = "autor") String autor) {
+	@RequestMapping(value="/delete/{nombre}", method=RequestMethod.DELETE)
+	public Map<String, Boolean> delete(@PathVariable(value = "nombre") String nombreCancion) {
 		
 		// Invoca lógica de negocio
-		ResponseEntity<Cancion> songByNameAndArtist = cancionService.getSongByNameAndArtist(nombreCancion,autor);
+		ResponseEntity<Cancion> songByNameAndArtist = cancionService.getSongByName(nombreCancion);
 		
 		Cancion deleteCancion = songByNameAndArtist.getBody();
 		

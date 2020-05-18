@@ -4,11 +4,16 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="podcast", uniqueConstraints= {@UniqueConstraint(columnNames= "nombre"), @UniqueConstraint(columnNames= "temporada"), @UniqueConstraint(columnNames= "episodio")})
@@ -27,9 +32,6 @@ public class Podcast {
 	@Column(name = "temporada")
 	private int temporada;
 	
-    @Column(name = "artista")
-	private String autor;
-	
     @Column(name = "descripcion")
 	private String descripcion;
     
@@ -44,20 +46,39 @@ public class Podcast {
     
     @Column(name = "reproducciones")
     private Long reproducciones;
-
+	////////CREADOR /////////////////////
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="creador")
+	private Artista creador;
+	
+	/*
+	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	 */
+	@JsonBackReference(value = "artista-podcast")
+	public Artista getCreador() {
+		return creador;
+	}
+	
+	public void setCreador(Artista creador) {
+		this.creador = creador;
+	}
+	
+	public boolean isCreador(Artista creador) {
+		return this.creador==creador;
+	}
+	//////// FIN CREADOR /////////////////////
 	public Podcast() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Podcast(Long id, String nombre, int episodio, int temporada, String autor, String descripcion, String path,
+	public Podcast(Long id, String nombre, int episodio, int temporada, String descripcion, String path,
 			Float duracion, Date fecha, Long reproducciones) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.episodio = episodio;
 		this.temporada = temporada;
-		this.autor = autor;
 		this.descripcion = descripcion;
 		this.path = path;
 		this.duracion = duracion;
@@ -95,14 +116,6 @@ public class Podcast {
 
 	public void setTemporada(int temporada) {
 		this.temporada = temporada;
-	}
-
-	public String getAutor() {
-		return autor;
-	}
-
-	public void setAutor(String autor) {
-		this.autor = autor;
 	}
 
 	public String getDescripcion() {
@@ -149,7 +162,6 @@ public class Podcast {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((autor == null) ? 0 : autor.hashCode());
 		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result + ((duracion == null) ? 0 : duracion.hashCode());
 		result = prime * result + episodio;
@@ -171,11 +183,6 @@ public class Podcast {
 		if (getClass() != obj.getClass())
 			return false;
 		Podcast other = (Podcast) obj;
-		if (autor == null) {
-			if (other.autor != null)
-				return false;
-		} else if (!autor.equals(other.autor))
-			return false;
 		if (descripcion == null) {
 			if (other.descripcion != null)
 				return false;
@@ -221,7 +228,7 @@ public class Podcast {
 	@Override
 	public String toString() {
 		return "Podcast [id=" + id + ", nombre=" + nombre + ", episodio=" + episodio + ", temporada=" + temporada
-				+ ", autor=" + autor + ", descripcion=" + descripcion + ", path=" + path + ", duracion=" + duracion
+				+ ", descripcion=" + descripcion + ", path=" + path + ", duracion=" + duracion
 				+ ", fecha=" + fecha + ", reproducciones=" + reproducciones + "]";
 	}
     

@@ -1,51 +1,24 @@
 package com.software.upbeat.model;
 
+import java.util.Set;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 public class Artista extends Cliente{
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = super.hashCode();
-		result = prime * result + ((cod_artista == null) ? 0 : cod_artista.hashCode());
-		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
-		result = prime * result + ((nombre_artista == null) ? 0 : nombre_artista.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (!super.equals(obj))
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Artista other = (Artista) obj;
-		if (cod_artista == null) {
-			if (other.cod_artista != null)
-				return false;
-		} else if (!cod_artista.equals(other.cod_artista))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
-			return false;
-		if (nombre_artista == null) {
-			if (other.nombre_artista != null)
-				return false;
-		} else if (!nombre_artista.equals(other.nombre_artista))
-			return false;
-		return true;
-	}
+	
 
 	/**
 	 * 
@@ -55,7 +28,102 @@ public class Artista extends Cliente{
 	private Long cod_artista;
 	private String nombre_artista;
 	private String descripcion;
+	@Column(name = "numCanciones")
+	private int numCanciones;
 	
+	//////// CANCIONES /////////////////////
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Cancion> canciones; //= new HashSet<Cancion>();
+	
+	/*
+	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	 */
+	@JsonBackReference(value = "canciones")
+	public Set<Cancion> getCanciones() {
+		return canciones;
+	}
+
+	public void setCanciones(Set<Cancion> canciones) {
+		this.canciones = canciones;
+	}
+	
+
+	public void addCancion(Cancion cancion) {
+		canciones.add(cancion);
+		numCanciones++;
+	}
+
+	public void removeCancion(Cancion cancion) {
+		canciones.remove(cancion);
+		if(numCanciones<=0) {
+			numCanciones=0;
+		}
+		else {
+			numCanciones--;
+		}
+	}
+	
+	public boolean containsCancion(Cancion cancion) {
+		return canciones.contains(cancion);
+	}
+	//////// FIN CANCIONES /////////////////////
+	@Column(name = "numPodcast")
+	private int numPodcast;
+	
+	public int getNumCanciones() {
+		return numCanciones;
+	}
+
+	public void setNumCanciones(int numCanciones) {
+		this.numCanciones = numCanciones;
+	}
+
+	public int getNumPodcast() {
+		return numPodcast;
+	}
+
+	public void setNumPodcast(int numPodcast) {
+		this.numPodcast = numPodcast;
+	}
+
+
+	public void setPodcasts(Set<Podcast> podcasts) {
+		this.podcasts = podcasts;
+	}
+	//////// PODCAST /////////////////////
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Podcast> podcasts; //= new HashSet<Cancion>();
+	
+	/*
+	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	 */
+	@JsonBackReference(value = "podcast")
+	public Set<Podcast> getPodcasts() {
+		return podcasts;
+	}
+
+	
+	
+
+	public void addPodcast(Podcast podcast) {
+		podcasts.add(podcast);
+		numPodcast++;
+	}
+
+	public void removePodcast(Podcast podcast) {
+		podcasts.remove(podcast);
+		if(numPodcast<=0) {
+			numPodcast=0;
+		}
+		else {
+			numPodcast--;
+		}
+	}
+	
+	public boolean containsPodcast(Podcast podcast) {
+		return podcasts.contains(podcast);
+	}
+	//////// FIN PODCAST /////////////////////
 	public Artista() {	
 	}
 	

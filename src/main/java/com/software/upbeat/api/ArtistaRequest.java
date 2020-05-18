@@ -1,6 +1,13 @@
 package com.software.upbeat.api;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.validation.constraints.*;
+
+import com.software.upbeat.model.Cancion;
+import com.software.upbeat.model.Playlist;
+import com.software.upbeat.model.Podcast;
 
 public class ArtistaRequest extends ClienteRequest{
 	
@@ -9,8 +16,8 @@ public class ArtistaRequest extends ClienteRequest{
 	@NotNull(message="El nombre de artista es requerido")
 	private String nombre_artista;
 	private String descripcion;
-	
-	
+	private Set<Cancion> artistSongs;
+	private Set<Podcast> artistPodcast;
 	public Long getCod_artista() {
 		return cod_artista;
 	}
@@ -29,5 +36,18 @@ public class ArtistaRequest extends ClienteRequest{
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+	public Set<Cancion> getArtistSongs() {
+		return artistSongs;
+	}
+	public void setArtistSongs(Set<Cancion> artistSongs) {
+		this.artistSongs = artistSongs;
+	}
+	public Set<Podcast> getArtistPodcast() {
+		return artistPodcast;
+	}
+	public void setArtistPodcast(Set<Podcast> artistPodcast) {
+		this.artistPodcast = artistPodcast;
+	}
+	
 
 }

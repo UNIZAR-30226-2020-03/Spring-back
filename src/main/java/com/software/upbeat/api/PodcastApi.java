@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Podcast;
 import com.software.upbeat.service.PodcastService;
 
@@ -59,7 +60,7 @@ public class PodcastApi {
 	//////////////////////////////////////////////
 	// OBTENER TODOS LOS PODCAST     			//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/allSongs", method=RequestMethod.GET)
+	@RequestMapping(value="/allPodcasts", method=RequestMethod.GET)
 	public List<Podcast> getAllPodcast() {
 		return podcastService.getAllPodcast();
 	}
@@ -72,13 +73,6 @@ public class PodcastApi {
 	return podcastService.findPodcastByPopularity();
 	}
 	
-	//////////////////////////////////////////////////////////////////////
-	// OBTENER TODOS LAS PODCAST DE UN ARTISTA             		    	//
-	//////////////////////////////////////////////////////////////////////
-	@RequestMapping(value="/getAllPodcastByAutor/{autor}", method=RequestMethod.GET)
-	public List<Podcast> findPodcastByAutor(@PathVariable(value = "autor") String autor) {
-	return podcastService.findPodcastByAutor(autor);
-	}
 
 	//////////////////////////////////////////////////////
 	// ACTUALIZAR PODCAST POR EL NOMBRE TEMP Y EP 		//
@@ -99,7 +93,7 @@ public class PodcastApi {
 		updatePodcast.setEpisodio(podcast.getEpisodio());
 		updatePodcast.setTemporada(podcast.getTemporada());
 		updatePodcast.setDescripcion(podcast.getDescripcion());
-		updatePodcast.setAutor(podcast.getAutor());
+		updatePodcast.setCreador(podcast.getCreador());
 		updatePodcast.setPath(podcast.getPath());
 		updatePodcast.setDuracion(podcast.getDuracion());
 		updatePodcast.setFecha(podcast.getFecha());
@@ -130,6 +124,26 @@ public class PodcastApi {
 		return response;
 		
 	}
+//////////////////////////////////////////////
+// AÑADIR PODCAST       				    //
+//////////////////////////////////////////////
+
+@RequestMapping(value="/save", method=RequestMethod.POST)
+public PodcastResponse savePodcast(@RequestBody PodcastRequest podcastRequest) throws IOException {
+
+// Mapeo request dto
+Podcast podcast = mapper.map(podcastRequest, Podcast.class);
+podcast.setReproducciones((long) 0);
+// Invoca lógica de negocio
+Podcast newPodcast = podcastService.save(podcast);
+
+// Mapeo entity
+PodcastResponse podcastResponse = mapper.map(newPodcast, PodcastResponse.class);
+
+return podcastResponse;
+
+// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
+}
 	
 	//////////////////////////////////////////////
 	// ELIMINAR PODCAST		ID			 		//

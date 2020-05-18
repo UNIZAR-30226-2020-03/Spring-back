@@ -4,14 +4,19 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
-@Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= "nombre"), @UniqueConstraint(columnNames= "artista")})
+@Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= "nombre"), @UniqueConstraint(columnNames= "creador")})
 public class Cancion {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,9 +26,6 @@ public class Cancion {
 	@Column(name = "nombre")
 	private String nombre;
     
-    @Column(name = "artista")
-	private String autor;
-	
     @Column(name = "path")
 	private String path;
     
@@ -42,7 +44,27 @@ public class Cancion {
     @Column(name="fichero")
     private byte[] song;
     */
+	////////CREADOR /////////////////////
+	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="creador")
+	private Artista creador;
 	
+	/*
+	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	 */
+	@JsonBackReference(value = "artista-canciones")
+	public Artista getCreador() {
+		return creador;
+	}
+	
+	public void setCreador(Artista creador) {
+		this.creador = creador;
+	}
+	
+	public boolean isCreador(Artista creador) {
+		return this.creador==creador;
+	}
+	//////// FIN CREADOR /////////////////////
 	public Cancion(){}
 
 	public String getPath() {
@@ -53,11 +75,10 @@ public class Cancion {
 		this.path = path;
 	}
 
-	public Cancion(Long id, String nombre, String autor, String path, Float duracion, Date fecha) {
+	public Cancion(Long id, String nombre, String path, Float duracion, Date fecha) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
-		this.autor = autor;
 		this.path = path;
 		this.duracion = duracion;
 		this.fecha = fecha;
@@ -80,13 +101,6 @@ public class Cancion {
 		this.nombre = nombre;
 	}
 
-	public String getAutor() {
-		return autor;
-	}
-
-	public void setAutor(String autor) {
-		this.autor = autor;
-	}
 	
 	
 	/*
@@ -127,7 +141,6 @@ public class Cancion {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((autor == null) ? 0 : autor.hashCode());
 		result = prime * result + ((duracion == null) ? 0 : duracion.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
@@ -146,11 +159,6 @@ public class Cancion {
 		if (getClass() != obj.getClass())
 			return false;
 		Cancion other = (Cancion) obj;
-		if (autor == null) {
-			if (other.autor != null)
-				return false;
-		} else if (!autor.equals(other.autor))
-			return false;
 		if (duracion == null) {
 			if (other.duracion != null)
 				return false;
@@ -186,7 +194,7 @@ public class Cancion {
 
 	@Override
 	public String toString() {
-		return "Cancion [id=" + id + ", nombre=" + nombre + ", autor=" + autor + ", path=" + path + ", duracion="
+		return "Cancion [id=" + id + ", nombre=" + nombre + ", path=" + path + ", duracion="
 				+ duracion + ", fecha=" + fecha + ", reproducciones=" + reproducciones + "]";
 	}
 	

@@ -43,25 +43,11 @@ public class CancionService {
 		return cancion.getPath();
 	}
 	
-	public String getSongURLByNameAndArtist(String nombre,String autor){ //con actualización reproducciones
-		Cancion cancion = dao.findSongByNameAndArtist(nombre,autor);
-		cancion.setReproducciones((cancion.getReproducciones()+1));
-		dao.save(cancion);
-		return cancion.getPath();
-	}
-	
-	public ResponseEntity<Cancion> getSongByNameAndArtist(String nombre, String autor){
-		Cancion cancion = dao.findSongByNameAndArtist(nombre, autor);
-		return ResponseEntity.ok().body(cancion);
-	}
 	
 	public List<Cancion> findSongsByPopularity(){
 		return dao.findSongsByPopularity();
 	}
 	
-	public List<Cancion> findSongsByAutor(String autor){
-		return dao.findSongsByAutor(autor);
-	}
 	
 	public void delete(Cancion cancion) {
 		// TODO Auto-generated method stub
