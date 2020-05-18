@@ -2,6 +2,7 @@ package com.software.upbeat.api;
 
 
 import java.io.IOException;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,50 +88,49 @@ public class CancionApi {
 	return cancionService.findSongsByAutor(autor);
 	}
 
-	//////////////////////////////////////////////
-	// ACTUALIZAR CANCION POR EL NOMBRE 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/update/{nombre}", method=RequestMethod.PUT)
-	public CancionResponse update(@PathVariable(value = "nombre") String nombre,
+	//////////////////////////////////////////////////////////
+	// ACTUALIZAR CANCION POR EL NOMBRE Y EL ARTISTA		//
+	/////////////////////////////////////////////////////////
+	@RequestMapping(value="/update/{nombre}/{autor}", method=RequestMethod.PUT)
+	public CancionResponse update(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "autor") String autor,
 			@Valid @RequestBody CancionRequest datosCancion) {
 		
 		// Mapeo request dto
 		Cancion cancion = mapper.map(datosCancion, Cancion.class);
 		
 		// Invoca lógica de negocio
-		ResponseEntity<Cancion> cancionByEmail = cancionService.getSongByName(nombre);
+		ResponseEntity<Cancion> cancionByNombreArtista = cancionService.getSongByNameAndArtist(nombre,autor);
 		
-		Cancion updateCancion = cancionByEmail.getBody();
-		
+		Cancion updateCancion = cancionByNombreArtista.getBody();
 		updateCancion.setNombre(cancion.getNombre());
 		updateCancion.setAutor(cancion.getAutor());
 		updateCancion.setPath(cancion.getPath());
+		updateCancion.setDuracion(cancion.getDuracion());
+		updateCancion.setFecha(cancion.getFecha());
 		//updateCancion.setSong(compressBytes(cancion.getSong()));
 		
 		updateCancion = cancionService.save(updateCancion);
 		
-		//ACTUALIZAR DE FIREBASE
 		// Mapeo entity
 		CancionResponse cancionResponse = mapper.map(updateCancion, CancionResponse.class);
 		return cancionResponse;
 	}
 	
-	//////////////////////////////////////////////
-	// ELIMINAR CANCION					 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/delete/{nombre}", method=RequestMethod.DELETE)
-	public Map<String, Boolean> delete(@PathVariable(value = "nombre") String nombreCancion) {
+	//////////////////////////////////////////////////
+	// ELIMINAR CANCION	POR EL NOMBRE Y EL ARTISTA	//
+	/////////////////////////////////////////////////
+	@RequestMapping(value="/delete/{nombre}/{autor}", method=RequestMethod.DELETE)
+	public Map<String, Boolean> delete(@PathVariable(value = "nombre") String nombreCancion,@PathVariable(value = "autor") String autor) {
 		
 		// Invoca lógica de negocio
-		ResponseEntity<Cancion> songByName = cancionService.getSongByName(nombreCancion);
+		ResponseEntity<Cancion> songByNameAndArtist = cancionService.getSongByNameAndArtist(nombreCancion,autor);
 		
-		Cancion deleteCancion = songByName.getBody();
+		Cancion deleteCancion = songByNameAndArtist.getBody();
 		
 		cancionService.delete(deleteCancion);
 		
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("ELIMINADO", Boolean.TRUE);
-		//ELIMINAR DE FIREBASE
 		return response;
 		
 	}
