@@ -113,6 +113,64 @@ public class Cliente implements Serializable{
 	}
 	// FIN PLAYLISTS
 	
+	//FAVORITOS PLAYLIST
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Playlist> favPlaylists;
+	
+	@JsonBackReference(value = "favPlaylists")
+	public Set<Playlist> getFavPlaylists() {
+		return favPlaylists;
+	}
+
+	public void setFavPlaylists(Set<Playlist> playlists) {
+		this.favPlaylists = playlists;
+	}
+	
+
+	public void addFavPlaylist(Playlist playlist) {
+		favPlaylists.add(playlist);
+	}
+	
+	public void removeFavPlaylist(Playlist playlist) {
+		favPlaylists.remove(playlist);
+	}
+	
+	public boolean containsFavPlaylist(Playlist playlist) {
+		return favPlaylists.contains(playlist);
+	}
+	
+	//FIN FAVORITOS PLAYLIST
+	
+	//FAVORITOS CANCIONES
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Cancion> favSongs;
+	
+	@JsonBackReference(value = "favPlaylists")
+	public Set<Cancion> getFavSongs() {
+		return favSongs;
+	}
+
+	public void setFavSongs(Set<Cancion> song) {
+		this.favSongs = song;
+	}
+	
+
+	public void addFavSongs(Cancion song) {
+		favSongs.add(song);
+	}
+	
+	public void removeFavSongs(Cancion song) {
+		favSongs.remove(song);
+	}
+	
+	public boolean containsFavSongs(Cancion song) {
+		return favSongs.contains(song);
+	}
+	
+	//FIN FAVORITOS CANCIONES
+	
 	public Cliente() {	
 	}
 	

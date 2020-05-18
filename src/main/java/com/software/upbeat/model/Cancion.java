@@ -11,7 +11,7 @@ import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= "nombre"), @UniqueConstraint(columnNames= "artrista")})
+@Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= "nombre"), @UniqueConstraint(columnNames= "artista")})
 public class Cancion {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)

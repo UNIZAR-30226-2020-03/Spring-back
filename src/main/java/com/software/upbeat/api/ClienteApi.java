@@ -18,9 +18,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-
+import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
+import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.ClienteService;
 import com.software.upbeat.service.PlaylistService;
 
@@ -41,6 +42,9 @@ public class ClienteApi {
 	
 	@Autowired
 	PlaylistService playlistService;
+	
+	@Autowired
+	CancionService cancionService;
 	
 	
 	//////////////////////////////////////////////
@@ -285,6 +289,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////////////////////////////////////////
 	// PLAYLISTS																	//
 	//////////////////////////////////////////////////////////////////////////////////
+	
 	//////////////////////////////////////////////
 	// SEGUIR A UN CLIENTE				 		//
 	//////////////////////////////////////////////
@@ -359,15 +364,15 @@ public class ClienteApi {
 	@RequestMapping(value="/myPlaylists/{miCorreo}", method=RequestMethod.GET)
 	public Set<Playlist> myPlaylists(@PathVariable(value = "miCorreo") String correoCliente) {
 	
-	// Invoca lógica de negocio
-	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
-	
-	Cliente cliente = clienteByEmail.getBody();
-	
-	// Mapeo entity
-	ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
-	
-	return cliente.getPlaylists();
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return cliente.getPlaylists();
 	
 	}
 	
@@ -403,6 +408,196 @@ public class ClienteApi {
 		return resul;
 		
 	}
+	//////////////////////////////////////////////
+	// MARCAR PLAYLIST FAVORITOS		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/favPlaylist/{miCorreo}/{playlistId}", method=RequestMethod.PUT)
+	public int favPlaylist(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "playlistId") Long playlistId) {
+		
+		int resul;
+		
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+			Optional<Playlist> newPlaylist = playlistService.getPlaylistById(playlistId);
+			
+			Cliente cliente = clienteByEmail.getBody();
+			Playlist playlist = newPlaylist.get();
+			
+			if(cliente.containsFavPlaylist(playlist)) {
+				System.out.println("YA TENÍA ESA PLAYLIST COMO FAVORITA");
+				resul = WRONG_RESULT;
+			}
+			else {
+				System.out.println("AÑADO PLAYLIST FAVORITA");
+				cliente.addFavPlaylist(playlist);
+				System.out.println("AÑADIDA COMO FAVORITA");
+				cliente = clienteService.save(cliente);
+				resul = CORRECT;
+			}
+		
+		}
+		catch(Exception e) {
+			resul = ERROR;
+		}
+		return resul;
+		
+	}
 	
+	//////////////////////////////////////////////
+	// VER SI UNA PLAYLIST ES FAVORITA	 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/markFavPlaylist/{miCorreo}/{playlistId}", method=RequestMethod.GET)
+	public int markFavPlaylist(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "playlistId") Long playlistId) {
 	
+	int resul;
+	
+	try {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Playlist> newPlaylist = playlistService.getPlaylistById(playlistId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Playlist playlist = newPlaylist.get();
+					
+		if(cliente.containsFavPlaylist(playlist)) {
+			resul = CORRECT;
+		}
+		else {
+			resul = WRONG_RESULT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	
+	return resul;
+	
+	}
+	
+	//////////////////////////////////////////////
+	// DESMARCAR PLAYLIST FAVORITA		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/eliminateFavPlaylist/{miCorreo}/{playlistId}", method=RequestMethod.PUT)
+	public int eliminateFavPlaylist(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "playlistId") Long playlistId)  {
+	
+	int resul;
+	
+	try{
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Playlist> newPlaylist = playlistService.getPlaylistById(playlistId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Playlist playlist = newPlaylist.get();
+		
+		cliente.removeFavPlaylist(playlist);
+		cliente = clienteService.save(cliente);
+		
+		resul = CORRECT;
+	
+	}catch(Exception e) {
+		resul = ERROR;
+	}
+		return resul;
+	}
+	
+	//////////////////////////////////////////////
+	// MARCAR CANCION FAVORITOS	 		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/favSong/{miCorreo}/{songId}", method=RequestMethod.PUT)
+	public int favSong(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "songId") Long songId) {
+	
+	int resul;
+	
+	try {
+	// Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	ResponseEntity<Cancion> newSong = cancionService.getSongByID(songId);
+	
+	Cliente cliente = clienteByEmail.getBody();
+	Cancion song = newSong.getBody();
+	
+		if(cliente.containsFavSongs(song)) {
+			System.out.println("YA TENÍA ESA CANCION COMO FAVORITA");
+			resul = WRONG_RESULT;
+		}
+		else {
+			System.out.println("AÑADO CANCION FAVORITA");
+			cliente.addFavSongs(song);
+			System.out.println("AÑADIDA COMO FAVORITA");
+			cliente = clienteService.save(cliente);
+			resul = CORRECT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	return resul;
+	
+	}
+	
+	//////////////////////////////////////////////
+	// VER SI UNA CANCION ES FAVORITA	 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/markFavSong/{miCorreo}/{songId}", method=RequestMethod.GET)
+	public int markFavSong(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "songId") Long songId) {
+	
+	int resul;
+	
+	try {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Cancion> newSong = cancionService.getSongByID(songId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Cancion song = newSong.getBody();
+	
+		if(cliente.containsFavSongs(song)) {
+			resul = CORRECT;
+		}
+		else {
+			resul = WRONG_RESULT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	
+	return resul;
+	
+	}
+	
+	//////////////////////////////////////////////
+	// DESMARCAR CANCION FAVORITA		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/eliminateFavSong/{miCorreo}/{songId}", method=RequestMethod.PUT)
+	public int eliminateFavSong(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "songId") Long songId)  {
+	
+	int resul;
+	
+	try{
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Cancion> newSong = cancionService.getSongByID(songId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Cancion song = newSong.getBody();
+		
+		cliente.removeFavSongs(song);
+		cliente = clienteService.save(cliente);
+		
+		resul = CORRECT;
+	
+	}catch(Exception e) {
+		resul = ERROR;
+	}
+	return resul;
+	}
 }

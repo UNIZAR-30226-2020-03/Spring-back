@@ -6,6 +6,7 @@ import java.util.Set;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
 
@@ -34,7 +35,10 @@ public class ClienteRequest {
 	
 	private Set<Playlist> playlists = new HashSet<Playlist>();
 	
-
+	private Set<Playlist> favPlaylists = new HashSet<Playlist>();
+	
+	private Set<Cancion> favSongs;
+	
 	public Long getCod_cliente() {
 		return cod_cliente;
 	}
@@ -89,5 +93,17 @@ public class ClienteRequest {
 	public void setPlaylists(Set<Playlist> playlists) {
 		this.playlists = playlists;
 	}
-
+	public Set<Playlist> getFavPlaylists() {
+		return favPlaylists;
+	}
+	public void setFavPlaylists(Set<Playlist> favPlaylists) {
+		this.favPlaylists = favPlaylists;
+	}
+	public Set<Cancion> getFavSongs() {
+		return favSongs;
+	}
+	public void setFavSongs(Set<Cancion> favSongs) {
+		this.favSongs = favSongs;
+	}
+	
 }
