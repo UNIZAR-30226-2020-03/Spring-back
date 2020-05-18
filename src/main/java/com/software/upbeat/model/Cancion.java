@@ -43,7 +43,7 @@ public class Cancion {
     private byte[] song;
     */
 	
-	public Cancion(){}
+	public Cancion(){this.duracion = (float) 0; this.reproducciones = (long) 0;}
 
 	public String getPath() {
 		return path;
