@@ -68,7 +68,9 @@ public class Cancion {
 		return this.creador==creador;
 	}
 	//////// FIN CREADOR /////////////////////
-	public Cancion(){}
+
+	public Cancion(){this.duracion = (float) 0; this.reproducciones = (long) 0;}
+
 
 	public String getPathMp3() {
 		return pathMp3;

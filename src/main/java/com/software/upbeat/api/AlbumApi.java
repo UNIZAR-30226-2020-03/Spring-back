@@ -1,6 +1,5 @@
 package com.software.upbeat.api;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,21 +19,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Cancion;
-import com.software.upbeat.model.Playlist;
+import com.software.upbeat.model.Album;
 import com.software.upbeat.service.CancionService;
-import com.software.upbeat.service.PlaylistService;
+import com.software.upbeat.service.AlbumService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
-@RequestMapping("/playlist/")
-public class PlaylistApi {
+@RequestMapping("/album/")
+public class AlbumApi {
 
 	private static final int CORRECT = 0;
 	private static final int ERROR = 1;
 	private static final int WRONG_RESULT = 2;
 	
 	@Autowired
-	PlaylistService playlistService;
+	AlbumService albumService;
 	
 	@Autowired
 	Mapper mapper;
@@ -44,108 +42,107 @@ public class PlaylistApi {
 	CancionService cancionService;
 	
 	/*
-	 * ¿¿¿ getPlaylistByNameAndAuthor ???
+	 * ¿¿¿ getAlbumByNameAndAuthor ???
 	 */
 	
 	//////////////////////////////////////////////
-	// OBTENER PLAYLIST POR ID					//
+	// OBTENER ALBUM POR ID				//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/get/{id}", method=RequestMethod.GET)
-    public PlaylistResponse getPlaylistById(@PathVariable(value = "id") Long playlistId) {
+    public AlbumResponse getAlbumById(@PathVariable(value = "id") Long albumId) {
 		// Invoca lógica de negocio
-		Optional<Playlist> playlistById = playlistService.getPlaylistById(playlistId);
+		Optional<Album> albumById = albumService.getAlbumById(albumId);
 		
 		// Mapeo entity
-		PlaylistResponse playlistResponse = mapper.map(playlistById.get(), PlaylistResponse.class);
+		AlbumResponse albumResponse = mapper.map(albumById.get(), AlbumResponse.class);
 		
-		return playlistResponse;
+		return albumResponse;
     }
 	
 	//////////////////////////////////////////////
-	// OBTENER PLAYLIST/S POR NOMBRE			//
+	// OBTENER ALBUM/S POR NOMBRE				//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/getByName/{name}", method=RequestMethod.GET)
-	public List<Playlist> getPlaylistByName(@PathVariable(value = "name") String nombre) {
-		return playlistService.getPlaylistByName(nombre);
+	public List<Album> getAlbumByName(@PathVariable(value = "name") String nombre) {
+		return albumService.getAlbumByName(nombre);
 	}
 	
 	//////////////////////////////////////////////
-	// OBTENER TODOS LOS PLAYLISTS				//
+	// OBTENER TODOS LOS ALBUMS				//
 	//////////////////////////////////////////////
-	
-	@RequestMapping(value="/allPlaylists", method=RequestMethod.GET)
-	public List<Playlist> getAllPlaylists() {
-		return playlistService.getAllPlaylists();
+	@RequestMapping(value="/allAlbums", method=RequestMethod.GET)
+	public List<Album> getAllAlbums() {
+		return albumService.getAllAlbums();
 	}
 	
 	//////////////////////////////////////////////
-	// AÑADIR PLAYLIST							//
+	// AÑADIR ALBUM							//
 	//////////////////////////////////////////////
 	
 	@RequestMapping(value="/save", method=RequestMethod.POST)
-	public PlaylistResponse savePlaylist(@RequestBody PlaylistRequest playlistRequest) {
+	public AlbumResponse saveAlbum(@RequestBody AlbumRequest albumRequest) {
 		
 		// Mapeo request dto
-		Playlist playlist = mapper.map(playlistRequest, Playlist.class);
+		Album album = mapper.map(albumRequest, Album.class);
 		
 		// Invoca lógica de negocio
-		Playlist newPlaylist = playlistService.save(playlist);
+		Album newAlbum = albumService.save(album);
 		
 		// Mapeo entity
-		PlaylistResponse playlistResponse = mapper.map(newPlaylist, PlaylistResponse.class);
+		AlbumResponse albumResponse = mapper.map(newAlbum, AlbumResponse.class);
 		
-		return playlistResponse;
+		return albumResponse;
 		
 	}
-
 	
 	//////////////////////////////////////////////
-	// ACTUALIZAR PLAYLIST POR EL CORREO 		//
+	// ACTUALIZAR ALBUM POR EL CORREO 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/update/{id}", method=RequestMethod.PUT)
-	public PlaylistResponse update(@PathVariable(value = "id") Long idPlaylist,
-	@Valid @RequestBody PlaylistRequest datosPlaylist) {
+	public AlbumResponse update(@PathVariable(value = "id") Long idAlbum,
+	@Valid @RequestBody AlbumRequest datosAlbum) {
 		
 		// Mapeo request dto
-		Playlist playlist = mapper.map(datosPlaylist, Playlist.class);
+		Album album = mapper.map(datosAlbum, Album.class);
 		
 		// Invoca lógica de negocio
-		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+		Optional<Album> albumById = albumService.getAlbumById(idAlbum);
 		
-		Playlist updatePlaylist = playlistById.get();
+		Album updateAlbum = albumById.get();
 		
-		updatePlaylist.setNombre(playlist.getNombre());
-		updatePlaylist.setDescripcion(playlist.getDescripcion());
-		updatePlaylist.setPathImg(playlist.getPathImg());
-		updatePlaylist = playlistService.save(updatePlaylist);
+		updateAlbum.setNombre(album.getNombre());
+		updateAlbum.setDescripcion(album.getDescripcion());
+		updateAlbum.setFecha(album.getFecha());
+		
+		updateAlbum = albumService.save(updateAlbum);
 		
 		
 		// Mapeo entity
-		PlaylistResponse playlistResponse = mapper.map(updatePlaylist, PlaylistResponse.class);
+		AlbumResponse albumResponse = mapper.map(updateAlbum, AlbumResponse.class);
 		
-		return playlistResponse;
+		return albumResponse;
 		
 	}
 	
 	//////////////////////////////////////////////
-	// ELIMINAR PLAYLIST				 		//
+	// ELIMINAR ALBUM				 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
-	public Map<String, Boolean> delete(@PathVariable(value = "id") Long idPlaylist) {
+	public Map<String, Boolean> delete(@PathVariable(value = "id") Long idAlbum) {
 		
 		// Invoca lógica de negocio
-		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+		Optional<Album> albumById = albumService.getAlbumById(idAlbum);
 		
-		Playlist deletePlaylist = playlistById.get();
+		Album deleteAlbum = albumById.get();
 		
-		playlistService.delete(deletePlaylist);
+		albumService.delete(deleteAlbum);
 		
 		Map<String, Boolean> response = new HashMap<>();
 		response.put("ELIMINADO", Boolean.TRUE);
 		
 		
 		// Mapeo entity
-		// PlaylistResponse playlistResponse = mapper.map(deletePlaylist, PlaylistResponse.class);
+		// AlbumResponse albumResponse = mapper.map(deleteAlbum, AlbumResponse.class);
 		
 		return response;
 		
@@ -155,29 +152,29 @@ public class PlaylistApi {
 	// CANCIONES																		//
 	//////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////
-	// AÑADIR CANCIÓN A UNA PLAYLIST		 	//
+	// AÑADIR CANCIÓN A UNA ALBUM			 	//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/addSong/{idPlaylist}/{idSong}", method=RequestMethod.PUT)
-	public int addSong(@PathVariable(value = "idPlaylist") Long idPlaylist,
+	@RequestMapping(value="/addSong/{idAlbum}/{idSong}", method=RequestMethod.PUT)
+	public int addSong(@PathVariable(value = "idAlbum") Long idAlbum,
 			@PathVariable(value = "idSong") Long idSong) {
 		
 		int resul;
 		
 		try {
 		// Invoca lógica de negocio
-			Optional<Playlist> queryPlaylist = playlistService.getPlaylistById(idPlaylist);
+			Optional<Album> queryAlbum = albumService.getAlbumById(idAlbum);
 			ResponseEntity<Cancion> querySong = cancionService.getSongByID(idSong);
 			
-			Playlist playlist = queryPlaylist.get();
+			Album album = queryAlbum.get();
 			Cancion song = querySong.getBody();
 			
-			if(playlist.containsCancion(song)) {
+			if(album.containsCancion(song)) {
 				System.out.println("YA TENÍA ESTA CANCIÓN");
 				resul = WRONG_RESULT;
 			}
 			else {
-				playlist.addCancion(song);
-				playlist = playlistService.save(playlist);
+				album.addCancion(song);
+				album = albumService.save(album);
 				resul = CORRECT;
 			}
 			
@@ -190,23 +187,23 @@ public class PlaylistApi {
 	}
 	
 	//////////////////////////////////////////////
-	// VER SI UNA CANCIÓN ESTÁ EN LA PLAYLIST	//
+	// VER SI UNA CANCIÓN ESTÁ EN LA ALBUM	//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/isInPlaylist/{idPlaylist}/{idSong}", method=RequestMethod.GET)
-	public int isInPlaylist(@PathVariable(value = "idPlaylist") Long idPlaylist,
+	@RequestMapping(value="/isInAlbum/{idAlbum}/{idSong}", method=RequestMethod.GET)
+	public int isInAlbum(@PathVariable(value = "idAlbum") Long idAlbum,
 	@PathVariable(value = "idSong") Long idSong) {
 		
 		int resul;
 		
 		try {
 			// Invoca lógica de negocio
-			Optional<Playlist> queryPlaylist = playlistService.getPlaylistById(idPlaylist);
+			Optional<Album> queryAlbum = albumService.getAlbumById(idAlbum);
 			ResponseEntity<Cancion> querySong = cancionService.getSongByID(idSong);
 			
-			Playlist playlist = queryPlaylist.get();
+			Album album = queryAlbum.get();
 			Cancion song = querySong.getBody();
 			
-			if(playlist.containsCancion(song)) {
+			if(album.containsCancion(song)) {
 				resul = CORRECT;
 			}
 			else {
@@ -222,24 +219,24 @@ public class PlaylistApi {
 	}
 	
 	//////////////////////////////////////////////
-	// QUITAR CANCIÓN DE LA PLAYLIST	 		//
+	// QUITAR CANCIÓN DE LA ALBUM	 		//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/takeOut/{idPlaylist}/{idSong}", method=RequestMethod.PUT)
-	public int takeOut(@PathVariable(value = "idPlaylist") Long idPlaylist,
+	@RequestMapping(value="/takeOut/{idAlbum}/{idSong}", method=RequestMethod.PUT)
+	public int takeOut(@PathVariable(value = "idAlbum") Long idAlbum,
 	@PathVariable(value = "idSong") Long idSong) {
 		
 		int resul;
 		
 		try{
 			// Invoca lógica de negocio
-			Optional<Playlist> queryPlaylist = playlistService.getPlaylistById(idPlaylist);
+			Optional<Album> queryAlbum = albumService.getAlbumById(idAlbum);
 			ResponseEntity<Cancion> querySong = cancionService.getSongByID(idSong);
 			
-			Playlist playlist = queryPlaylist.get();
+			Album album = queryAlbum.get();
 			Cancion song = querySong.getBody();
 			
-			playlist.removeCancion(song);
-			playlist = playlistService.save(playlist);
+			album.removeCancion(song);
+			album = albumService.save(album);
 			
 			resul = CORRECT;
 			
@@ -259,14 +256,14 @@ public class PlaylistApi {
 	public Set<Cancion> songList(@PathVariable(value = "id") Long id) {
 		
 		// Invoca lógica de negocio
-		Optional<Playlist> queryPlaylist = playlistService.getPlaylistById(id);
+		Optional<Album> queryAlbum = albumService.getAlbumById(id);
 		
-		Playlist playlist = queryPlaylist.get();
+		Album album = queryAlbum.get();
 		
 		// Mapeo entity
-		PlaylistResponse playlistResponse = mapper.map(playlist, PlaylistResponse.class);
+		AlbumResponse albumResponse = mapper.map(album, AlbumResponse.class);
 		
-		return playlistResponse.getCanciones();
+		return albumResponse.getCanciones();
 		
 	}
 }
