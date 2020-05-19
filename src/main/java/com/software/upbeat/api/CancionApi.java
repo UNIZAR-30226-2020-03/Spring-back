@@ -2,7 +2,7 @@ package com.software.upbeat.api;
 
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -59,6 +59,9 @@ public class CancionApi {
 		// Mapeo request dto
 		Cancion cancion = mapper.map(cancionRequest, Cancion.class);
 		cancion.setReproducciones((long) 0);
+		if(cancion.getDuracion()==null) cancion.setDuracion((float) 0);
+		Date fecha=new Date();
+		if(cancion.getFecha()==null) cancion.setFecha(convertUtilToSql(fecha));
 		// Invoca lógica de negocio
 		Cancion newCancion = cancionService.save(cancion);
 		
@@ -252,5 +255,9 @@ public class CancionApi {
 		return decompressBytes(song);
 	}
 	*/
-	
+	private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
+
 }

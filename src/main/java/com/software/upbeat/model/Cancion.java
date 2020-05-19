@@ -146,8 +146,8 @@ public class Cancion {
 		return fecha;
 	}
 
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
+	public void setFecha(Date string) {
+		this.fecha = string;
 	}
 
 	@Override

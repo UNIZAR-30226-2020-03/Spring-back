@@ -1,7 +1,7 @@
 package com.software.upbeat.api;
 
 import java.io.IOException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -143,6 +143,9 @@ public PodcastResponse savePodcast(@RequestBody PodcastRequest podcastRequest) t
 // Mapeo request dto
 Podcast podcast = mapper.map(podcastRequest, Podcast.class);
 podcast.setReproducciones((long) 0);
+if(podcast.getDuracion()==null) podcast.setDuracion((float) 0);
+Date fecha=new Date();
+if(podcast.getFecha()==null) podcast.setFecha(convertUtilToSql(fecha));
 // Invoca lógica de negocio
 Podcast newPodcast = podcastService.save(podcast);
 
@@ -173,5 +176,9 @@ return podcastResponse;
 	return response;
 	
 	}
+	private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
 
 }
