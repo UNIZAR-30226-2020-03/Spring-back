@@ -13,8 +13,6 @@ import com.software.upbeat.model.Podcast;
 public class ArtistaRequest extends ClienteRequest{
 	
 	private Long cod_artista;
-	
-	@NotNull(message="El nombre de artista es requerido")
 	private String nombre_artista;
 	private String descripcion;
 	private int numCanciones;
