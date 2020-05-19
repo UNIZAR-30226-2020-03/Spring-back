@@ -14,11 +14,9 @@ public class CancionRequest {
 	private Long id;
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
-	@NotNull(message="El artista es requerido")
 	private Artista creador;
 	@NotNull(message="La url es requerida")
 	private String pathMp3;
-	@NotNull(message="La imagen es requerida")
 	private String pathImg;
 	private Float duracion;
 	private Date fecha;

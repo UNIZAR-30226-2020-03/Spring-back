@@ -12,11 +12,9 @@ public class PodcastRequest {
 	private int episodio;
 	@NotNull(message="La temporada es requerida")
 	private int temporada;
-	@NotNull(message="El artista es requerido")
 	private String autor;
 	@NotNull(message="La url es requerida")
 	private String pathMp3;
-	@NotNull(message="La imagen es requerida")
 	private String pathImg;
 	private String descripcion;
 	private Float duracion;

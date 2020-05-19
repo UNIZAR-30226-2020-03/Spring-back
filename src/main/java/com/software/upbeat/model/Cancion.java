@@ -16,7 +16,7 @@ import javax.persistence.UniqueConstraint;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
-@Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= "nombre"), @UniqueConstraint(columnNames= "creador")})
+@Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= {"nombre", "creador"}), @UniqueConstraint(columnNames= "pathMp3")})
 public class Cancion {
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
