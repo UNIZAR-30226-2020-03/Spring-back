@@ -127,9 +127,9 @@ public class Artista extends Cliente{
 	public Artista() {	
 	}
 	
-	public Artista(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
+	public Artista(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,String pathImg,
 			String username, String pais, Long cod_artista, String nombre_artista, String descripcion) {
-		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais);
+		super(cod_cliente, nombre, apellidos,pathImg, contrasenya, correo, username, pais);
 		// TODO Auto-generated constructor stub
 		this.cod_artista = cod_artista;
 		this.nombre_artista = nombre_artista;

@@ -26,8 +26,11 @@ public class Cancion {
 	@Column(name = "nombre")
 	private String nombre;
     
-    @Column(name = "path")
-	private String path;
+    @Column(name = "pathMp3")
+	private String pathMp3;
+    
+    @Column(name = "pathImg")
+	private String pathImg;
     
     @Column(name = "duracion")
 	private Float duracion;
@@ -67,19 +70,29 @@ public class Cancion {
 	//////// FIN CREADOR /////////////////////
 	public Cancion(){}
 
-	public String getPath() {
-		return path;
+	public String getPathMp3() {
+		return pathMp3;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setPathMp3(String pathMp3) {
+		this.pathMp3 = pathMp3;
+	}
+	
+	public String getPathImg() {
+		return pathImg;
 	}
 
-	public Cancion(Long id, String nombre, String path, Float duracion, Date fecha) {
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
+	}
+
+
+	public Cancion(Long id, String nombre, String pathMp3, String pathImg, Float duracion, Date fecha) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
-		this.path = path;
+		this.pathMp3 = pathMp3;
+		this.pathImg = pathImg;
 		this.duracion = duracion;
 		this.fecha = fecha;
 		this.reproducciones = (long) 0;
@@ -145,7 +158,7 @@ public class Cancion {
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result + ((pathMp3 == null) ? 0 : pathMp3.hashCode());
 		result = prime * result + ((reproducciones == null) ? 0 : reproducciones.hashCode());
 		return result;
 	}
@@ -179,10 +192,10 @@ public class Cancion {
 				return false;
 		} else if (!nombre.equals(other.nombre))
 			return false;
-		if (path == null) {
-			if (other.path != null)
+		if (pathMp3 == null) {
+			if (other.pathMp3 != null)
 				return false;
-		} else if (!path.equals(other.path))
+		} else if (!pathMp3.equals(other.pathMp3))
 			return false;
 		if (reproducciones == null) {
 			if (other.reproducciones != null)
@@ -194,7 +207,7 @@ public class Cancion {
 
 	@Override
 	public String toString() {
-		return "Cancion [id=" + id + ", nombre=" + nombre + ", path=" + path + ", duracion="
+		return "Cancion [id=" + id + ", nombre=" + nombre + ", pathMp3=" + pathMp3 + ", duracion="
 				+ duracion + ", fecha=" + fecha + ", reproducciones=" + reproducciones + "]";
 	}
 	

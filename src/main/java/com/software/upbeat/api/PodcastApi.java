@@ -36,11 +36,19 @@ public class PodcastApi {
 	//////////////////////////////////////////////////////////////////
 	// STREAMING  URL PODCAST POR NOMBRE TEMPORADA Y EPISODIO      	//
 	/////////////////////////////////////////////////////////////////
-	@GetMapping(value="/getStreamUrl/{nombre}/{temp}/{ep}")
-	public String  getUrlByNameAndTemporadaAndEpisodio(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "temp") int temporada,@PathVariable(value = "ep") int episodio) throws IOException{
-		return podcastService.getPodcastURLByNameAndTemporadaAndEpisodio(nombre,temporada,episodio);
+	@GetMapping(value="/getStreamMp3Url/{nombre}/{temp}/{ep}")
+	public String  getUrlMp3ByNameAndTemporadaAndEpisodio(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "temp") int temporada,@PathVariable(value = "ep") int episodio) throws IOException{
+		return podcastService.getPodcastMp3URLByNameAndTemporadaAndEpisodio(nombre,temporada,episodio);
 	}
 	
+	//////////////////////////////////////////////////////////////////
+	// IMAGE URL PODCAST POR NOMBRE TEMPORADA Y EPISODIO      	//
+	/////////////////////////////////////////////////////////////////
+	@GetMapping(value="/getStreamImgUrl/{nombre}/{temp}/{ep}")
+	public String  getUrlImgByNameAndTemporadaAndEpisodio(@PathVariable(value = "nombre") String nombre,@PathVariable(value = "temp") int temporada,@PathVariable(value = "ep") int episodio) throws IOException{
+	return podcastService.getPodcastImgURLByNameAndTemporadaAndEpisodio(nombre,temporada,episodio);
+	}
+
 	//////////////////////////////////////////////
 	// OBTENER PODCAST POR NOMBRE           	//
 	//////////////////////////////////////////////
@@ -94,7 +102,8 @@ public class PodcastApi {
 		updatePodcast.setTemporada(podcast.getTemporada());
 		updatePodcast.setDescripcion(podcast.getDescripcion());
 		updatePodcast.setCreador(podcast.getCreador());
-		updatePodcast.setPath(podcast.getPath());
+		updatePodcast.setPathMp3(podcast.getPathMp3());
+		updatePodcast.setPathImg(podcast.getPathImg());
 		updatePodcast.setDuracion(podcast.getDuracion());
 		updatePodcast.setFecha(podcast.getFecha());
 		

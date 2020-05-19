@@ -1,5 +1,6 @@
 package com.software.upbeat.api;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,7 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -88,7 +90,13 @@ public class UsuarioApi{
 	public List<Usuario> getAllUsuarios() {
 		return usuarioService.getAllUsuarios();
 	}
-	
+	//////////////////////////////////////////////
+	// OBTENER IMAGEN POR EMAIL				//
+	//////////////////////////////////////////////
+	@GetMapping(value="/getImgUrl/{correo}")
+	public String  getUrlImgByEmail(@PathVariable(value = "correo") String correo) throws IOException{
+		return usuarioService.getImgByEmail(correo);
+	}
 	//////////////////////////////////////////////
 	// AÑADIR USUARIO							//
 	//////////////////////////////////////////////
@@ -140,6 +148,7 @@ public class UsuarioApi{
 		updateUsuario.setContrasenya(usuario.getContrasenya());
 		updateUsuario.setCorreo(usuario.getCorreo());
 		updateUsuario.setUsername(usuario.getUsername());
+		updateUsuario.setPathImg(usuario.getPathImg());
 		updateUsuario.setPais(usuario.getPais());
 		updateUsuario.setAmigos(usuario.getAmigos());
 		

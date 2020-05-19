@@ -1,5 +1,6 @@
 package com.software.upbeat.api;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -95,6 +97,7 @@ public class PlaylistApi {
 		return playlistResponse;
 		
 	}
+
 	
 	//////////////////////////////////////////////
 	// ACTUALIZAR PLAYLIST POR EL CORREO 		//
@@ -113,7 +116,7 @@ public class PlaylistApi {
 		
 		updatePlaylist.setNombre(playlist.getNombre());
 		updatePlaylist.setDescripcion(playlist.getDescripcion());
-		
+		updatePlaylist.setPathImg(playlist.getPathImg());
 		updatePlaylist = playlistService.save(updatePlaylist);
 		
 		

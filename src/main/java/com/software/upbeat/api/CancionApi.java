@@ -3,6 +3,7 @@ package com.software.upbeat.api;
 
 import java.io.IOException;
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,13 +71,26 @@ public class CancionApi {
 	}
 	
 	//////////////////////////////////////////////////////
-	// STREAMING CANCION POR NOMBRE Y ARTISTA URL      	//
+	// STREAMING CANCION POR NOMBRE URL      	        //
 	/////////////////////////////////////////////////////
-	@GetMapping(value="/getStreamUrl/{usuario}/{nombre}")
-	public String  getUrlByName(@PathVariable(value = "usuario") String usuario,@PathVariable(value = "nombre") String nombre) throws IOException{
-		Cliente clienteReproduce= clienteService.getClienteByEmail(usuario).getBody();
-		clienteReproduce.reproduceCancion(cancionService.getSongByName(nombre).getBody());
+	@GetMapping(value="/getStreamUrlMp3/{nombre}")
+	public String  getUrlMp3ByName(@PathVariable(value = "nombre") String nombre) throws IOException{
+		/*Cliente clienteReproduce= clienteService.getClienteByEmail(correo).getBody();
+		clienteReproduce.addLastSongs(cancionService.getSongByName(nombre).getBody().getId());
+		clienteReproduce = clienteService.save(clienteReproduce);
+		
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(clienteReproduce, ClienteResponse.class);*/
 		return cancionService.getSongURLByName(nombre);
+	}
+	
+	//////////////////////////////////////////////////////
+	// STREAMING IMAGEN POR NOMBRE URL      	        //
+	/////////////////////////////////////////////////////
+	@GetMapping(value="/getStreamUrlImg/{nombre}")
+	public String  getUrlImgByName(@PathVariable(value = "nombre") String nombre) throws IOException{
+		return cancionService.getImgURLByName(nombre);
 	}
 	
 	//////////////////////////////////////////////
@@ -106,19 +120,24 @@ public class CancionApi {
 	return cancionService.findSongsByPopularity();
 	}
 	
-	//////////////////////////////////////////////////////////////////////
+	/*///////////////////////////////////////////////////////////////////////
 	// OBTENER 10 ULTIMAS CANCIONES REPRODUCIDAS USUARIO            			//
 	//////////////////////////////////////////////////////////////////////
 	@RequestMapping(value="/getLast10/{correo}", method=RequestMethod.GET)
 	public List<Cancion> find10LastSongsByClient(@PathVariable(value = "correo") String correo) {
 		Cliente clienteReproduce= clienteService.getClienteByEmail(correo).getBody();
-	return clienteReproduce.ultimasCancionesReproducidas();
-	}
+		List<Cancion> aux=new ArrayList<Cancion>();
+		int i=0;
+		while(i<clienteReproduce.getUltimaCancion()) {
+			aux.add(cancionService.getSongByID(clienteReproduce.getIdCancion(i)).getBody());
+		}
+		return aux;
+	}*/
 
 	//////////////////////////////////////////////////////////
 	// ACTUALIZAR CANCION POR EL NOMBRE 		//
 	/////////////////////////////////////////////////////////
-	@RequestMapping(value="/update/{nombre}/{autor}", method=RequestMethod.PUT)
+	@RequestMapping(value="/update/{nombre}", method=RequestMethod.PUT)
 	public CancionResponse update(@PathVariable(value = "nombre") String nombre,
 			@Valid @RequestBody CancionRequest datosCancion) {
 		
@@ -130,7 +149,8 @@ public class CancionApi {
 		
 		Cancion updateCancion = cancionByNombreArtista.getBody();
 		updateCancion.setNombre(cancion.getNombre());
-		updateCancion.setPath(cancion.getPath());
+		updateCancion.setPathMp3(cancion.getPathMp3());
+		updateCancion.setPathImg(cancion.getPathImg());
 		updateCancion.setDuracion(cancion.getDuracion());
 		updateCancion.setCreador(cancion.getCreador());
 		updateCancion.setFecha(cancion.getFecha());

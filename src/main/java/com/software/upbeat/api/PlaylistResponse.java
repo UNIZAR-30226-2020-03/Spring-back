@@ -11,16 +11,24 @@ public class PlaylistResponse {
 	private Long id;
 	private String nombre;
 	private String descripcion;
+	private String pathImg;
 	private int numCanciones;
 	private Set<Cancion> canciones = new HashSet<Cancion>();
 	private Cliente creador;
-	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public String getPathImg() {
+		return pathImg;
+	}
+
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 
 	public String getNombre() {

@@ -11,7 +11,8 @@ import com.software.upbeat.model.Cliente;
 public class CancionResponse {
 	private Long id;
 	private String nombre;
-	private String path;
+	private String pathMp3;
+	private String pathImg;
 	private Float duracion;
 	private Date fecha;
 	private Long reproducciones;
@@ -19,13 +20,19 @@ public class CancionResponse {
 	//private byte[] song;
 
 
-	public String getPath() {
-		return path;
+	public String getPathMp3() {
+		return pathMp3;
 	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setPathMp3(String pathMp3) {
+		this.pathMp3 = pathMp3;
 	}
 
+	public String getPathImg() {
+		return pathImg;
+	}
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
+	}
 	public Long getId() {
 		return id;
 	}

@@ -16,6 +16,8 @@ public class ClienteResponse {
 	private String correo;
 	private String username;
 	private String pais;
+	private String pathImg;
+	
 	
 	private Set<Cliente> amigos = new HashSet<Cliente>();
 	private Set<Playlist> playlists = new HashSet<Playlist>();
@@ -48,6 +50,13 @@ public class ClienteResponse {
 	}
 	public String getCorreo() {
 		return correo;
+	}
+	
+	public String getPathImg() {
+		return pathImg;
+	}
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 	public void setCorreo(String correo) {
 		this.correo = correo;

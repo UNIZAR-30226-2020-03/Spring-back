@@ -35,8 +35,11 @@ public class Podcast {
     @Column(name = "descripcion")
 	private String descripcion;
     
-    @Column(name = "path")
-	private String path;
+    @Column(name = "pathMp3")
+    private String pathMp3;
+    
+    @Column(name = "pathImg")
+   	private String pathImg;
     
     @Column(name = "duracion")
 	private Float duracion;
@@ -72,7 +75,7 @@ public class Podcast {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Podcast(Long id, String nombre, int episodio, int temporada, String descripcion, String path,
+	public Podcast(Long id, String nombre, int episodio, int temporada, String descripcion, String pathMp3,String pathImg,
 			Float duracion, Date fecha, Long reproducciones) {
 		super();
 		this.id = id;
@@ -80,7 +83,8 @@ public class Podcast {
 		this.episodio = episodio;
 		this.temporada = temporada;
 		this.descripcion = descripcion;
-		this.path = path;
+		this.pathMp3 = pathMp3;
+		this.pathImg = pathImg;
 		this.duracion = duracion;
 		this.fecha = fecha;
 		this.reproducciones = (long) 0;
@@ -126,14 +130,21 @@ public class Podcast {
 		this.descripcion = descripcion;
 	}
 
-	public String getPath() {
-		return path;
+	public String getPathMp3() {
+		return pathMp3;
 	}
 
-	public void setPath(String path) {
-		this.path = path;
+	public void setPathMp3(String pathMp3) {
+		this.pathMp3 = pathMp3;
+	}
+	
+	public String getPathImg() {
+		return pathImg;
 	}
 
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
+	}
 	public Float getDuracion() {
 		return duracion;
 	}
@@ -168,7 +179,7 @@ public class Podcast {
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((path == null) ? 0 : path.hashCode());
+		result = prime * result + ((pathMp3 == null) ? 0 : pathMp3.hashCode());
 		result = prime * result + ((reproducciones == null) ? 0 : reproducciones.hashCode());
 		result = prime * result + temporada;
 		return result;
@@ -210,10 +221,10 @@ public class Podcast {
 				return false;
 		} else if (!nombre.equals(other.nombre))
 			return false;
-		if (path == null) {
-			if (other.path != null)
+		if (pathMp3 == null) {
+			if (other.pathMp3 != null)
 				return false;
-		} else if (!path.equals(other.path))
+		} else if (!pathMp3.equals(other.pathMp3))
 			return false;
 		if (reproducciones == null) {
 			if (other.reproducciones != null)
@@ -228,7 +239,7 @@ public class Podcast {
 	@Override
 	public String toString() {
 		return "Podcast [id=" + id + ", nombre=" + nombre + ", episodio=" + episodio + ", temporada=" + temporada
-				+ ", descripcion=" + descripcion + ", path=" + path + ", duracion=" + duracion
+				+ ", descripcion=" + descripcion + ", pathMp3=" + pathMp3 + ", duracion=" + duracion
 				+ ", fecha=" + fecha + ", reproducciones=" + reproducciones + "]";
 	}
     

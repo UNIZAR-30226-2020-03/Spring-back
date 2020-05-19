@@ -17,24 +17,32 @@ public class CancionRequest {
 	@NotNull(message="El artista es requerido")
 	private Artista creador;
 	@NotNull(message="La url es requerida")
-	private String path;
+	private String pathMp3;
+	@NotNull(message="La imagen es requerida")
+	private String pathImg;
 	private Float duracion;
 	private Date fecha;
 	private Long reproducciones;
 	//private byte[] song;
 
 
-	public String getPath() {
-		return path;
-	}
 	public Artista getCreador() {
 		return creador;
 	}
+	public String getPathMp3() {
+		return pathMp3;
+	}
+	public void setPathMp3(String pathMp3) {
+		this.pathMp3 = pathMp3;
+	}
+	public String getPathImg() {
+		return pathImg;
+	}
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
+	}
 	public void setCreador(Artista creador) {
 		this.creador = creador;
-	}
-	public void setPath(String path) {
-		this.path = path;
 	}
 
 	public Long getId() {

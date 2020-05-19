@@ -1,5 +1,7 @@
 package com.software.upbeat.api;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +14,7 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,6 +71,14 @@ public class ClienteApi {
 	}
 	
 	//////////////////////////////////////////////
+	// OBTENER IMAGEN POR EMAIL				//
+	//////////////////////////////////////////////
+	@GetMapping(value="/getImgUrl/{correo}")
+	public String  getUrlImgByEmail(@PathVariable(value = "correo") String correo) throws IOException{
+		return clienteService.getImgByEmail(correo);
+	}
+	
+	//////////////////////////////////////////////
 	// OBTENER CLIENTE POR PASSWORD Y EMAIL 	//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/get/{contrasenya}/{correo}", method=RequestMethod.GET)
@@ -98,7 +109,11 @@ public class ClienteApi {
 		
 		// Mapeo request dto
 		Cliente cliente = mapper.map(clienteRequest, Cliente.class);
-		
+		/*
+		ArrayList<Long> aux =new ArrayList<Long>();
+		cliente.setLista10Ultimas(aux);
+		cliente.setUltimaCancion(0);
+		*/
 		// Invoca lógica de negocio
 		Cliente newCliente = clienteService.save(cliente);
 		
@@ -129,6 +144,7 @@ public class ClienteApi {
 		updateCliente.setApellidos(cliente.getApellidos());
 		updateCliente.setContrasenya(cliente.getContrasenya());
 		updateCliente.setCorreo(cliente.getCorreo());
+		updateCliente.setPathImg(cliente.getPathImg());
 		updateCliente.setUsername(cliente.getUsername());
 		updateCliente.setPais(cliente.getPais());
 		

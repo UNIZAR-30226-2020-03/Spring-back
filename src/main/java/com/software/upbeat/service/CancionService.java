@@ -40,9 +40,13 @@ public class CancionService {
 		Cancion cancion = dao.findSongByName(nombre);
 		cancion.setReproducciones((cancion.getReproducciones()+1));
 		dao.save(cancion);
-		return cancion.getPath();
+		return cancion.getPathMp3();
 	}
 	
+	public String getImgURLByName(String nombre){ //con actualización reproducciones
+		Cancion cancion = dao.findSongByName(nombre);
+		return cancion.getPathImg();
+	}
 	
 	public List<Cancion> findSongsByPopularity(){
 		return dao.findSongsByPopularity();

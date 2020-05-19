@@ -15,7 +15,9 @@ public class PodcastRequest {
 	@NotNull(message="El artista es requerido")
 	private String autor;
 	@NotNull(message="La url es requerida")
-	private String path;
+	private String pathMp3;
+	@NotNull(message="La imagen es requerida")
+	private String pathImg;
 	private String descripcion;
 	private Float duracion;
 	private Date fecha;
@@ -50,11 +52,18 @@ public class PodcastRequest {
 	public void setAutor(String autor) {
 		this.autor = autor;
 	}
-	public String getPath() {
-		return path;
+	
+	public String getPathMp3() {
+		return pathMp3;
 	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setPathMp3(String pathMp3) {
+		this.pathMp3 = pathMp3;
+	}
+	public String getPathImg() {
+		return pathImg;
+	}
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 	public String getDescripcion() {
 		return descripcion;

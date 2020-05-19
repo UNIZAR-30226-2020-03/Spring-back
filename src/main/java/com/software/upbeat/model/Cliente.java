@@ -1,6 +1,7 @@
 package com.software.upbeat.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -34,20 +35,45 @@ public class Cliente implements Serializable{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long cod_cliente;
 	private String nombre;
+	private String pathImg;
 	private String apellidos;
 	private String contrasenya;
 	private String correo;
 	private String username;
 	private String pais;
-	@Transient
-	private List<Cancion> ultimasCanciones;
-	@Transient
-	private int ultimasCancionesN;
+	/*
+	private ArrayList<Long> lista10Ultimas;
+	private int ultimaCancion;
+	
+	
+	
+	
 	/*
 	 * AMIGOS -> CLIENTES = USUARIO | ARTISTA
 	 * https://stackoverflow.com/questions/3393515/jpa-how-to-have-one-to-many-relation-of-the-same-entity-type
 	 */
+	/*
+	public ArrayList<Long> getLista10Ultimas() {
+		return lista10Ultimas;
+	}
+	public Long getIdCancion(int numero) {
+		return lista10Ultimas.get(numero);
+	}
+	public void setLista10Ultimas(ArrayList<Long> lista10Ultimas) {
+		this.lista10Ultimas = lista10Ultimas;
+	}
 	
+	public int getUltimaCancion() {
+		return ultimaCancion;
+	}
+	public void setUltimaCancion(int ultimaCancion) {
+		this.ultimaCancion = ultimaCancion;
+	}
+	public void addLastSongs(Long id) {
+		lista10Ultimas.set(ultimaCancion,id);
+		ultimaCancion=(ultimaCancion+1)%10;
+	}
+	*/
 	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<Cliente> amigos; //= new HashSet<Cliente>();
 	// private List<Cliente> amigos = new ArrayList<Cliente>();
@@ -247,7 +273,7 @@ public class Cliente implements Serializable{
 		return true;
 	}
 
-	public Cliente(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
+	public Cliente(Long cod_cliente, String nombre, String apellidos,String pathImg, String contrasenya, String correo,
 			String username, String pais) {
 		super();
 		this.cod_cliente = cod_cliente;
@@ -255,15 +281,22 @@ public class Cliente implements Serializable{
 		this.apellidos = apellidos;
 		this.contrasenya = contrasenya;
 		this.correo = correo;
+		this.pathImg = pathImg;
 		this.username = username;
 		this.pais = pais;
-		this.ultimasCanciones.clear();
-		this.ultimasCancionesN=0;
 	}
 
 	@Column(name = "cod_cliente", nullable = false)
 	public Long getCod_cliente() {
 		return cod_cliente;
+	}
+
+	public String getPathImg() {
+		return pathImg;
+	}
+
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 
 	public void setCod_cliente(Long cod_cliente) {
@@ -333,12 +366,4 @@ public class Cliente implements Serializable{
 				+ ", amigos=" + amigos + ", playlists=" + playlists + "]";
 	}
 	
-	public void reproduceCancion(Cancion cancion) {
-		ultimasCanciones.add(ultimasCancionesN,cancion);
-		ultimasCancionesN=(ultimasCancionesN+1)%10;
-	}
-	
-	public List<Cancion> ultimasCancionesReproducidas(){
-		return ultimasCanciones;
-	}
 }

@@ -35,11 +35,15 @@ public class PodcastService {
 		return ResponseEntity.ok().body(podcast);
 	}
 	
-	public String getPodcastURLByNameAndTemporadaAndEpisodio(String nombre,int temporada,int episodio){ //con actualización reproducciones
+	public String getPodcastMp3URLByNameAndTemporadaAndEpisodio(String nombre,int temporada,int episodio){ //con actualización reproducciones
 		Podcast podcast= dao.findPodcastByNameAndTemporadaAndEpisodio(nombre,temporada,episodio);
 		podcast.setReproducciones((podcast.getReproducciones()+1));
 		dao.save(podcast);
-		return podcast.getPath();
+		return podcast.getPathMp3();
+	}
+	public String getPodcastImgURLByNameAndTemporadaAndEpisodio(String nombre,int temporada,int episodio){ //con actualización reproducciones
+		Podcast podcast= dao.findPodcastByNameAndTemporadaAndEpisodio(nombre,temporada,episodio);
+		return podcast.getPathImg();
 	}
 	
 	public ResponseEntity<Podcast> getPodcastById(Long id){

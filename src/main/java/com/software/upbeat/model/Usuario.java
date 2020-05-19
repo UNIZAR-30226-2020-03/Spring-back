@@ -78,9 +78,9 @@ public class Usuario extends Cliente{
 		return true;
 	}
 
-	public Usuario(Long cod_cliente, String nombre, String apellidos, String contrasenya, String correo,
+	public Usuario(Long cod_cliente, String nombre, String apellidos,String pathImg, String contrasenya, String correo,
 			String username, String pais, Long codigo_usuario) {
-		super(cod_cliente, nombre, apellidos, contrasenya, correo, username, pais);
+		super(cod_cliente, nombre, apellidos,pathImg, contrasenya, correo, username, pais);
 		// TODO Auto-generated constructor stub
 		this.cod_usuario = codigo_usuario;
 		//this.amigos = new HashSet<Usuario>();

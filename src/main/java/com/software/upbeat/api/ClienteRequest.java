@@ -30,6 +30,8 @@ public class ClienteRequest {
 	private String username;
 	
 	private String pais;
+	private String pathImg;
+	
 	
 	private Set<Cliente> amigos = new HashSet<Cliente>();
 	
@@ -68,6 +70,13 @@ public class ClienteRequest {
 	}
 	public void setCorreo(String correo) {
 		this.correo = correo;
+	}
+	
+	public String getPathImg() {
+		return pathImg;
+	}
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 	public String getUsername() {
 		return username;

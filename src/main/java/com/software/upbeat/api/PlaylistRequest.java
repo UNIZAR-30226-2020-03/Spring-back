@@ -14,9 +14,17 @@ public class PlaylistRequest {
 	
 	@NotNull(message="El nombre es requerido")
 	private String nombre;
-	
+	private String pathImg;
 	public Long getId() {
 		return id;
+	}
+
+	public String getPathImg() {
+		return pathImg;
+	}
+
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 
 	public void setId(Long id) {

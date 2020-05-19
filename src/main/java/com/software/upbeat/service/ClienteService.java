@@ -29,6 +29,11 @@ public class ClienteService {
 		return ResponseEntity.ok().body(cliente);
 	}
 	
+	public String getImgByEmail(String correo){
+		Cliente cliente = dao.findByEmail(correo);
+		return cliente.getPathImg();
+	}
+	
 	public ResponseEntity<Cliente> getClienteByEmailAndPassword(String password, String correo){
 		Cliente cliente = dao.findByEmailAndPassword(password, correo);
 		return ResponseEntity.ok().body(cliente);

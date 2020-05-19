@@ -38,6 +38,9 @@ public class Playlist implements Serializable{
 	@Column(name = "descripcion")
 	private String descripcion;
 	
+	@Column(name = "pathImg")
+	private String pathImg;
+	
 	@Column(name = "numCanciones")
 	private int numCanciones;
 	
@@ -118,6 +121,14 @@ public class Playlist implements Serializable{
 		this.nombre = nombre;
 	}
 
+	public String getPathImg() {
+		return pathImg;
+	}
+
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
+	}
+
 	public String getDescripcion() {
 		return descripcion;
 	}
@@ -180,9 +191,10 @@ public class Playlist implements Serializable{
 		return true;
 	}
 
-	public Playlist(Long id, String nombre, String descripcion) {
+	public Playlist(Long id, String nombre, String descripcion,String pathImg) {
 		super();
 		this.id = id;
+		this.pathImg= pathImg;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.numCanciones = 0;

@@ -1,5 +1,6 @@
 package com.software.upbeat.api;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -111,6 +113,13 @@ public class ArtistaApi {
 		
 		// SE PODRÍA HACER DE FORMA MÁS BREVE PERO ASÍ SE RESALTA CADA PASO DE FORMA INDEPENDIENTE
 	}
+	//////////////////////////////////////////////
+	// OBTENER IMAGEN POR EMAIL				//
+	//////////////////////////////////////////////
+	@GetMapping(value="/getImgUrl/{correo}")
+	public String  getUrlImgByEmail(@PathVariable(value = "correo") String correo) throws IOException{
+		return artistaService.getImgByEmail(correo);
+	}
 	
 	//////////////////////////////////////////////
 	// ACTUALIZAR ARTISTA POR EL CORREO 		//
@@ -131,6 +140,7 @@ public class ArtistaApi {
 		updateArtista.setApellidos(artista.getApellidos());
 		updateArtista.setContrasenya(artista.getContrasenya());
 		updateArtista.setCorreo(artista.getCorreo());
+		updateArtista.setPathImg(artista.getPathImg());
 		updateArtista.setUsername(artista.getUsername());
 		updateArtista.setPais(artista.getPais());
 		
