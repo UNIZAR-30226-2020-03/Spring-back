@@ -604,6 +604,21 @@ public class ClienteApi {
 	}
 	
 	//////////////////////////////////////////////
+	// LISTA CANCIONES FAVORITOS		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/songsFavPlaylist/{miCorreo}", method=RequestMethod.GET)
+	public Set<Cancion> myFavSongs(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		
+		return cliente.getFavSongs();
+	
+	}
+	
+	//////////////////////////////////////////////
 	// DESMARCAR CANCION FAVORITA		 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/eliminateFavSong/{miCorreo}/{songId}", method=RequestMethod.PUT)
