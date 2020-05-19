@@ -66,10 +66,15 @@ public class Album implements Serializable{
 	
 
 	public void addCancion(Cancion cancion) {
-		if(cancion.getCreador() == this.autor && !containsCancion(cancion)) {
-			canciones.add(cancion);
-			numCanciones++;
-			this.duracion += cancion.getDuracion();
+		if(cancion.getCreador() == this.autor) {
+			System.out.println("Es mismo autor");
+			if (!containsCancion(cancion)) {
+				System.out.println("No estaba la canción");
+				canciones.add(cancion);
+				numCanciones++;
+				this.duracion = this.duracion + cancion.getDuracion();
+				System.out.println("Cancion añadida al album");
+			}
 		}
 	}
 
@@ -88,10 +93,20 @@ public class Album implements Serializable{
 			this.duracion = (float) 0;
 		}
 		else {
-			this.duracion -= cancion.getDuracion();
+			this.duracion = this.duracion - cancion.getDuracion();
 		}
 	}
 	
+	public Album(Long id, String nombre, String descripcion, Date fecha) {
+		super();
+		this.id = id;
+		this.nombre = nombre;
+		this.descripcion = descripcion;
+		this.duracion = (float) 0;
+		this.fecha = fecha;
+		this.numCanciones = 0;
+	}
+
 	public boolean containsCancion(Cancion cancion) {
 		return canciones.contains(cancion);
 	}
@@ -207,15 +222,8 @@ public class Album implements Serializable{
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.numCanciones = 0;
+		this.duracion = (float) 0;
 	}
-
-	public Album(Long id, String nombre, String descripcion, Date fecha) {
-		super();
-		this.id = id;
-		this.nombre = nombre;
-		this.descripcion = descripcion;
-		this.fecha = fecha;
-	}
-	
+		
 
 }

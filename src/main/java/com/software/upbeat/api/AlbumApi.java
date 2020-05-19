@@ -152,7 +152,7 @@ public class AlbumApi {
 	// CANCIONES																		//
 	//////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////
-	// AÑADIR CANCIÓN A UNA ALBUM			 	//
+	// AÑADIR CANCIÓN A UN ÁLBUM			 	//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/addSong/{idAlbum}/{idSong}", method=RequestMethod.PUT)
 	public int addSong(@PathVariable(value = "idAlbum") Long idAlbum,
