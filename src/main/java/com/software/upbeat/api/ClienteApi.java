@@ -491,10 +491,24 @@ public class ClienteApi {
 		resul = ERROR;
 	}
 	
-	return resul;
+		return resul;
 	
 	}
 	
+	//////////////////////////////////////////////
+	// LISTA PLAYLISTS FAVORITOS		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/listFavPlaylist/{miCorreo}", method=RequestMethod.GET)
+	public Set<Playlist> myFavPlaylists(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		
+		return cliente.getFavPlaylists();
+	
+	}
 	//////////////////////////////////////////////
 	// DESMARCAR PLAYLIST FAVORITA		 		//
 	//////////////////////////////////////////////
@@ -588,6 +602,21 @@ public class ClienteApi {
 	}
 	
 	return resul;
+	
+	}
+	
+	//////////////////////////////////////////////
+	// LISTA CANCIONES FAVORITOS		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/songsFavPlaylist/{miCorreo}", method=RequestMethod.GET)
+	public Set<Cancion> myFavSongs(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		
+		return cliente.getFavSongs();
 	
 	}
 	
