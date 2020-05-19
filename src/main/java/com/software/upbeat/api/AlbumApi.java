@@ -1,5 +1,6 @@
 package com.software.upbeat.api;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,7 +85,9 @@ public class AlbumApi {
 		
 		// Mapeo request dto
 		Album album = mapper.map(albumRequest, Album.class);
-		
+		if(album.getDuracion()==null) album.setDuracion((float) 0);
+		Date fecha=new Date();
+		if(album.getFecha()==null) album.setFecha(convertUtilToSql(fecha));
 		// Invoca lógica de negocio
 		Album newAlbum = albumService.save(album);
 		
@@ -266,4 +269,9 @@ public class AlbumApi {
 		return albumResponse.getCanciones();
 		
 	}
+	
+	private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
+        java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+        return sDate;
+    }
 }

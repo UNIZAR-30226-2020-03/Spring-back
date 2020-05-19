@@ -41,6 +41,9 @@ public class Album implements Serializable{
 	
 	@Column(name = "duracion")
 	private Float duracion;
+	
+	@Column(name = "pathImg")
+	private String pathImg;
     
     @Column(name = "fecha")
 	private Date fecha;
@@ -97,11 +100,12 @@ public class Album implements Serializable{
 		}
 	}
 	
-	public Album(Long id, String nombre, String descripcion, Date fecha) {
+	public Album(Long id, String nombre, String descripcion, String pathImg, Date fecha) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
+		this.pathImg=pathImg;
 		this.duracion = (float) 0;
 		this.fecha = fecha;
 		this.numCanciones = 0;
@@ -184,6 +188,14 @@ public class Album implements Serializable{
 		this.numCanciones = numCanciones;
 	}
 	
+	public String getPathImg() {
+		return pathImg;
+	}
+
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
+	}
+
 	@Override
 	public String toString() {
 		return "Album [id=" + id + ", nombre=" + nombre + ", descripcion=" + descripcion + ", duracion=" + duracion
@@ -216,12 +228,13 @@ public class Album implements Serializable{
 		return true;
 	}
 
-	public Album(Long id, String nombre, String descripcion) {
+	public Album(Long id, String nombre, String descripcion,String pathImg) {
 		super();
 		this.id = id;
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.numCanciones = 0;
+		this.pathImg=pathImg;
 		this.duracion = (float) 0;
 	}
 		

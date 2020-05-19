@@ -30,12 +30,22 @@ public class AlbumRequest {
 	
 	private Artista autor;
 	
+	private String pathImg;
+	
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getPathImg() {
+		return pathImg;
+	}
+
+	public void setPathImg(String pathImg) {
+		this.pathImg = pathImg;
 	}
 
 	public String getNombre() {
