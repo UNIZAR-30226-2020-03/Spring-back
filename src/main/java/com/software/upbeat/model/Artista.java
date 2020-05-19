@@ -30,7 +30,7 @@ public class Artista extends Cliente{
 	@Column(name = "cod_artista")
 	private Long cod_artista;
 	
-	@Column(name = "nombre_artista", nullable = false)
+	@Column(name = "nombre_artista")
 	private String nombre_artista;
 	
 	@Column(name = "descripcion")
