@@ -156,12 +156,7 @@ public class Cancion {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((duracion == null) ? 0 : duracion.hashCode());
-		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((pathMp3 == null) ? 0 : pathMp3.hashCode());
-		result = prime * result + ((reproducciones == null) ? 0 : reproducciones.hashCode());
 		return result;
 	}
 
@@ -174,48 +169,19 @@ public class Cancion {
 		if (getClass() != obj.getClass())
 			return false;
 		Cancion other = (Cancion) obj;
-		if (duracion == null) {
-			if (other.duracion != null)
-				return false;
-		} else if (!duracion.equals(other.duracion))
-			return false;
-		if (fecha == null) {
-			if (other.fecha != null)
-				return false;
-		} else if (!fecha.equals(other.fecha))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
-			return false;
-		if (pathMp3 == null) {
-			if (other.pathMp3 != null)
-				return false;
-		} else if (!pathMp3.equals(other.pathMp3))
-			return false;
-		if (reproducciones == null) {
-			if (other.reproducciones != null)
-				return false;
-		} else if (!reproducciones.equals(other.reproducciones))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Cancion [id=" + id + ", nombre=" + nombre + ", pathMp3=" + pathMp3 + ", duracion="
-				+ duracion + ", fecha=" + fecha + ", reproducciones=" + reproducciones + "]";
+		return "Cancion [id=" + id + ", nombre=" + nombre + ", pathMp3=" + pathMp3 + ", pathImg=" + pathImg
+				+ ", duracion=" + duracion + ", fecha=" + fecha + ", reproducciones=" + reproducciones + ", creador="
+				+ creador + "]";
 	}
-	
-
-
-	
-	
 	
 }

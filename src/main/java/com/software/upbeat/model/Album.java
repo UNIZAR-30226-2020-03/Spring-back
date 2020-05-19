@@ -66,9 +66,11 @@ public class Album implements Serializable{
 	
 
 	public void addCancion(Cancion cancion) {
-		canciones.add(cancion);
-		numCanciones++;
-		this.duracion += cancion.getDuracion();
+		if(cancion.getCreador() == this.autor && !containsCancion(cancion)) {
+			canciones.add(cancion);
+			numCanciones++;
+			this.duracion += cancion.getDuracion();
+		}
 	}
 
 	public void removeCancion(Cancion cancion) {

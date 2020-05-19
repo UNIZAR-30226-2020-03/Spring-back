@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Artista;
 import com.software.upbeat.model.Cancion;
-import com.software.upbeat.model.Cliente;
-import com.software.upbeat.model.Playlist;
 import com.software.upbeat.model.Podcast;
+import com.software.upbeat.service.AlbumService;
 import com.software.upbeat.service.ArtistaService;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.PodcastService;
@@ -52,6 +52,9 @@ public class ArtistaApi {
 	
 	@Autowired
 	PodcastService podcastService;
+	
+	@Autowired
+	AlbumService albumService;
 	
 	//////////////////////////////////////////////
 	// OBTENER ARTISTA POR EMAIL				//
@@ -257,17 +260,17 @@ public class ArtistaApi {
 	//////////////////////////////////////////////
 	@RequestMapping(value="/mySongs/{miCorreo}", method=RequestMethod.GET)
 	public Set<Cancion> mySongs(@PathVariable(value = "miCorreo") String correoArtista) {
-	
-	// Invoca lógica de negocio
-	ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
-	
-	Artista artista = artistaByEmail.getBody();
-	
-	// Mapeo entity
-	ArtistaResponse artistaResponse = mapper.map(artista, ArtistaResponse.class);
-	
-	return artista.getCanciones();
-	
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+		
+		Artista artista = artistaByEmail.getBody();
+		
+		// Mapeo entity
+		ArtistaResponse artistaResponse = mapper.map(artista, ArtistaResponse.class);
+		
+		return artista.getCanciones();
+		
 	}
 	
 	//////////////////////////////////////////////
@@ -275,17 +278,109 @@ public class ArtistaApi {
 	//////////////////////////////////////////////
 	@RequestMapping(value="/myPodcast/{miCorreo}", method=RequestMethod.GET)
 	public Set<Podcast> myPodcast(@PathVariable(value = "miCorreo") String correoArtista) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+		
+		Artista artista = artistaByEmail.getBody();
+		
+		// Mapeo entity
+		ArtistaResponse artistaResponse = mapper.map(artista, ArtistaResponse.class);
+		
+		return artista.getPodcasts();
+		
+	}
 	
-	// Invoca lógica de negocio
-	ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+	//////////////////////////////////////////////////////////////////////////////////
+	// ÁLBUMES																	//
+	//////////////////////////////////////////////////////////////////////////////////
 	
-	Artista artista = artistaByEmail.getBody();
+	//////////////////////////////////////////////
+	// CREAR UN ÁLBUM					 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/createAlbum/{miCorreo}/{albumId}", method=RequestMethod.PUT)
+	public int createAlbum(@PathVariable(value = "miCorreo") String correoArtista,
+	@PathVariable(value = "albumId") Long albumId) {
+		
+		int resul;
+		
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+			Optional<Album> newAlbum = albumService.getAlbumById(albumId);
+			
+			Artista artista = artistaByEmail.getBody();
+			Album album = newAlbum.get();
+			
+			if(artista.containsAlbum(album)) {
+				System.out.println("YA TENÍA ESA PLAYLIST");
+				resul = WRONG_RESULT;
+			}
+			else {
+				System.out.println("AÑADO PLAYLIST");
+				artista.addAlbum(album);
+				System.out.println("AÑADIDA");
+				artista = artistaService.save(artista);
+				resul = CORRECT;
+			}
+			
+		}
+		catch(Exception e) {
+			resul = ERROR;
+		}
+		return resul;
+		
+	}
 	
-	// Mapeo entity
-	ArtistaResponse artistaResponse = mapper.map(artista, ArtistaResponse.class);
+	//////////////////////////////////////////////
+	// LISTA PLAYLISTS					 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/myAlbums/{miCorreo}", method=RequestMethod.GET)
+	public Set<Album> myAlbums(@PathVariable(value = "miCorreo") String correoArtista) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+		
+		Artista artista = artistaByEmail.getBody();
+		
+		// Mapeo entity
+		ArtistaResponse artistaResponse = mapper.map(artista, ArtistaResponse.class);
+		
+		return artistaResponse.getAlbumes();
+		
+	}
 	
-	return artista.getPodcasts();
-	
+	//////////////////////////////////////////////
+	// VER SI UNA PLAYLIST ES DE UN CLIENTE		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/isMyAlbum/{miCorreo}/{albumId}", method=RequestMethod.GET)
+	public int isMyAlbum(@PathVariable(value = "miCorreo") String correoArtista,
+	@PathVariable(value = "albumId") Long albumId) {
+		
+		int resul;
+		
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+			Optional<Album> newAlbum = albumService.getAlbumById(albumId);
+			
+			Artista artista = artistaByEmail.getBody();
+			Album album = newAlbum.get();
+			
+			if(artista.containsAlbum(album)) {
+				resul = CORRECT;
+			}
+			else {
+				resul = WRONG_RESULT;
+			}
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			resul = ERROR;
+		}
+		
+		return resul;
+		
 	}
 
 

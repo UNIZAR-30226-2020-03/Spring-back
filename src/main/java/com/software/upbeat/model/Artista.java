@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Artista extends Cliente{
@@ -24,10 +25,17 @@ public class Artista extends Cliente{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	
 	@GeneratedValue(strategy = GenerationType.AUTO)  // GenerationType.IDENTITY??????
+	@Column(name = "cod_artista")
 	private Long cod_artista;
+	
+	@Column(name = "artistname", nullable = false)
 	private String nombre_artista;
+	
+	@Column(name = "descripcion", nullable = false)
 	private String descripcion;
+	
 	@Column(name = "numCanciones")
 	private int numCanciones;
 	
@@ -124,6 +132,38 @@ public class Artista extends Cliente{
 		return podcasts.contains(podcast);
 	}
 	//////// FIN PODCAST /////////////////////
+	
+	// ÁLBUMES
+
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="autor")
+	private Set<Album> albumes; //= new HashSet<Album>();
+	
+	@JsonManagedReference(value = "autor-album")
+	public Set<Album> getAlbumes() {
+		return albumes;
+	}
+
+	public void setAlbumes(Set<Album> albumes) {
+		this.albumes = albumes;
+	}
+
+	public void addAlbum(Album album) {
+		albumes.add(album);
+		album.setAutor(this);
+		System.out.println("------------------");
+		System.out.println(albumes);
+	}
+
+	public void removeAlbum(Album album) {
+		albumes.remove(album);
+		album.setAutor(null);
+	}
+	
+	public boolean containsAlbum(Album album) {
+		return albumes.contains(album);
+	}
+	// FIN ÁLBUMES
+	
 	public Artista() {	
 	}
 	
@@ -135,8 +175,7 @@ public class Artista extends Cliente{
 		this.nombre_artista = nombre_artista;
 		this.descripcion = descripcion;
 	}
-
-    @Column(name = "cod_artista")
+	
 	public Long getCod_artista() {
 		return cod_artista;
 	}
@@ -145,7 +184,6 @@ public class Artista extends Cliente{
 		this.cod_artista = cod_artista;
 	}
 	
-	@Column(name = "artistname", nullable = false)
 	public String getNombre_artista() {
 		return nombre_artista;
 	}
@@ -153,8 +191,7 @@ public class Artista extends Cliente{
 	public void setNombre_artista(String nombre_artista) {
 		this.nombre_artista = nombre_artista;
 	}
-
-	@Column(name = "descripcion", nullable = false)
+	
 	public String getDescripcion() {
 		return descripcion;
 	}
