@@ -30,23 +30,23 @@ public class Artista extends Cliente{
 	@Column(name = "cod_artista")
 	private Long cod_artista;
 	
-	@Column(name = "artistname", nullable = false)
+	@Column(name = "nombre_artista", nullable = false)
 	private String nombre_artista;
 	
-	@Column(name = "descripcion", nullable = false)
+	@Column(name = "descripcion")
 	private String descripcion;
 	
 	@Column(name = "numCanciones")
 	private int numCanciones;
 	
 	//////// CANCIONES /////////////////////
-	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creador")
 	private Set<Cancion> canciones; //= new HashSet<Cancion>();
 	
 	/*
 	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 	 */
-	@JsonBackReference(value = "canciones")
+	@JsonBackReference(value = "artista-canciones")
 	public Set<Cancion> getCanciones() {
 		return canciones;
 	}
@@ -58,6 +58,7 @@ public class Artista extends Cliente{
 
 	public void addCancion(Cancion cancion) {
 		canciones.add(cancion);
+		cancion.setCreador(this);
 		numCanciones++;
 	}
 
@@ -115,6 +116,7 @@ public class Artista extends Cliente{
 
 	public void addPodcast(Podcast podcast) {
 		podcasts.add(podcast);
+		podcast.setCreador(this);
 		numPodcast++;
 	}
 

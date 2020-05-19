@@ -112,7 +112,7 @@ public class Cliente implements Serializable{
 	@OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="creador")
 	private Set<Playlist> playlists; //= new HashSet<Playlist>();
 	
-	@JsonManagedReference(value = "cliente-playlists")
+	@JsonManagedReference(value = "cliente_playlists")
 	public Set<Playlist> getPlaylists() {
 		return playlists;
 	}
@@ -144,7 +144,7 @@ public class Cliente implements Serializable{
 	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<Playlist> favPlaylists;
 	
-	@JsonBackReference(value = "favPlaylists")
+	@JsonBackReference(value = "cliente_fav_playlists")
 	public Set<Playlist> getFavPlaylists() {
 		return favPlaylists;
 	}
@@ -173,7 +173,7 @@ public class Cliente implements Serializable{
 	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 	private Set<Cancion> favSongs;
 	
-	@JsonBackReference(value = "favSongs")
+	@JsonBackReference(value = "cliente_fav_songs")
 	public Set<Cancion> getFavSongs() {
 		return favSongs;
 	}

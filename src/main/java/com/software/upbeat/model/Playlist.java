@@ -89,7 +89,7 @@ public class Playlist implements Serializable{
 	/*
 	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 	 */
-	@JsonBackReference(value = "cliente-playlists")
+	@JsonBackReference(value = "cliente_playlists")
 	public Cliente getCreador() {
 		return creador;
 	}
