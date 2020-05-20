@@ -48,6 +48,18 @@ public class CancionService {
 		return cancion.getPathImg();
 	}
 	
+	public String getSongURLById(Long id){ //con actualización reproducciones
+		Cancion cancion = dao.findSongByID(id);
+		cancion.setReproducciones((cancion.getReproducciones()+1));
+		dao.save(cancion);
+		return cancion.getPathMp3();
+	}
+	
+	public String getImgURLById(Long id){ //con actualización reproducciones
+		Cancion cancion = dao.findSongByID(id);
+		return cancion.getPathImg();
+	}
+	
 	public List<Cancion> findSongsByPopularity(){
 		return dao.findSongsByPopularity();
 	}

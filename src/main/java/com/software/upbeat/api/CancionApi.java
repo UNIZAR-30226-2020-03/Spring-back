@@ -100,12 +100,44 @@ public class CancionApi {
 	// OBTENER CANCION POR NOMBRE           	//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/get/{nombre}", method=RequestMethod.GET)
-	public CancionResponse getByNameAndArtist(@PathVariable(value = "nombre") String name) {
+	public CancionResponse getByName(@PathVariable(value = "nombre") String name) {
 	ResponseEntity<Cancion> songByName = cancionService.getSongByName(name);
 	CancionResponse cancionResponse = mapper.map(songByName.getBody(), CancionResponse.class);
 	return cancionResponse;
 	}
 
+	//////////////////////////////////////////////////////
+	// STREAMING CANCION POR ID URL         	        //
+	/////////////////////////////////////////////////////
+	@GetMapping(value="/getStreamUrlMp3byId/{id}")
+	public String  getUrlMp3ById(@PathVariable(value = "id") Long id) throws IOException{
+	/*Cliente clienteReproduce= clienteService.getClienteByEmail(correo).getBody();
+	clienteReproduce.addLastSongs(cancionService.getSongByName(nombre).getBody().getId());
+	clienteReproduce = clienteService.save(clienteReproduce);
+	
+	
+	// Mapeo entity
+	ClienteResponse clienteResponse = mapper.map(clienteReproduce, ClienteResponse.class);*/
+	return cancionService.getSongURLById(id);
+	}
+	
+	//////////////////////////////////////////////////////
+	// STREAMING IMAGEN POR ID URL      	           //
+	/////////////////////////////////////////////////////
+	@GetMapping(value="/getStreamUrlImgbyId/{id}")
+	public String  getUrlImgById(@PathVariable(value = "id") Long id) throws IOException{
+	return cancionService.getImgURLById(id);
+	}
+	
+	//////////////////////////////////////////////
+	// OBTENER CANCION POR ID               	//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/getbyId/{id}", method=RequestMethod.GET)
+	public CancionResponse getById(@PathVariable(value = "id") Long id) {
+	ResponseEntity<Cancion> songByName = cancionService.getSongByID(id);
+	CancionResponse cancionResponse = mapper.map(songByName.getBody(), CancionResponse.class);
+	return cancionResponse;
+	}
 	
 	//////////////////////////////////////////////
 	// OBTENER TODAS LAS CANCIONES			//
@@ -138,7 +170,7 @@ public class CancionApi {
 	}*/
 
 	//////////////////////////////////////////////////////////
-	// ACTUALIZAR CANCION POR EL NOMBRE 		//
+	// ACTUALIZAR CANCION POR EL NOMBRE 		           //
 	/////////////////////////////////////////////////////////
 	@RequestMapping(value="/update/{nombre}", method=RequestMethod.PUT)
 	public CancionResponse update(@PathVariable(value = "nombre") String nombre,
@@ -166,8 +198,37 @@ public class CancionApi {
 		return cancionResponse;
 	}
 	
+	//////////////////////////////////////////////////////////
+	// ACTUALIZAR CANCION POR EL ID							//
+	/////////////////////////////////////////////////////////
+	@RequestMapping(value="/updateid/{id}", method=RequestMethod.PUT)
+	public CancionResponse updateid(@PathVariable(value = "id") Long id,
+	@Valid @RequestBody CancionRequest datosCancion) {
+	
+	// Mapeo request dto
+	Cancion cancion = mapper.map(datosCancion, Cancion.class);
+	
+	// Invoca lógica de negocio
+	ResponseEntity<Cancion> cancionByNombreArtista = cancionService.getSongByID(id);
+	
+	Cancion updateCancion = cancionByNombreArtista.getBody();
+	updateCancion.setNombre(cancion.getNombre());
+	updateCancion.setPathMp3(cancion.getPathMp3());
+	updateCancion.setPathImg(cancion.getPathImg());
+	updateCancion.setDuracion(cancion.getDuracion());
+	updateCancion.setCreador(cancion.getCreador());
+	updateCancion.setFecha(cancion.getFecha());
+	//updateCancion.setSong(compressBytes(cancion.getSong()));
+	
+	updateCancion = cancionService.save(updateCancion);
+	
+	// Mapeo entity
+	CancionResponse cancionResponse = mapper.map(updateCancion, CancionResponse.class);
+	return cancionResponse;
+	}
+	
 	//////////////////////////////////////////////////
-	// ELIMINAR CANCION	POR EL NOMBRE 	//
+	// ELIMINAR CANCION	POR EL NOMBRE 	           //
 	/////////////////////////////////////////////////
 	@RequestMapping(value="/delete/{nombre}", method=RequestMethod.DELETE)
 	public Map<String, Boolean> delete(@PathVariable(value = "nombre") String nombreCancion) {
@@ -189,7 +250,7 @@ public class CancionApi {
 	// ELIMINAR CANCION		ID			 		//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/deleteid/{id}", method=RequestMethod.DELETE)
-	public Map<String, Boolean> delete(@PathVariable(value = "id") Long id) {
+	public Map<String, Boolean> deleteid(@PathVariable(value = "id") Long id) {
 	
 	// Invoca lógica de negocio
 	ResponseEntity<Cancion> songByName = cancionService.getSongByID(id);
