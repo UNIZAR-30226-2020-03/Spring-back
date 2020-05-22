@@ -655,7 +655,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// CREAR MI LISTA DE REPRODUCCION			//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/createMiListaReprod/{miCorreo}/", method=RequestMethod.PUT)
+	/*@RequestMapping(value="/createMiListaReprod/{miCorreo}/", method=RequestMethod.PUT)
 	public int createListaReproduccion(@PathVariable(value = "miCorreo") String correoCliente) {
 		
 		int resul;
@@ -683,7 +683,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// DEVOLVER CANCION  COLA    		 		//
 	//////////////////////////////////////////////
-	/*
+	
 	@RequestMapping(value="/nextSongCola/{miCorreo}", method=RequestMethod.GET)
 	public String nextSongCola(@PathVariable(value = "miCorreo") String correoCliente) {
 	
