@@ -107,18 +107,17 @@ public class CancionApi {
 	}
 
 	//////////////////////////////////////////////////////
-	// STREAMING CANCION POR ID URL         	        //
+	// ACTUALIZAR REPRODUCCIONES CANCION POR ID 		//
 	/////////////////////////////////////////////////////
-	@GetMapping(value="/getStreamUrlMp3byId/{id}")
-	public String  getUrlMp3ById(@PathVariable(value = "id") Long id) throws IOException{
-	/*Cliente clienteReproduce= clienteService.getClienteByEmail(correo).getBody();
-	clienteReproduce.addLastSongs(cancionService.getSongByName(nombre).getBody().getId());
-	clienteReproduce = clienteService.save(clienteReproduce);
-	
-	
-	// Mapeo entity
-	ClienteResponse clienteResponse = mapper.map(clienteReproduce, ClienteResponse.class);*/
-	return cancionService.getSongURLById(id);
+	@RequestMapping(value="/updateReprod/{id}", method=RequestMethod.POST)
+	public CancionResponse updateReprod(@PathVariable(value = "id") Long id) throws IOException{
+		// Mapeo request dto
+		ResponseEntity<Cancion> songById = cancionService.getSongByID(id);
+		Cancion cancion=songById.getBody();	
+		cancion.setReproducciones((cancion.getReproducciones()+1));
+		cancion=cancionService.save(cancion);
+		CancionResponse cancionResponse = mapper.map(cancion, CancionResponse.class);
+		return cancionResponse;
 	}
 	
 	//////////////////////////////////////////////////////
@@ -134,8 +133,8 @@ public class CancionApi {
 	//////////////////////////////////////////////
 	@RequestMapping(value="/getbyId/{id}", method=RequestMethod.GET)
 	public CancionResponse getById(@PathVariable(value = "id") Long id) {
-	ResponseEntity<Cancion> songByName = cancionService.getSongByID(id);
-	CancionResponse cancionResponse = mapper.map(songByName.getBody(), CancionResponse.class);
+	ResponseEntity<Cancion> songById = cancionService.getSongByID(id);
+	CancionResponse cancionResponse = mapper.map(songById.getBody(), CancionResponse.class);
 	return cancionResponse;
 	}
 	
