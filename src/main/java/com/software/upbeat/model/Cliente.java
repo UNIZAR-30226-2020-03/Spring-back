@@ -201,7 +201,7 @@ public class Cliente implements Serializable{
 	
 	//////// LISTA DE REPROD /////////////////////
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="listaRep")
+	@JoinColumn(unique = true)
 	private ListaReproduccion listaRep;
 	
 	/*
