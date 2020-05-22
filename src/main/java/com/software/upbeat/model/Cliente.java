@@ -201,13 +201,13 @@ public class Cliente implements Serializable{
 	
 	//////// LISTA DE REPROD /////////////////////
 	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="cliente")
+	@JoinColumn(name="listaRep")
 	private ListaReproduccion listaRep;
 	
 	/*
 	* https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 	*/
-	@JsonBackReference(value = "cliente-listaRep")
+	@JsonBackReference(value = "listaRep-cliente")
 	public ListaReproduccion getListaReproduccion() {
 	return listaRep;
 	}

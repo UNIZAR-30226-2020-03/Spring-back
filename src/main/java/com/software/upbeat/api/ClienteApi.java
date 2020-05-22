@@ -683,6 +683,7 @@ public class ClienteApi {
 	//////////////////////////////////////////////
 	// DEVOLVER CANCION  COLA    		 		//
 	//////////////////////////////////////////////
+	/*
 	@RequestMapping(value="/nextSongCola/{miCorreo}", method=RequestMethod.GET)
 	public String nextSongCola(@PathVariable(value = "miCorreo") String correoCliente) {
 	
@@ -742,7 +743,7 @@ public class ClienteApi {
 	cliente = clienteService.save(cliente);
 	}
 	
-	
+	*/
 //////////////////////////////// FIN LISTA DE REPRODUCCION /////////////////////////////////
 	
 }

@@ -3,14 +3,27 @@ package com.software.upbeat.model;
 import java.util.Queue;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
+@Entity
+@Table(name="listaReproduccion")
 public class ListaReproduccion {
+
+@Id
+@GeneratedValue(strategy = GenerationType.AUTO)
+@Column(name = "id")
+private Long id;
 	
 	
 //////// CLIENTE /////////////////////
@@ -34,7 +47,7 @@ public boolean isCliente(Cliente cliente) {
 	return this.cliente==cliente;
 }
 //////// FIN CLIENTE /////////////////////
-
+/*
 ////////CANCIONES /////////////////////
 @ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
 private Queue<Cancion> canciones; //= new HashSet<Cancion>();
@@ -43,6 +56,7 @@ int segundoReproduccion;
 /*
 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 */
+/*
 @JsonBackReference(value = "cancionesCola")
 public Queue<Cancion> getCanciones() {
 return canciones;
@@ -74,7 +88,7 @@ public ListaReproduccion() {
 	this.segundoReproduccion = 0;
 }
 
-
+*/
 //////////CANCIONES /////////////////////
 
 }
