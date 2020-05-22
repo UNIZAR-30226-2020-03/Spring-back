@@ -12,8 +12,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
@@ -196,6 +198,27 @@ public class Cliente implements Serializable{
 	}
 	
 	//FIN FAVORITOS CANCIONES
+	
+	//////// LISTA DE REPROD /////////////////////
+	@OneToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name="cliente")
+	private ListaReproduccion listaRep;
+	
+	/*
+	* https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
+	*/
+	@JsonBackReference(value = "cliente-listaRep")
+	public ListaReproduccion getListaReproduccion() {
+	return listaRep;
+	}
+	
+	public void setListaReproduccion(ListaReproduccion listaRep) {
+		this.listaRep=listaRep;
+	}
+	
+	
+	////////FIN LISTA DE REPROD /////////////////////
+
 	
 	public Cliente() {	
 	}

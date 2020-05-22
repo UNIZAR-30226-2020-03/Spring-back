@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Playlist;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.ClienteService;
+import com.software.upbeat.service.ListaReproduccionService;
 import com.software.upbeat.service.PlaylistService;
 
 @CrossOrigin(maxAge = 3600)
@@ -49,6 +51,8 @@ public class ClienteApi {
 	@Autowired
 	CancionService cancionService;
 	
+	@Autowired
+	ListaReproduccionService listaReproduccionService;;
 	
 	//////////////////////////////////////////////
 	// OBTENER CLIENTE POR EMAIL				//
@@ -387,7 +391,6 @@ public class ClienteApi {
 		
 		// Mapeo entity
 		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
-		
 		return cliente.getPlaylists();
 	
 	}
@@ -647,4 +650,99 @@ public class ClienteApi {
 	}
 	return resul;
 	}
+	
+////////////////////////////////// LISTA DE REPRODUCCION /////////////////////////////////
+	//////////////////////////////////////////////
+	// CREAR MI LISTA DE REPRODUCCION			//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/createMiListaReprod/{miCorreo}/", method=RequestMethod.PUT)
+	public int createListaReproduccion(@PathVariable(value = "miCorreo") String correoCliente) {
+		
+		int resul;
+		
+		try {
+			// Obtiene cliente
+			ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+			Cliente cliente = clienteByEmail.getBody();
+			//Crea la lista de reproduccion vacia
+			ListaReproduccion listaReproduccion  = new ListaReproduccion();
+			listaReproduccion.setCliente(cliente);
+		    listaReproduccion  = listaReproduccionService.save(listaReproduccion);
+			//relaciona las entidades
+			cliente.setListaReproduccion(listaReproduccion);
+			System.out.println("AÑADIDA");
+			cliente = clienteService.save(cliente);
+			resul = CORRECT;
+		}
+		catch(Exception e) {
+			resul = ERROR;
+		}
+		return resul;
+	}
+	
+	//////////////////////////////////////////////
+	// DEVOLVER CANCION  COLA    		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/nextSongCola/{miCorreo}", method=RequestMethod.GET)
+	public String nextSongCola(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+	// Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	Cliente cliente = clienteByEmail.getBody();
+	ListaReproduccion cola = cliente.getListaReproduccion();
+	Long id = cola.devolverCancion().getId();
+	String url = cancionService.getSongURLById(id);
+	cola = listaReproduccionService.save(cola);
+	cliente = clienteService.save(cliente);
+	return url;
+	}
+	
+	//////////////////////////////////////////////
+	//DEVOLVER SEGUNDO CANCION  COLA    		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/nextSecondSongCola/{miCorreo}", method=RequestMethod.GET)
+	public int nextSecondSongCola(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+	//Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	Cliente cliente = clienteByEmail.getBody();
+	ListaReproduccion cola = cliente.getListaReproduccion();
+	return cola.getSegundoReproduccion();
+	}
+	
+	//////////////////////////////////////////////
+	//ACTUALIZAR SEGUNDO CANCION  COLA    		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/updateSecondSongCola/{miCorreo}/{number}", method=RequestMethod.GET)
+	public void updateSecondSongCola(@PathVariable(value = "miCorreo") String correoCliente,@PathVariable(value = "number") int number) {
+	
+	//Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	Cliente cliente = clienteByEmail.getBody();
+	ListaReproduccion cola = cliente.getListaReproduccion();
+	cola.setSegundoReproduccion(number);
+	cola = listaReproduccionService.save(cola);
+	cliente = clienteService.save(cliente);
+	}
+	
+	//////////////////////////////////////////////
+	// AÑADIR CANCION  COLA    		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/addSongCola/{miCorreo}/{id}", method=RequestMethod.GET)
+	public void addSongCola(@PathVariable(value = "miCorreo") String correoCliente,@PathVariable(value = "id") Long id) {
+	
+	// Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	Cliente cliente = clienteByEmail.getBody();
+	ListaReproduccion cola = cliente.getListaReproduccion();
+	ResponseEntity<Cancion> cancionById = cancionService.getSongByID(id);
+	Cancion cancion = cancionById.getBody();
+	cola.addCancion(cancion);
+	cola = listaReproduccionService.save(cola);
+	cliente = clienteService.save(cliente);
+	}
+	
+	
+//////////////////////////////// FIN LISTA DE REPRODUCCION /////////////////////////////////
+	
 }
