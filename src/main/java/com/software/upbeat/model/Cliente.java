@@ -208,33 +208,27 @@ public class Cliente implements Serializable{
 	* https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 	*/
 	@JsonBackReference(value = "listaRep-cliente")
-	public ListaReproduccion getListaReproduccion() {
-	return listaRep;
+	public ListaReproduccion getListaRep() {
+		return listaRep;
+	}
+
+	public void setListaRep(ListaReproduccion listaRep) {
+		this.listaRep = listaRep;
 	}
 	
-	public void setListaReproduccion(ListaReproduccion listaRep) {
-		this.listaRep=listaRep;
-	}
 	
 	
 	////////FIN LISTA DE REPROD /////////////////////
 
 	
-	public Cliente() {	
-	}
-	
+	public Cliente() {}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((amigos == null) ? 0 : amigos.hashCode());
-		result = prime * result + ((apellidos == null) ? 0 : apellidos.hashCode());
 		result = prime * result + ((cod_cliente == null) ? 0 : cod_cliente.hashCode());
-		result = prime * result + ((contrasenya == null) ? 0 : contrasenya.hashCode());
 		result = prime * result + ((correo == null) ? 0 : correo.hashCode());
-		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
-		result = prime * result + ((pais == null) ? 0 : pais.hashCode());
-		result = prime * result + ((playlists == null) ? 0 : playlists.hashCode());
 		result = prime * result + ((username == null) ? 0 : username.hashCode());
 		return result;
 	}
@@ -248,45 +242,15 @@ public class Cliente implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Cliente other = (Cliente) obj;
-		if (amigos == null) {
-			if (other.amigos != null)
-				return false;
-		} else if (!amigos.equals(other.amigos))
-			return false;
-		if (apellidos == null) {
-			if (other.apellidos != null)
-				return false;
-		} else if (!apellidos.equals(other.apellidos))
-			return false;
 		if (cod_cliente == null) {
 			if (other.cod_cliente != null)
 				return false;
 		} else if (!cod_cliente.equals(other.cod_cliente))
 			return false;
-		if (contrasenya == null) {
-			if (other.contrasenya != null)
-				return false;
-		} else if (!contrasenya.equals(other.contrasenya))
-			return false;
 		if (correo == null) {
 			if (other.correo != null)
 				return false;
 		} else if (!correo.equals(other.correo))
-			return false;
-		if (nombre == null) {
-			if (other.nombre != null)
-				return false;
-		} else if (!nombre.equals(other.nombre))
-			return false;
-		if (pais == null) {
-			if (other.pais != null)
-				return false;
-		} else if (!pais.equals(other.pais))
-			return false;
-		if (playlists == null) {
-			if (other.playlists != null)
-				return false;
-		} else if (!playlists.equals(other.playlists))
 			return false;
 		if (username == null) {
 			if (other.username != null)
@@ -384,9 +348,10 @@ public class Cliente implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Cliente [cod_cliente=" + cod_cliente + ", nombre=" + nombre + ", apellidos=" + apellidos
-				+ ", contrasenya=" + contrasenya + ", correo=" + correo + ", username=" + username + ", pais=" + pais
-				+ ", amigos=" + amigos + ", playlists=" + playlists + "]";
+		return "Cliente [cod_cliente=" + cod_cliente + ", nombre=" + nombre + ", pathImg=" + pathImg + ", apellidos="
+				+ apellidos + ", contrasenya=" + contrasenya + ", correo=" + correo + ", username=" + username
+				+ ", pais=" + pais + ", amigos=" + amigos + ", playlists=" + playlists + ", favPlaylists="
+				+ favPlaylists + ", favSongs=" + favSongs + ", listaRep=" + listaRep + "]";
 	}
 	
 }

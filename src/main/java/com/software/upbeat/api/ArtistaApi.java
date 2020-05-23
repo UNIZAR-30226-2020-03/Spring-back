@@ -23,10 +23,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Artista;
 import com.software.upbeat.model.Cancion;
+import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Podcast;
 import com.software.upbeat.service.AlbumService;
 import com.software.upbeat.service.ArtistaService;
 import com.software.upbeat.service.CancionService;
+import com.software.upbeat.service.ListaReproduccionService;
 import com.software.upbeat.service.PodcastService;
 
 @CrossOrigin(maxAge = 3600)
@@ -55,6 +57,9 @@ public class ArtistaApi {
 	
 	@Autowired
 	AlbumService albumService;
+	
+	@Autowired
+	ListaReproduccionService listaReproduccionService;
 	
 	//////////////////////////////////////////////
 	// OBTENER ARTISTA POR EMAIL				//
@@ -107,6 +112,10 @@ public class ArtistaApi {
 		artista.setNumCanciones(0);
 		artista.setNumPodcast(0);
 		// Invoca lógica de negocio
+		ListaReproduccion lr = new ListaReproduccion();
+		listaReproduccionService.save(lr);
+		artista.setListaRep(lr);
+		
 		Artista newArtista = artistaService.save(artista);
 		
 		// Mapeo entity
@@ -164,35 +173,37 @@ public class ArtistaApi {
 	@RequestMapping(value="/createSong/{miCorreo}/{songId}", method=RequestMethod.PUT)
 	public int createSong(@PathVariable(value = "miCorreo") String correoArtista,
 	@PathVariable(value = "songId") Long songId) {
-	
-	int resul;
-	
-	try {
-	// Invoca lógica de negocio
-	ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
-	ResponseEntity<Cancion> newSong = cancionService.getSongByID(songId);
-	
-	Artista artista = artistaByEmail.getBody();
-	Cancion cancion = newSong.getBody();
-	
-	if(artista.containsCancion(cancion)) {
-	System.out.println("YA TENÍA ESA CANCION");
-	resul = WRONG_RESULT;
-	}
-	else {
-	System.out.println("AÑADO CANCION");
-	artista.addCancion(cancion);
-	System.out.println("AÑADIDA");
-	artista = artistaService.save(artista);
-	resul = CORRECT;
-	}
-	
-	}
-	catch(Exception e) {
-	resul = ERROR;
-	}
-	return resul;
-	
+		
+		int resul;
+		
+		try {
+			// Invoca lógica de negocio
+			ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+			ResponseEntity<Cancion> newSong = cancionService.getSongByID(songId);
+			
+			Artista artista = artistaByEmail.getBody();
+			Cancion cancion = newSong.getBody();
+			
+			if(artista.containsCancion(cancion)) {
+				System.out.println("YA TENÍA ESA CANCION");
+				resul = WRONG_RESULT;
+			}
+			else {
+				System.out.println("AÑADO CANCION");
+				artista.addCancion(cancion);
+				cancion.setCreador(artista);
+				System.out.println("AÑADIDA");
+				cancion = cancionService.save(cancion);
+				artista = artistaService.save(artista);
+				resul = CORRECT;
+			}
+			
+		}
+		catch(Exception e) {
+			resul = ERROR;
+		}
+		return resul;
+		
 	}
 	
 	//////////////////////////////////////////////

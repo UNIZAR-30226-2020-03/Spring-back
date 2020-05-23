@@ -45,6 +45,11 @@ public class CancionListaReproduccion {
 		return true;
 	}
 	
+	@Override
+	public String toString() {
+		return "CancionListaReproduccion [cancion=" + cancion + ", segundos=" + segundos + "]";
+	}
+	
 	public CancionListaReproduccion(Cancion cancion, int segundos) {
 		super();
 		this.cancion = cancion;

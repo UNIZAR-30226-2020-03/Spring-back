@@ -19,9 +19,19 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Table(name="listaReproduccion")
 public class ListaReproduccion {
 	
-	private static int ACTUAL = 0;
-	private static int SIGUIENTE = 1;
+	// private static final int ACTUAL = 0;
+	// private static final int SIGUIENTE = 1;
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
@@ -30,6 +40,7 @@ public class ListaReproduccion {
 	@Column(name = "num_canciones")
 	private int num_canciones;
 	
+	@Column(name = "segundoReproduccion")
 	private int segundoReproduccion;
 	
 	public Long getId() {
@@ -136,8 +147,8 @@ public class ListaReproduccion {
 		Cancion cancion;
 		int segs;
 		actualizar_num_canciones();
-		if(num_canciones > ACTUAL) {
-			cancion = canciones.get(ACTUAL);
+		if(num_canciones > 0) {
+			cancion = canciones.get(0);
 			segs = this.segundoReproduccion;
 		}
 		else {
@@ -168,15 +179,16 @@ public class ListaReproduccion {
 		Cancion cancion;
 		int segs;
 		actualizar_num_canciones();
-		if(num_canciones > SIGUIENTE) {
-			cancion = canciones.get(SIGUIENTE);
-			segs = this.segundoReproduccion;
-			canciones.remove(ACTUAL);
+		if(num_canciones > 1) {
+			cancion = canciones.get(1);
+			segs = 0;
+			canciones.remove(0);
 		}
 		else {
 			cancion = null;
 			segs = -1;
 		}
+		actualizar_segundoReproduccion(segs);
 		return new CancionListaReproduccion(cancion, segs);
 	}
 	
@@ -185,9 +197,10 @@ public class ListaReproduccion {
 	 */
 	public CancionListaReproduccion reproducirCancion(Cancion cancion) {
 		canciones.remove(cancion);
-		canciones.add(ACTUAL, cancion);
+		canciones.add(0, cancion);
 		actualizar_num_canciones();
 		int segs = 0;
+		actualizar_segundoReproduccion(segs);
 		return new CancionListaReproduccion(cancion, segs);
 	}
 	
@@ -199,10 +212,11 @@ public class ListaReproduccion {
 	 */
 	public CancionListaReproduccion reproducirLista(List<Cancion> cancionList) {
 		canciones.removeAll(cancionList);
-		canciones.addAll(ACTUAL, cancionList);
+		canciones.addAll(0, cancionList);
 		actualizar_num_canciones();
-		Cancion cancion = canciones.get(ACTUAL);
+		Cancion cancion = canciones.get(0);
 		int segs = 0;
+		actualizar_segundoReproduccion(segs);
 		return new CancionListaReproduccion(cancion, segs);
 	}
 	
@@ -232,7 +246,44 @@ public class ListaReproduccion {
 		this.segundoReproduccion = 0;
 		this.num_canciones = 0;
 	}
-	
-	
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ListaReproduccion other = (ListaReproduccion) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "ListaReproduccion [id=" + id + ", num_canciones=" + num_canciones + ", segundoReproduccion="
+				+ segundoReproduccion + ", canciones=" + canciones + "]";
+	}
+
+	public ListaReproduccion(Long id, int num_canciones, int segundoReproduccion, List<Cancion> canciones) {
+		super();
+		this.id = id;
+		this.num_canciones = num_canciones;
+		this.segundoReproduccion = segundoReproduccion;
+		this.canciones = canciones;
+	}
+	
 }

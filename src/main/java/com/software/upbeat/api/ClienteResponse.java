@@ -5,6 +5,7 @@ import java.util.Set;
 
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Playlist;
 
 public class ClienteResponse {
@@ -23,6 +24,7 @@ public class ClienteResponse {
 	private Set<Playlist> playlists = new HashSet<Playlist>();
 	private Set<Playlist> favPlaylists = new HashSet<Playlist>();
 	private Set<Cancion> favSongs;
+	private ListaReproduccion listaRep;
 	
 	public Long getCod_cliente() {
 		return cod_cliente;
@@ -96,6 +98,13 @@ public class ClienteResponse {
 	}
 	public void setFavSongs(Set<Cancion> favSongs) {
 		this.favSongs = favSongs;
+	}
+
+	public ListaReproduccion getListaRep() {
+		return listaRep;
+	}
+	public void setListaRep(ListaReproduccion listaRep) {
+		this.listaRep = listaRep;
 	}
 	
 }
