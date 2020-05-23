@@ -21,14 +21,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Playlist;
+import com.software.upbeat.model.Podcast;
+import com.software.upbeat.service.AlbumService;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.ClienteService;
 import com.software.upbeat.service.ListaReproduccionService;
 import com.software.upbeat.service.PlaylistService;
+import com.software.upbeat.service.PodcastService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -50,6 +54,12 @@ public class ClienteApi {
 	
 	@Autowired
 	CancionService cancionService;
+	
+	@Autowired
+	AlbumService albumService;
+	
+	@Autowired
+	PodcastService podcastService;
 	
 	@Autowired
 	ListaReproduccionService listaReproduccionService;;
@@ -641,6 +651,226 @@ public class ClienteApi {
 		Cancion song = newSong.getBody();
 		
 		cliente.removeFavSongs(song);
+		cliente = clienteService.save(cliente);
+		
+		resul = CORRECT;
+	
+	}catch(Exception e) {
+		resul = ERROR;
+	}
+	return resul;
+	}
+	
+	//////////////////////////////////////////////
+	// MARCAR ALBUM FAVORITOS	 		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/favAlbum/{miCorreo}/{albumId}", method=RequestMethod.PUT)
+	public int favAlbum(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "albumId") Long albumId) {
+	
+	int resul;
+	
+	try {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Album> newAlbum = albumService.getAlbumById(albumId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Album album = newAlbum.get();
+	
+		if(cliente.containsFavAlbum(album)) {
+			System.out.println("YA TENÍA ESE ALBUM COMO FAVORITO");
+			resul = WRONG_RESULT;
+		}
+		else {
+			System.out.println("AÑADO ALBUM FAVORITO");
+			cliente.addFavAlbum(album);
+			System.out.println("AÑADIDO COMO FAVORITO");
+			cliente = clienteService.save(cliente);
+			resul = CORRECT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	return resul;
+	}
+
+	//////////////////////////////////////////////
+	// VER SI UN ALBUM ES FAVORITO      		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/markFavAlbum/{miCorreo}/{albumId}", method=RequestMethod.GET)
+	public int markFavAlbum(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "albumId") Long albumId) {
+	
+	int resul;
+	
+	try {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Album> newAlbum = albumService.getAlbumById(albumId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Album album = newAlbum.get();
+		
+		if(cliente.containsFavAlbum(album)) {
+			resul = CORRECT;
+		}
+		else {
+			resul = WRONG_RESULT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	
+	return resul;
+	
+	}
+
+	//////////////////////////////////////////////
+	// LISTA ALBUMES FAVORITOS			 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/songsFavAlbum/{miCorreo}", method=RequestMethod.GET)
+	public Set<Album> myFavAlbum(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+	// Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	
+	Cliente cliente = clienteByEmail.getBody();
+	
+	return cliente.getFavAlbum();
+	
+	}
+
+	//////////////////////////////////////////////
+	// DESMARCAR ALBUM FAVORITO			 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/eliminateFavAlbum/{miCorreo}/{albumId}", method=RequestMethod.PUT)
+	public int eliminateFavAlbum(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "albumId") Long albumId)  {
+	
+	int resul;
+	
+	try{
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Album> newAlbum = albumService.getAlbumById(albumId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Album album = newAlbum.get();
+		
+		cliente.removeFavAlbum(album);
+		cliente = clienteService.save(cliente);
+		
+		resul = CORRECT;
+	
+	}catch(Exception e) {
+		resul = ERROR;
+	}
+		return resul;
+	}
+	
+	//////////////////////////////////////////////
+	// MARCAR PODCAST FAVORITOS	 		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/favPodcast/{miCorreo}/{podcastId}", method=RequestMethod.PUT)
+	public int favPodcast(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "podcastId") Long podcastId) {
+	
+	int resul;
+	
+	try {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Podcast> newPodcast = podcastService.getPodcastById(podcastId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Podcast podcast = newPodcast.getBody();
+		
+		if(cliente.containsFavPodcast(podcast)) {
+			System.out.println("YA TENÍA ESE PODCAST COMO FAVORITO");
+			resul = WRONG_RESULT;
+		}
+		else {
+			System.out.println("AÑADO PODCAST FAVORITO");
+			cliente.addFavPodcast(podcast);
+			System.out.println("AÑADIDO COMO FAVORITO");
+			cliente = clienteService.save(cliente);
+			resul = CORRECT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	return resul;
+	}
+	
+	//////////////////////////////////////////////
+	// VER SI UN PODCAST ES FAVORITO      		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/markFavPodcast/{miCorreo}/{podcastId}", method=RequestMethod.GET)
+	public int markFavPodcast(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "podcastId") Long podcastId) {
+	
+	int resul;
+	
+	try {
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Podcast> newPodcast = podcastService.getPodcastById(podcastId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Podcast podcast = newPodcast.getBody();
+				
+		if(cliente.containsFavPodcast(podcast)) {
+			resul = CORRECT;
+		}
+		else {
+			resul = WRONG_RESULT;
+		}
+	}
+	catch(Exception e) {
+		resul = ERROR;
+	}
+	
+	return resul;
+	
+	}
+	
+	//////////////////////////////////////////////
+	// LISTA PODCAST FAVORITOS			 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/songsFavPodcast/{miCorreo}", method=RequestMethod.GET)
+	public Set<Podcast> myFavPodcast(@PathVariable(value = "miCorreo") String correoCliente) {
+	
+	// Invoca lógica de negocio
+	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+	
+	Cliente cliente = clienteByEmail.getBody();
+	
+	return cliente.getFavPodcast();
+	
+	}
+	
+	//////////////////////////////////////////////
+	// DESMARCAR PODCAST FAVORITO		 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/eliminateFavPodcast/{miCorreo}/{podcastId}", method=RequestMethod.PUT)
+	public int eliminateFavPodcast(@PathVariable(value = "miCorreo") String correoCliente, 
+			@PathVariable(value = "podcastId") Long podcastId)  {
+	
+	int resul;
+	
+	try{
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Podcast> newPodcast = podcastService.getPodcastById(podcastId);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Podcast podcast = newPodcast.getBody();
+
+		cliente.removeFavPodcast(podcast);
 		cliente = clienteService.save(cliente);
 		
 		resul = CORRECT;

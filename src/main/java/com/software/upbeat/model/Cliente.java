@@ -199,6 +199,62 @@ public class Cliente implements Serializable{
 	
 	//FIN FAVORITOS CANCIONES
 	
+	//FAVORITOS ALBUMES
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Album> favAlbum;
+	
+	@JsonBackReference(value = "cliente_fav_albumes")
+	public Set<Album> getFavAlbum() {
+		return favAlbum;
+	}
+
+	public void setFavAlbum(Set<Album> albumes) {
+		this.favAlbum = albumes;
+	}
+	
+	public void addFavAlbum(Album albumes) {
+		favAlbum.add(albumes);
+	}
+	
+	public void removeFavAlbum(Album albumes) {
+		favAlbum.remove(albumes);
+	}
+	
+	public boolean containsFavAlbum(Album albumes) {
+		return favAlbum.contains(albumes);
+	}
+	
+	//FIN FAVORITOS ALBUMES
+	
+	//FAVORITOS PODCAST
+	
+	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	private Set<Podcast> favPodcast;
+	
+	@JsonBackReference(value = "cliente_fav_podcast")
+	public Set<Podcast> getFavPodcast() {
+		return favPodcast;
+	}
+
+	public void setFavPodcast(Set<Podcast> podcast) {
+		this.favPodcast = podcast;
+	}
+	
+	public void addFavPodcast(Podcast podcast) {
+		favPodcast.add(podcast);
+	}
+	
+	public void removeFavPodcast(Podcast podcast) {
+		favPodcast.remove(podcast);
+	}
+	
+	public boolean containsFavPodcast(Podcast podcast) {
+		return favPodcast.contains(podcast);
+	}
+	
+	//FIN FAVORITOS PODCAST
+	
 	//////// LISTA DE REPROD /////////////////////
 	@OneToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="listaRep")

@@ -3,9 +3,11 @@ package com.software.upbeat.api;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
+import com.software.upbeat.model.Podcast;
 
 public class ClienteResponse {
 	
@@ -22,7 +24,9 @@ public class ClienteResponse {
 	private Set<Cliente> amigos = new HashSet<Cliente>();
 	private Set<Playlist> playlists = new HashSet<Playlist>();
 	private Set<Playlist> favPlaylists = new HashSet<Playlist>();
-	private Set<Cancion> favSongs;
+	private Set<Cancion> favSongs = new HashSet<Cancion>();
+	private Set<Album> favAlbum = new HashSet<Album>();
+	private Set<Podcast> favPodcast = new HashSet<Podcast>();
 	
 	public Long getCod_cliente() {
 		return cod_cliente;
@@ -96,6 +100,18 @@ public class ClienteResponse {
 	}
 	public void setFavSongs(Set<Cancion> favSongs) {
 		this.favSongs = favSongs;
+	}
+	public Set<Album> getFavAlbum() {
+		return favAlbum;
+	}
+	public void setFavAlbum(Set<Album> favAlbum) {
+		this.favAlbum = favAlbum;
+	}
+	public Set<Podcast> getFavPodcast() {
+		return favPodcast;
+	}
+	public void setFavPodcast(Set<Podcast> favPodcast) {
+		this.favPodcast = favPodcast;
 	}
 	
 }
