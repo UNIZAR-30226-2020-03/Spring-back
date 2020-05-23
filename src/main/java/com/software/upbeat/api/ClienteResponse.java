@@ -6,6 +6,7 @@ import java.util.Set;
 import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Playlist;
 import com.software.upbeat.model.Podcast;
 
@@ -27,6 +28,7 @@ public class ClienteResponse {
 	private Set<Cancion> favSongs = new HashSet<Cancion>();
 	private Set<Album> favAlbum = new HashSet<Album>();
 	private Set<Podcast> favPodcast = new HashSet<Podcast>();
+	private ListaReproduccion listaRep;
 	
 	public Long getCod_cliente() {
 		return cod_cliente;
@@ -101,6 +103,7 @@ public class ClienteResponse {
 	public void setFavSongs(Set<Cancion> favSongs) {
 		this.favSongs = favSongs;
 	}
+	
 	public Set<Album> getFavAlbum() {
 		return favAlbum;
 	}
@@ -112,6 +115,13 @@ public class ClienteResponse {
 	}
 	public void setFavPodcast(Set<Podcast> favPodcast) {
 		this.favPodcast = favPodcast;
+	}
+
+	public ListaReproduccion getListaRep() {
+		return listaRep;
+	}
+	public void setListaRep(ListaReproduccion listaRep) {
+		this.listaRep = listaRep;
 	}
 	
 }

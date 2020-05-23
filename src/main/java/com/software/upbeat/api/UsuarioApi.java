@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Cliente;
+import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Usuario;
+import com.software.upbeat.service.ListaReproduccionService;
 import com.software.upbeat.service.UsuarioService;
 
 @CrossOrigin(maxAge = 3600)
@@ -33,6 +35,9 @@ public class UsuarioApi{
 	
 	@Autowired
 	Mapper mapper;
+	
+	@Autowired
+	ListaReproduccionService listaReproduccionService;
 	
 	//////////////////////////////////////////////
 	// OBTENER USUARIO POR EMAIL				//
@@ -108,6 +113,11 @@ public class UsuarioApi{
 		
 		// Invoca lógica de negocio
 		try {
+			
+			ListaReproduccion lr = new ListaReproduccion();
+			listaReproduccionService.save(lr);
+			usuario.setListaRep(lr);
+			
 			Usuario newUsuario = usuarioService.save(usuario);
 			
 			// Mapeo entity

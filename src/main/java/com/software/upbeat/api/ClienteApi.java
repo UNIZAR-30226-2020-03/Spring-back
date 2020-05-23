@@ -1,7 +1,6 @@
 package com.software.upbeat.api;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Cancion;
+import com.software.upbeat.model.CancionListaReproduccion;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.ListaReproduccion;
 import com.software.upbeat.model.Playlist;
@@ -62,7 +62,7 @@ public class ClienteApi {
 	PodcastService podcastService;
 	
 	@Autowired
-	ListaReproduccionService listaReproduccionService;;
+	ListaReproduccionService listaReproduccionService;
 	
 	//////////////////////////////////////////////
 	// OBTENER CLIENTE POR EMAIL				//
@@ -128,8 +128,14 @@ public class ClienteApi {
 		cliente.setLista10Ultimas(aux);
 		cliente.setUltimaCancion(0);
 		*/
+		
 		// Invoca lógica de negocio
+		ListaReproduccion lr = new ListaReproduccion();
+		listaReproduccionService.save(lr);
+		cliente.setListaRep(lr);
+		
 		Cliente newCliente = clienteService.save(cliente);
+		System.out.println(newCliente);
 		
 		// Mapeo entity
 		ClienteResponse clienteResponse = mapper.map(newCliente, ClienteResponse.class);
@@ -859,121 +865,152 @@ public class ClienteApi {
 	@RequestMapping(value="/eliminateFavPodcast/{miCorreo}/{podcastId}", method=RequestMethod.PUT)
 	public int eliminateFavPodcast(@PathVariable(value = "miCorreo") String correoCliente, 
 			@PathVariable(value = "podcastId") Long podcastId)  {
-	
-	int resul;
-	
-	try{
-		// Invoca lógica de negocio
-		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
-		ResponseEntity<Podcast> newPodcast = podcastService.getPodcastById(podcastId);
-		
-		Cliente cliente = clienteByEmail.getBody();
-		Podcast podcast = newPodcast.getBody();
-
-		cliente.removeFavPodcast(podcast);
-		cliente = clienteService.save(cliente);
-		
-		resul = CORRECT;
-	
-	}catch(Exception e) {
-		resul = ERROR;
-	}
-	return resul;
-	}
-	
-////////////////////////////////// LISTA DE REPRODUCCION /////////////////////////////////
-	//////////////////////////////////////////////
-	// CREAR MI LISTA DE REPRODUCCION			//
-	//////////////////////////////////////////////
-	/*@RequestMapping(value="/createMiListaReprod/{miCorreo}/", method=RequestMethod.PUT)
-	public int createListaReproduccion(@PathVariable(value = "miCorreo") String correoCliente) {
 		
 		int resul;
 		
-		try {
-			// Obtiene cliente
+		try{
+			// Invoca lógica de negocio
 			ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+			ResponseEntity<Podcast> newPodcast = podcastService.getPodcastById(podcastId);
+			
 			Cliente cliente = clienteByEmail.getBody();
-			//Crea la lista de reproduccion vacia
-			ListaReproduccion listaReproduccion  = new ListaReproduccion();
-			listaReproduccion.setCliente(cliente);
-		    listaReproduccion  = listaReproduccionService.save(listaReproduccion);
-			//relaciona las entidades
-			cliente.setListaReproduccion(listaReproduccion);
-			System.out.println("AÑADIDA");
+			Podcast podcast = newPodcast.getBody();
+	
+			cliente.removeFavPodcast(podcast);
 			cliente = clienteService.save(cliente);
+			
 			resul = CORRECT;
-		}
-		catch(Exception e) {
+		
+		}catch(Exception e) {
 			resul = ERROR;
 		}
 		return resul;
 	}
 	
-	//////////////////////////////////////////////
-	// DEVOLVER CANCION  COLA    		 		//
-	//////////////////////////////////////////////
+	////////////////////////////////// COLA DE REPRODUCCION /////////////////////////////////
 	
-	@RequestMapping(value="/nextSongCola/{miCorreo}", method=RequestMethod.GET)
-	public String nextSongCola(@PathVariable(value = "miCorreo") String correoCliente) {
-	
-	// Invoca lógica de negocio
-	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
-	Cliente cliente = clienteByEmail.getBody();
-	ListaReproduccion cola = cliente.getListaReproduccion();
-	Long id = cola.devolverCancion().getId();
-	String url = cancionService.getSongURLById(id);
-	cola = listaReproduccionService.save(cola);
-	cliente = clienteService.save(cliente);
-	return url;
+	//////////////////////////////////////////////
+	// OBTENER CANCIONES DE LA COLA DE REPRODUCCIÓN POR EMAIL	//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/getCancionesCola/{correo}", method=RequestMethod.GET)
+	public List<Cancion> getCancionesCola(@PathVariable(value = "correo") String correoCliente) {
+		
+		// Mapeo request dto
+		// Cliente cliente = mapper.map(clienteRequest, Cliente.class);
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		// Cliente cliente = clienteByEmail.getBody();
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(clienteByEmail.getBody(), ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().getCanciones();
 	}
 	
 	//////////////////////////////////////////////
-	//DEVOLVER SEGUNDO CANCION  COLA    		//
+	// PLAY COLA								//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/nextSecondSongCola/{miCorreo}", method=RequestMethod.GET)
-	public int nextSecondSongCola(@PathVariable(value = "miCorreo") String correoCliente) {
-	
-	//Invoca lógica de negocio
-	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
-	Cliente cliente = clienteByEmail.getBody();
-	ListaReproduccion cola = cliente.getListaReproduccion();
-	return cola.getSegundoReproduccion();
+	@RequestMapping(value="/play/{correo}", method=RequestMethod.GET)
+	public CancionListaReproduccion play(@PathVariable(value = "correo") String correoCliente) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().play();
 	}
 	
 	//////////////////////////////////////////////
-	//ACTUALIZAR SEGUNDO CANCION  COLA    		//
+	// PAUSE COLA								//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/updateSecondSongCola/{miCorreo}/{number}", method=RequestMethod.GET)
-	public void updateSecondSongCola(@PathVariable(value = "miCorreo") String correoCliente,@PathVariable(value = "number") int number) {
-	
-	//Invoca lógica de negocio
-	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
-	Cliente cliente = clienteByEmail.getBody();
-	ListaReproduccion cola = cliente.getListaReproduccion();
-	cola.setSegundoReproduccion(number);
-	cola = listaReproduccionService.save(cola);
-	cliente = clienteService.save(cliente);
+	@RequestMapping(value="/pause/{correo}/{segundo}", method=RequestMethod.PUT)
+	public int pause(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "segundo") int segundo) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		cliente.getListaRep().parar(segundo);
+		cliente = clienteService.save(cliente);
+		
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().getSegundoReproduccion();
 	}
 	
 	//////////////////////////////////////////////
-	// AÑADIR CANCION  COLA    		 		//
+	// NEXT COLA								//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/addSongCola/{miCorreo}/{id}", method=RequestMethod.GET)
-	public void addSongCola(@PathVariable(value = "miCorreo") String correoCliente,@PathVariable(value = "id") Long id) {
-	
-	// Invoca lógica de negocio
-	ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
-	Cliente cliente = clienteByEmail.getBody();
-	ListaReproduccion cola = cliente.getListaReproduccion();
-	ResponseEntity<Cancion> cancionById = cancionService.getSongByID(id);
-	Cancion cancion = cancionById.getBody();
-	cola.addCancion(cancion);
-	cola = listaReproduccionService.save(cola);
-	cliente = clienteService.save(cliente);
+	@RequestMapping(value="/next/{correo}", method=RequestMethod.PUT)
+	public CancionListaReproduccion next(@PathVariable(value = "correo") String correoCliente) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		cliente.getListaRep().next();
+		cliente = clienteService.save(cliente);
+		
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().play();
 	}
 	
-	*/
+	//////////////////////////////////////////////
+	// AÑADIR CANCIÓN A LA COLA					//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/addCancionCola/{correo}/{id}", method=RequestMethod.PUT)
+	public List<Cancion> addCancionCola(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "id") Long idCancion) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Cancion> cancionById = cancionService.getSongByID(idCancion);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Cancion cancion = cancionById.getBody();
+		
+		cliente.getListaRep().addCancion(cancion);
+		cliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().getCanciones();
+	}
+	
+	//////////////////////////////////////////////
+	// REPRODUCIR CANCIÓN (SE AÑADE LA PRIMERA)	//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/reproducirCancion/{correo}/{id}", method=RequestMethod.PUT)
+	public CancionListaReproduccion reproducirCancion(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "id") Long idCancion) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		ResponseEntity<Cancion> cancionById = cancionService.getSongByID(idCancion);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Cancion cancion = cancionById.getBody();
+		
+		CancionListaReproduccion cancionSegs = cliente.getListaRep().reproducirCancion(cancion);
+		cliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		//ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return cancionSegs;
+	}
 //////////////////////////////// FIN LISTA DE REPRODUCCION /////////////////////////////////
 	
 }
