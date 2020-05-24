@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Album;
-import com.software.upbeat.model.Artista;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.AlbumService;
 
@@ -271,27 +270,6 @@ public class AlbumApi {
 		
 	}
 	
-	//////////////////////////////////////////////
-	// AUTOR DEL ÁLBUM					 		//
-	//////////////////////////////////////////////
-	@RequestMapping(value="/getAutor/{idAlbum}", method=RequestMethod.GET)
-	public Artista autor(@PathVariable(value = "idAlbum") Long idAlbum) {
-		
-		// Invoca lógica de negocio
-		Optional<Album> queryAlbum = albumService.getAlbumById(idAlbum);
-		
-		Album album = queryAlbum.get();
-		
-		// Mapeo entity
-		AlbumResponse albumResponse = mapper.map(album, AlbumResponse.class);
-		
-		return albumResponse.getAutor();
-		
-	}
-	
-	//////////////////////////////////////////////
-	// FECHAS							 		//
-	//////////////////////////////////////////////
 	private static java.sql.Date convertUtilToSql(java.util.Date uDate) {
         java.sql.Date sDate = new java.sql.Date(uDate.getTime());
         return sDate;
