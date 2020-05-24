@@ -135,6 +135,10 @@ public class Cancion {
 	public void setReproducciones(Long reproducciones) {
 		this.reproducciones = reproducciones;
 	}
+	
+	public void addReproduccion() {
+		this.reproducciones++;
+	}
 
 	public Float getDuracion() {
 		return duracion;

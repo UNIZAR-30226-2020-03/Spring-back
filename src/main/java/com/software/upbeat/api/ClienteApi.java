@@ -1,6 +1,7 @@
 package com.software.upbeat.api;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -990,6 +991,56 @@ public class ClienteApi {
 	}
 	
 	//////////////////////////////////////////////
+	// AÑADIR PLAYLIST A LA COLA				//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/addPlaylistCola/{correo}/{id}", method=RequestMethod.PUT)
+	public List<Cancion> addPlaylistCola(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "id") Long idPlaylist) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Playlist playlist = playlistById.get();
+		
+		List<Cancion> lista = convertSetToList(playlist.getCanciones());
+		
+		cliente.getListaRep().addLista(lista);
+		cliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().getCanciones();
+	}
+	
+	//////////////////////////////////////////////
+	// AÑADIR ÁLBUM A LA COLA				//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/addAlbumCola/{correo}/{id}", method=RequestMethod.PUT)
+	public List<Cancion> addAlbumCola(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "id") Long idAlbum) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Album> albumById = albumService.getAlbumById(idAlbum);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Album album = albumById.get();
+		
+		List<Cancion> lista = convertSetToList(album.getCanciones());
+		
+		cliente.getListaRep().addLista(lista);
+		cliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return clienteResponse.getListaRep().getCanciones();
+	}
+	
+	//////////////////////////////////////////////
 	// REPRODUCIR CANCIÓN (SE AÑADE LA PRIMERA)	//
 	//////////////////////////////////////////////
 	@RequestMapping(value="/reproducirCancion/{correo}/{id}", method=RequestMethod.PUT)
@@ -1011,6 +1062,71 @@ public class ClienteApi {
 		
 		return cancionSegs;
 	}
+	
+	//////////////////////////////////////////////
+	// REPRODUCIR PLAYLIST (SE AÑADE AL PRINCIPIO //
+	//////////////////////////////////////////////
+	@RequestMapping(value="/reproducirPlaylist/{correo}/{id}", method=RequestMethod.PUT)
+	public CancionListaReproduccion reproducirPlaylist(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "id") Long idPlaylist) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Playlist playlist = playlistById.get();
+		
+		List<Cancion> lista = convertSetToList(playlist.getCanciones());
+		
+		CancionListaReproduccion cancionSegs = cliente.getListaRep().reproducirLista(lista);
+		cliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		// ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return cancionSegs;
+	}
+	
+	//////////////////////////////////////////////
+	// REPRODUCIR PLAYLIST (SE AÑADE AL PRINCIPIO //
+	//////////////////////////////////////////////
+	@RequestMapping(value="/reproducirAlbum/{correo}/{id}", method=RequestMethod.PUT)
+	public CancionListaReproduccion reproducirAlbum(@PathVariable(value = "correo") String correoCliente,
+			@PathVariable(value = "id") Long idAlbum) {
+		
+		// Invoca lógica de negocio
+		ResponseEntity<Cliente> clienteByEmail = clienteService.getClienteByEmail(correoCliente);
+		Optional<Album> albumById = albumService.getAlbumById(idAlbum);
+		
+		Cliente cliente = clienteByEmail.getBody();
+		Album album = albumById.get();
+		
+		List<Cancion> lista = convertSetToList(album.getCanciones());
+		
+		CancionListaReproduccion cancionSegs = cliente.getListaRep().reproducirLista(lista);
+		cliente = clienteService.save(cliente);
+		
+		// Mapeo entity
+		// ClienteResponse clienteResponse = mapper.map(cliente, ClienteResponse.class);
+		
+		return cancionSegs;
+	}
+	
 //////////////////////////////// FIN LISTA DE REPRODUCCION /////////////////////////////////
+	
+	// https://www.geeksforgeeks.org/program-to-convert-set-to-list-in-java/
+	public List<Cancion> convertSetToList(Set<Cancion> set) 
+    { 
+        // create an empty list 
+        List<Cancion> list = new ArrayList<>(); 
+  
+        // push each element in the set into the list 
+        for (Cancion t : set) 
+            list.add(t); 
+  
+        // return the list 
+        return list; 
+    }
 	
 }

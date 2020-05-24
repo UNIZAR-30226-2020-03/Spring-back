@@ -181,6 +181,7 @@ public class ListaReproduccion {
 		actualizar_num_canciones();
 		if(num_canciones > 1) {
 			cancion = canciones.get(1);
+			cancion.addReproduccion();
 			segs = 0;
 			canciones.remove(0);
 		}
@@ -198,6 +199,7 @@ public class ListaReproduccion {
 	public CancionListaReproduccion reproducirCancion(Cancion cancion) {
 		canciones.remove(cancion);
 		canciones.add(0, cancion);
+		cancion.addReproduccion();
 		actualizar_num_canciones();
 		int segs = 0;
 		actualizar_segundoReproduccion(segs);
@@ -215,6 +217,7 @@ public class ListaReproduccion {
 		canciones.addAll(0, cancionList);
 		actualizar_num_canciones();
 		Cancion cancion = canciones.get(0);
+		cancion.addReproduccion();
 		int segs = 0;
 		actualizar_segundoReproduccion(segs);
 		return new CancionListaReproduccion(cancion, segs);
