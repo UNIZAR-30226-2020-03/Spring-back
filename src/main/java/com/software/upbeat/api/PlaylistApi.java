@@ -1,6 +1,5 @@
 package com.software.upbeat.api;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,7 +12,6 @@ import org.dozer.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.software.upbeat.model.Cancion;
+import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
 import com.software.upbeat.service.CancionService;
 import com.software.upbeat.service.PlaylistService;
@@ -267,6 +266,24 @@ public class PlaylistApi {
 		PlaylistResponse playlistResponse = mapper.map(playlist, PlaylistResponse.class);
 		
 		return playlistResponse.getCanciones();
+		
+	}
+	
+	//////////////////////////////////////////////
+	// AUTOR DEL ÁLBUM					 		//
+	//////////////////////////////////////////////
+	@RequestMapping(value="/getCreador/{idPlaylist}", method=RequestMethod.GET)
+	public Cliente autor(@PathVariable(value = "idPlaylist") Long idPlaylist) {
+		
+		// Invoca lógica de negocio
+		Optional<Playlist> queryPlaylist = playlistService.getPlaylistById(idPlaylist);
+		
+		Playlist playlist = queryPlaylist.get();
+		
+		// Mapeo entity
+		PlaylistResponse playlistResponse = mapper.map(playlist, PlaylistResponse.class);
+		
+		return playlistResponse.getCreador();
 		
 	}
 }
