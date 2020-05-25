@@ -153,7 +153,6 @@ public class Artista extends Cliente{
 		albumes.add(album);
 		album.setAutor(this);
 		System.out.println("------------------");
-		System.out.println(albumes);
 	}
 
 	public void removeAlbum(Album album) {
@@ -200,6 +199,13 @@ public class Artista extends Cliente{
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	@Override
+	public String toString() {
+		return "Artista [cod_artista=" + cod_artista + ", nombre_artista=" + nombre_artista + ", descripcion="
+				+ descripcion + ", numCanciones=" + numCanciones + ", canciones=" + canciones + ", numPodcast="
+				+ numPodcast + ", podcasts=" + podcasts + ", albumes=" + albumes + "]";
 	}
 	
 	

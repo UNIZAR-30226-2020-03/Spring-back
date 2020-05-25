@@ -315,6 +315,8 @@ public class ArtistaApi {
 		
 		int resul;
 		
+		System.out.println("CREATE ALBUM");
+		
 		try {
 			// Invoca lógica de negocio
 			ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
@@ -323,14 +325,18 @@ public class ArtistaApi {
 			Artista artista = artistaByEmail.getBody();
 			Album album = newAlbum.get();
 			
+			System.out.println(artista + "    " + album);
+			
 			if(artista.containsAlbum(album)) {
-				System.out.println("YA TENÍA ESA PLAYLIST");
+				System.out.println("YA TENÍA ESE ÁLBUM");
 				resul = WRONG_RESULT;
 			}
 			else {
-				System.out.println("AÑADO PLAYLIST");
+				System.out.println("AÑADO ÁLBUM");
 				artista.addAlbum(album);
-				System.out.println("AÑADIDA");
+				album.setAutor(artista);
+				System.out.println("AÑADIDO");
+				album = albumService.save(album);
 				artista = artistaService.save(artista);
 				resul = CORRECT;
 			}

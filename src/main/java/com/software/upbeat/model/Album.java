@@ -58,7 +58,7 @@ public class Album implements Serializable{
 	/*
 	 * https://stackoverflow.com/questions/20119142/jackson-multiple-back-reference-properties-with-name-defaultreference
 	 */
-	@JsonBackReference(value = "canciones_album")
+	@JsonBackReference(value = "canciones-album")
 	public Set<Cancion> getCanciones() {
 		return canciones;
 	}
