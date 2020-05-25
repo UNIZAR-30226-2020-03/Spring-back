@@ -19,11 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Album;
 import com.software.upbeat.model.Artista;
-import com.software.upbeat.service.CancionService;
+import com.software.upbeat.model.Cancion;
 import com.software.upbeat.service.AlbumService;
+import com.software.upbeat.service.ArtistaService;
+import com.software.upbeat.service.CancionService;
 
 @CrossOrigin(maxAge = 3600)
 @RestController
@@ -42,6 +43,9 @@ public class AlbumApi {
 	
 	@Autowired
 	CancionService cancionService;
+	
+	@Autowired
+	ArtistaService artistaService;
 	
 	/*
 	 * ¿¿¿ getAlbumByNameAndAuthor ???
@@ -134,16 +138,26 @@ public class AlbumApi {
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
 	public Map<String, Boolean> delete(@PathVariable(value = "id") Long idAlbum) {
 		
-		// Invoca lógica de negocio
-		Optional<Album> albumById = albumService.getAlbumById(idAlbum);
-		
-		Album deleteAlbum = albumById.get();
-		
-		albumService.delete(deleteAlbum);
-		
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("ELIMINADO", Boolean.TRUE);
 		
+		try {
+			// Invoca lógica de negocio
+			Optional<Album> albumById = albumService.getAlbumById(idAlbum);
+			
+			Album deleteAlbum = albumById.get();
+			Artista artista = deleteAlbum.getAutor();
+			artista.removeAlbum(deleteAlbum);
+			artistaService.save(artista);
+			
+			albumService.delete(deleteAlbum);
+			
+			
+			response.put("ELIMINADO", Boolean.TRUE);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			response.put("EXCEPCIÓN", Boolean.FALSE);
+		}
 		
 		// Mapeo entity
 		// AlbumResponse albumResponse = mapper.map(deleteAlbum, AlbumResponse.class);
