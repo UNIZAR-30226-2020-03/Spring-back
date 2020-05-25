@@ -72,7 +72,7 @@ public class Album implements Serializable{
 		if(cancion.getCreador() == this.autor) {
 			System.out.println("Es mismo autor");
 			if (!containsCancion(cancion)) {
-				System.out.println("No estaba la canción");
+				System.out.println("No estaba la cancion");
 				canciones.add(cancion);
 				numCanciones++;
 				this.duracion = this.duracion + cancion.getDuracion();
@@ -207,7 +207,15 @@ public class Album implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((autor == null) ? 0 : autor.hashCode());
+		result = prime * result + ((canciones == null) ? 0 : canciones.hashCode());
+		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((duracion == null) ? 0 : duracion.hashCode());
+		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result + numCanciones;
+		result = prime * result + ((pathImg == null) ? 0 : pathImg.hashCode());
 		return result;
 	}
 
@@ -220,10 +228,47 @@ public class Album implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Album other = (Album) obj;
+		if (autor == null) {
+			if (other.autor != null)
+				return false;
+		} else if (!autor.equals(other.autor))
+			return false;
+		if (canciones == null) {
+			if (other.canciones != null)
+				return false;
+		} else if (!canciones.equals(other.canciones))
+			return false;
+		if (descripcion == null) {
+			if (other.descripcion != null)
+				return false;
+		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (duracion == null) {
+			if (other.duracion != null)
+				return false;
+		} else if (!duracion.equals(other.duracion))
+			return false;
+		if (fecha == null) {
+			if (other.fecha != null)
+				return false;
+		} else if (!fecha.equals(other.fecha))
+			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (nombre == null) {
+			if (other.nombre != null)
+				return false;
+		} else if (!nombre.equals(other.nombre))
+			return false;
+		if (numCanciones != other.numCanciones)
+			return false;
+		if (pathImg == null) {
+			if (other.pathImg != null)
+				return false;
+		} else if (!pathImg.equals(other.pathImg))
 			return false;
 		return true;
 	}

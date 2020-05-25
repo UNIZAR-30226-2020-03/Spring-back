@@ -32,7 +32,67 @@ public class Artista extends Cliente{
 	
 	@Column(name = "nombre_artista")
 	private String nombre_artista;
-	
+	/*
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((albumes == null) ? 0 : albumes.hashCode());
+		result = prime * result + ((canciones == null) ? 0 : canciones.hashCode());
+		result = prime * result + ((cod_artista == null) ? 0 : cod_artista.hashCode());
+		result = prime * result + ((descripcion == null) ? 0 : descripcion.hashCode());
+		result = prime * result + ((nombre_artista == null) ? 0 : nombre_artista.hashCode());
+		result = prime * result + numCanciones;
+		result = prime * result + numPodcast;
+		result = prime * result + ((podcasts == null) ? 0 : podcasts.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (!super.equals(obj))
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Artista other = (Artista) obj;
+		if (albumes == null) {
+			if (other.albumes != null)
+				return false;
+		} else if (!albumes.equals(other.albumes))
+			return false;
+		if (canciones == null) {
+			if (other.canciones != null)
+				return false;
+		} else if (!canciones.equals(other.canciones))
+			return false;
+		if (cod_artista == null) {
+			if (other.cod_artista != null)
+				return false;
+		} else if (!cod_artista.equals(other.cod_artista))
+			return false;
+		if (descripcion == null) {
+			if (other.descripcion != null)
+				return false;
+		} else if (!descripcion.equals(other.descripcion))
+			return false;
+		if (nombre_artista == null) {
+			if (other.nombre_artista != null)
+				return false;
+		} else if (!nombre_artista.equals(other.nombre_artista))
+			return false;
+		if (numCanciones != other.numCanciones)
+			return false;
+		if (numPodcast != other.numPodcast)
+			return false;
+		if (podcasts == null) {
+			if (other.podcasts != null)
+				return false;
+		} else if (!podcasts.equals(other.podcasts))
+			return false;
+		return true;
+	}*/
 	@Column(name = "descripcion")
 	private String descripcion;
 	
@@ -202,12 +262,12 @@ public class Artista extends Cliente{
 		this.descripcion = descripcion;
 	}
 
-	@Override
+	/*@Override
 	public String toString() {
 		return "Artista [cod_artista=" + cod_artista + ", nombre_artista=" + nombre_artista + ", descripcion="
 				+ descripcion + ", numCanciones=" + numCanciones + ", canciones=" + canciones + ", numPodcast="
 				+ numPodcast + ", podcasts=" + podcasts + ", albumes=" + albumes + "]";
-	}
+	}*/
 	
 	
 }

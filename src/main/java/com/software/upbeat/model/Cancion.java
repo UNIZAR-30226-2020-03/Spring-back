@@ -18,8 +18,17 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 @Entity
 @Table(name="cancion", uniqueConstraints= {@UniqueConstraint(columnNames= {"nombre", "creador"}), @UniqueConstraint(columnNames= "pathMp3")})
 public class Cancion {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
 	@Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 	

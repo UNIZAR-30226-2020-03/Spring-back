@@ -170,8 +170,8 @@ public class ArtistaApi {
 	//////////////////////////////////////////////
 	// CREAR CANCION			 		//
 	//////////////////////////////////////////////
-	@RequestMapping(value="/createSong/{miCorreo}/{songId}", method=RequestMethod.PUT)
-	public int createSong(@PathVariable(value = "miCorreo") String correoArtista,
+	@RequestMapping(value="/createSong/{correoArtista}/{songId}", method=RequestMethod.PUT)
+	public int createSong(@PathVariable(value = "correoArtista") String correoArtista,
 	@PathVariable(value = "songId") Long songId) {
 		
 		int resul;
@@ -181,13 +181,17 @@ public class ArtistaApi {
 		try {
 			// Invoca lógica de negocio
 			ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
+			Artista artista = artistaByEmail.getBody();
+			
+			// System.out.println(artista);
+			
 			ResponseEntity<Cancion> newSong = cancionService.getSongByID(songId);
 			
-			Artista artista = artistaByEmail.getBody();
+			
 			Cancion cancion = newSong.getBody();
 			
 			System.out.println("---------");
-			System.out.println(artista + " -- " + cancion);
+			// System.out.println(artista + " -- " + cancion);
 			
 			if(artista.containsCancion(cancion)) {
 				System.out.println("YA TENÍA ESA CANCION");
@@ -205,6 +209,7 @@ public class ArtistaApi {
 			
 		}
 		catch(Exception e) {
+			System.out.println(e);
 			resul = ERROR;
 		}
 		return resul;

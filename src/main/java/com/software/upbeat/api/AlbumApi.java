@@ -173,7 +173,7 @@ public class AlbumApi {
 			Cancion song = querySong.getBody();
 			
 			if(album.containsCancion(song)) {
-				System.out.println("YA TENÍA ESTA CANCIÓN");
+				System.out.println("YA TENIA ESTA CANCION");
 				resul = WRONG_RESULT;
 			}
 			else {
