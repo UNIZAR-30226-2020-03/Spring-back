@@ -73,6 +73,7 @@ public class Artista extends Cliente{
 	}
 	
 	public boolean containsCancion(Cancion cancion) {
+		System.out.println("Llego");
 		return canciones.contains(cancion);
 	}
 	//////// FIN CANCIONES /////////////////////

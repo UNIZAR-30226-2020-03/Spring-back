@@ -176,6 +176,8 @@ public class ArtistaApi {
 		
 		int resul;
 		
+		System.out.println("CREATE SONG");
+		
 		try {
 			// Invoca lógica de negocio
 			ResponseEntity<Artista> artistaByEmail = artistaService.getArtistaByEmail(correoArtista);
@@ -183,6 +185,9 @@ public class ArtistaApi {
 			
 			Artista artista = artistaByEmail.getBody();
 			Cancion cancion = newSong.getBody();
+			
+			System.out.println("---------");
+			System.out.println(artista + " -- " + cancion);
 			
 			if(artista.containsCancion(cancion)) {
 				System.out.println("YA TENÍA ESA CANCION");

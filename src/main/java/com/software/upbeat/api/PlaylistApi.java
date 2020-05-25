@@ -22,6 +22,7 @@ import com.software.upbeat.model.Cancion;
 import com.software.upbeat.model.Cliente;
 import com.software.upbeat.model.Playlist;
 import com.software.upbeat.service.CancionService;
+import com.software.upbeat.service.ClienteService;
 import com.software.upbeat.service.PlaylistService;
 
 @CrossOrigin(maxAge = 3600)
@@ -41,6 +42,9 @@ public class PlaylistApi {
 	
 	@Autowired
 	CancionService cancionService;
+	
+	@Autowired
+	ClienteService clienteService;
 	
 	/*
 	 * ¿¿¿ getPlaylistByNameAndAuthor ???
@@ -132,16 +136,25 @@ public class PlaylistApi {
 	@RequestMapping(value="/delete/{id}", method=RequestMethod.DELETE)
 	public Map<String, Boolean> delete(@PathVariable(value = "id") Long idPlaylist) {
 		
-		// Invoca lógica de negocio
-		Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
-		
-		Playlist deletePlaylist = playlistById.get();
-		
-		playlistService.delete(deletePlaylist);
-		
 		Map<String, Boolean> response = new HashMap<>();
-		response.put("ELIMINADO", Boolean.TRUE);
 		
+		try {
+			// Invoca lógica de negocio
+			Optional<Playlist> playlistById = playlistService.getPlaylistById(idPlaylist);
+			
+			Playlist deletePlaylist = playlistById.get();
+			Cliente cliente = deletePlaylist.getCreador();
+			cliente.removePlaylist(deletePlaylist);
+			clienteService.save(cliente);
+			
+			playlistService.delete(deletePlaylist);
+			
+			response.put("ELIMINADO", Boolean.TRUE);
+		}
+		catch(Exception e) {
+			System.out.println(e);
+			response.put("EXCEPCIÓN", Boolean.FALSE);
+		}
 		
 		// Mapeo entity
 		// PlaylistResponse playlistResponse = mapper.map(deletePlaylist, PlaylistResponse.class);

@@ -45,7 +45,7 @@ public class Playlist implements Serializable{
 	private int numCanciones;
 	
 	//////// CANCIONES /////////////////////
-	@ManyToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+	@ManyToMany(fetch=FetchType.LAZY)
 	private Set<Cancion> canciones; //= new HashSet<Cancion>();
 	
 	/*
